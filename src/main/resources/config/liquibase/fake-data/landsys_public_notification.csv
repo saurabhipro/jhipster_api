@@ -1,0 +1,11 @@
+id;date;file;file_content_type
+1;2022-07-10T02:35:42;../fake-data/blob/hipster.png;image/png
+2;2022-07-10T02:07:49;../fake-data/blob/hipster.png;image/png
+3;2022-07-09T20:04:20;../fake-data/blob/hipster.png;image/png
+4;2022-07-09T13:08:01;../fake-data/blob/hipster.png;image/png
+5;2022-07-10T01:41:32;../fake-data/blob/hipster.png;image/png
+6;2022-07-09T09:25:57;../fake-data/blob/hipster.png;image/png
+7;2022-07-10T06:57:46;../fake-data/blob/hipster.png;image/png
+8;2022-07-10T04:03:44;../fake-data/blob/hipster.png;image/png
+9;2022-07-09T17:39:58;../fake-data/blob/hipster.png;image/png
+10;2022-07-09T23:31:31;../fake-data/blob/hipster.png;image/png
