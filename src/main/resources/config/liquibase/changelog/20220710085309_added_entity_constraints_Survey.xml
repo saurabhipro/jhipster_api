@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <!--
+        Added the constraints for entity Survey.
+    -->
+    <changeSet id="20220710085309-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="khatedar_id"
+                                 baseTableName="landsys_survey"
+                                 constraintName="fk_landsys_survey__khatedar_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landsys_khatedar"/>
+
+        <addForeignKeyConstraint baseColumnNames="project_land_id"
+                                 baseTableName="landsys_survey"
+                                 constraintName="fk_landsys_survey__project_land_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landsys_project_land"/>
+    </changeSet>
+</databaseChangeLog>
