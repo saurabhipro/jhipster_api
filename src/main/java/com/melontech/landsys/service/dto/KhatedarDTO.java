@@ -1,6 +1,6 @@
 package com.melontech.landsys.service.dto;
 
-import com.melontech.landsys.domain.enumeration.KhatedayStatus;
+import com.melontech.landsys.domain.enumeration.KhatedarStatus;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Lob;
@@ -21,11 +21,13 @@ public class KhatedarDTO implements Serializable {
     private byte[] noticeFile;
 
     private String noticeFileContentType;
-    private KhatedayStatus status;
+    private KhatedarStatus status;
 
     private CitizenDTO citizen;
 
     private ProjectLandDTO projectLand;
+
+    private NoticeStatusInfoDTO noticeStatusInfo;
 
     public Long getId() {
         return id;
@@ -67,11 +69,11 @@ public class KhatedarDTO implements Serializable {
         this.noticeFileContentType = noticeFileContentType;
     }
 
-    public KhatedayStatus getStatus() {
+    public KhatedarStatus getStatus() {
         return status;
     }
 
-    public void setStatus(KhatedayStatus status) {
+    public void setStatus(KhatedarStatus status) {
         this.status = status;
     }
 
@@ -89,6 +91,14 @@ public class KhatedarDTO implements Serializable {
 
     public void setProjectLand(ProjectLandDTO projectLand) {
         this.projectLand = projectLand;
+    }
+
+    public NoticeStatusInfoDTO getNoticeStatusInfo() {
+        return noticeStatusInfo;
+    }
+
+    public void setNoticeStatusInfo(NoticeStatusInfoDTO noticeStatusInfo) {
+        this.noticeStatusInfo = noticeStatusInfo;
     }
 
     @Override
@@ -123,6 +133,7 @@ public class KhatedarDTO implements Serializable {
             ", status='" + getStatus() + "'" +
             ", citizen=" + getCitizen() +
             ", projectLand=" + getProjectLand() +
+            ", noticeStatusInfo=" + getNoticeStatusInfo() +
             "}";
     }
 }

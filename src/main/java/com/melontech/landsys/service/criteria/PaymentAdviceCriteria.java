@@ -102,11 +102,13 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
 
     private PaymentStatusFilter paymentStatus;
 
-    private HissaTypeFilter hisssaType;
+    private HissaTypeFilter hissaType;
+
+    private LongFilter projectLandId;
 
     private LongFilter landCompensationId;
 
-    private LongFilter projectLandId;
+    private LongFilter paymentFileReconId;
 
     private Boolean distinct;
 
@@ -124,9 +126,10 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
         this.paymentAdviceType = other.paymentAdviceType == null ? null : other.paymentAdviceType.copy();
         this.referenceNumber = other.referenceNumber == null ? null : other.referenceNumber.copy();
         this.paymentStatus = other.paymentStatus == null ? null : other.paymentStatus.copy();
-        this.hisssaType = other.hisssaType == null ? null : other.hisssaType.copy();
-        this.landCompensationId = other.landCompensationId == null ? null : other.landCompensationId.copy();
+        this.hissaType = other.hissaType == null ? null : other.hissaType.copy();
         this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
+        this.landCompensationId = other.landCompensationId == null ? null : other.landCompensationId.copy();
+        this.paymentFileReconId = other.paymentFileReconId == null ? null : other.paymentFileReconId.copy();
         this.distinct = other.distinct;
     }
 
@@ -300,19 +303,34 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
         this.paymentStatus = paymentStatus;
     }
 
-    public HissaTypeFilter getHisssaType() {
-        return hisssaType;
+    public HissaTypeFilter getHissaType() {
+        return hissaType;
     }
 
-    public HissaTypeFilter hisssaType() {
-        if (hisssaType == null) {
-            hisssaType = new HissaTypeFilter();
+    public HissaTypeFilter hissaType() {
+        if (hissaType == null) {
+            hissaType = new HissaTypeFilter();
         }
-        return hisssaType;
+        return hissaType;
     }
 
-    public void setHisssaType(HissaTypeFilter hisssaType) {
-        this.hisssaType = hisssaType;
+    public void setHissaType(HissaTypeFilter hissaType) {
+        this.hissaType = hissaType;
+    }
+
+    public LongFilter getProjectLandId() {
+        return projectLandId;
+    }
+
+    public LongFilter projectLandId() {
+        if (projectLandId == null) {
+            projectLandId = new LongFilter();
+        }
+        return projectLandId;
+    }
+
+    public void setProjectLandId(LongFilter projectLandId) {
+        this.projectLandId = projectLandId;
     }
 
     public LongFilter getLandCompensationId() {
@@ -330,19 +348,19 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
         this.landCompensationId = landCompensationId;
     }
 
-    public LongFilter getProjectLandId() {
-        return projectLandId;
+    public LongFilter getPaymentFileReconId() {
+        return paymentFileReconId;
     }
 
-    public LongFilter projectLandId() {
-        if (projectLandId == null) {
-            projectLandId = new LongFilter();
+    public LongFilter paymentFileReconId() {
+        if (paymentFileReconId == null) {
+            paymentFileReconId = new LongFilter();
         }
-        return projectLandId;
+        return paymentFileReconId;
     }
 
-    public void setProjectLandId(LongFilter projectLandId) {
-        this.projectLandId = projectLandId;
+    public void setPaymentFileReconId(LongFilter paymentFileReconId) {
+        this.paymentFileReconId = paymentFileReconId;
     }
 
     public Boolean getDistinct() {
@@ -374,9 +392,10 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
             Objects.equals(paymentAdviceType, that.paymentAdviceType) &&
             Objects.equals(referenceNumber, that.referenceNumber) &&
             Objects.equals(paymentStatus, that.paymentStatus) &&
-            Objects.equals(hisssaType, that.hisssaType) &&
-            Objects.equals(landCompensationId, that.landCompensationId) &&
+            Objects.equals(hissaType, that.hissaType) &&
             Objects.equals(projectLandId, that.projectLandId) &&
+            Objects.equals(landCompensationId, that.landCompensationId) &&
+            Objects.equals(paymentFileReconId, that.paymentFileReconId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -395,9 +414,10 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
             paymentAdviceType,
             referenceNumber,
             paymentStatus,
-            hisssaType,
-            landCompensationId,
+            hissaType,
             projectLandId,
+            landCompensationId,
+            paymentFileReconId,
             distinct
         );
     }
@@ -417,9 +437,10 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
             (paymentAdviceType != null ? "paymentAdviceType=" + paymentAdviceType + ", " : "") +
             (referenceNumber != null ? "referenceNumber=" + referenceNumber + ", " : "") +
             (paymentStatus != null ? "paymentStatus=" + paymentStatus + ", " : "") +
-            (hisssaType != null ? "hisssaType=" + hisssaType + ", " : "") +
-            (landCompensationId != null ? "landCompensationId=" + landCompensationId + ", " : "") +
+            (hissaType != null ? "hissaType=" + hissaType + ", " : "") +
             (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
+            (landCompensationId != null ? "landCompensationId=" + landCompensationId + ", " : "") +
+            (paymentFileReconId != null ? "paymentFileReconId=" + paymentFileReconId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

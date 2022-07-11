@@ -1,5 +1,6 @@
 package com.melontech.landsys.domain;
 
+import com.melontech.landsys.domain.enumeration.EventStatus;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -64,8 +65,9 @@ public class TransactionHistory implements Serializable {
     @Column(name = "event_type")
     private String eventType;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "event_status")
-    private String eventStatus;
+    private EventStatus eventStatus;
 
     @Column(name = "approver_1")
     private String approver1;
@@ -260,16 +262,16 @@ public class TransactionHistory implements Serializable {
         this.eventType = eventType;
     }
 
-    public String getEventStatus() {
+    public EventStatus getEventStatus() {
         return this.eventStatus;
     }
 
-    public TransactionHistory eventStatus(String eventStatus) {
+    public TransactionHistory eventStatus(EventStatus eventStatus) {
         this.setEventStatus(eventStatus);
         return this;
     }
 
-    public void setEventStatus(String eventStatus) {
+    public void setEventStatus(EventStatus eventStatus) {
         this.eventStatus = eventStatus;
     }
 

@@ -2,6 +2,8 @@ package com.melontech.landsys.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
@@ -48,28 +50,32 @@ public class Land implements Serializable {
     @Column(name = "total_land_value")
     private Double totalLandValue;
 
-    @JsonIgnoreProperties(value = { "districts", "land" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "district", "land" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
     private State state;
 
-    @JsonIgnoreProperties(value = { "land", "khatedars", "surveys", "landCompensations", "paymentAdvices", "project" }, allowSetters = true)
-    @OneToOne(mappedBy = "land")
-    private ProjectLand projectLand;
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "subDistrict", "lands" }, allowSetters = true)
+    private Village village;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "lands", "subDistrict" }, allowSetters = true)
-    private Village village;
+    @JsonIgnoreProperties(value = { "lands" }, allowSetters = true)
+    private Unit unit;
 
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = { "lands" }, allowSetters = true)
     private LandType landType;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "lands" }, allowSetters = true)
-    private Unit unit;
+    @OneToMany(mappedBy = "land")
+    @JsonIgnoreProperties(
+        value = { "project", "land", "noticeStatusInfo", "khatedars", "surveys", "landCompensations", "paymentAdvices" },
+        allowSetters = true
+    )
+    private Set<ProjectLand> projectLands = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -216,25 +222,6 @@ public class Land implements Serializable {
         return this;
     }
 
-    public ProjectLand getProjectLand() {
-        return this.projectLand;
-    }
-
-    public void setProjectLand(ProjectLand projectLand) {
-        if (this.projectLand != null) {
-            this.projectLand.setLand(null);
-        }
-        if (projectLand != null) {
-            projectLand.setLand(this);
-        }
-        this.projectLand = projectLand;
-    }
-
-    public Land projectLand(ProjectLand projectLand) {
-        this.setProjectLand(projectLand);
-        return this;
-    }
-
     public Village getVillage() {
         return this.village;
     }
@@ -245,6 +232,19 @@ public class Land implements Serializable {
 
     public Land village(Village village) {
         this.setVillage(village);
+        return this;
+    }
+
+    public Unit getUnit() {
+        return this.unit;
+    }
+
+    public void setUnit(Unit unit) {
+        this.unit = unit;
+    }
+
+    public Land unit(Unit unit) {
+        this.setUnit(unit);
         return this;
     }
 
@@ -261,16 +261,34 @@ public class Land implements Serializable {
         return this;
     }
 
-    public Unit getUnit() {
-        return this.unit;
+    public Set<ProjectLand> getProjectLands() {
+        return this.projectLands;
     }
 
-    public void setUnit(Unit unit) {
-        this.unit = unit;
+    public void setProjectLands(Set<ProjectLand> projectLands) {
+        if (this.projectLands != null) {
+            this.projectLands.forEach(i -> i.setLand(null));
+        }
+        if (projectLands != null) {
+            projectLands.forEach(i -> i.setLand(this));
+        }
+        this.projectLands = projectLands;
     }
 
-    public Land unit(Unit unit) {
-        this.setUnit(unit);
+    public Land projectLands(Set<ProjectLand> projectLands) {
+        this.setProjectLands(projectLands);
+        return this;
+    }
+
+    public Land addProjectLand(ProjectLand projectLand) {
+        this.projectLands.add(projectLand);
+        projectLand.setLand(this);
+        return this;
+    }
+
+    public Land removeProjectLand(ProjectLand projectLand) {
+        this.projectLands.remove(projectLand);
+        projectLand.setLand(null);
         return this;
     }
 

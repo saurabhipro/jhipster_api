@@ -1,5 +1,6 @@
 package com.melontech.landsys.service.dto;
 
+import com.melontech.landsys.domain.enumeration.EventStatus;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.validation.constraints.*;
@@ -43,7 +44,7 @@ public class TransactionHistoryDTO implements Serializable {
 
     private String eventType;
 
-    private String eventStatus;
+    private EventStatus eventStatus;
 
     private String approver1;
 
@@ -163,11 +164,11 @@ public class TransactionHistoryDTO implements Serializable {
         this.eventType = eventType;
     }
 
-    public String getEventStatus() {
+    public EventStatus getEventStatus() {
         return eventStatus;
     }
 
-    public void setEventStatus(String eventStatus) {
+    public void setEventStatus(EventStatus eventStatus) {
         this.eventStatus = eventStatus;
     }
 

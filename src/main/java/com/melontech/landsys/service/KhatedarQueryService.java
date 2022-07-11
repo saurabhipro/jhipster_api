@@ -99,21 +99,6 @@ public class KhatedarQueryService extends QueryService<Khatedar> {
             if (criteria.getStatus() != null) {
                 specification = specification.and(buildSpecification(criteria.getStatus(), Khatedar_.status));
             }
-            if (criteria.getSurveyId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getSurveyId(), root -> root.join(Khatedar_.surveys, JoinType.LEFT).get(Survey_.id))
-                    );
-            }
-            if (criteria.getLandCompensationId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getLandCompensationId(),
-                            root -> root.join(Khatedar_.landCompensations, JoinType.LEFT).get(LandCompensation_.id)
-                        )
-                    );
-            }
             if (criteria.getCitizenId() != null) {
                 specification =
                     specification.and(
@@ -126,6 +111,30 @@ public class KhatedarQueryService extends QueryService<Khatedar> {
                         buildSpecification(
                             criteria.getProjectLandId(),
                             root -> root.join(Khatedar_.projectLand, JoinType.LEFT).get(ProjectLand_.id)
+                        )
+                    );
+            }
+            if (criteria.getNoticeStatusInfoId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getNoticeStatusInfoId(),
+                            root -> root.join(Khatedar_.noticeStatusInfo, JoinType.LEFT).get(NoticeStatusInfo_.id)
+                        )
+                    );
+            }
+            if (criteria.getSurveyId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getSurveyId(), root -> root.join(Khatedar_.survey, JoinType.LEFT).get(Survey_.id))
+                    );
+            }
+            if (criteria.getLandCompensationId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLandCompensationId(),
+                            root -> root.join(Khatedar_.landCompensations, JoinType.LEFT).get(LandCompensation_.id)
                         )
                     );
             }

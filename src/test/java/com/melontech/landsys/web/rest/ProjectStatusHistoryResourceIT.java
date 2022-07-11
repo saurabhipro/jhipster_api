@@ -11,8 +11,8 @@ import com.melontech.landsys.domain.enumeration.ProjectStatus;
 import com.melontech.landsys.repository.ProjectStatusHistoryRepository;
 import com.melontech.landsys.service.dto.ProjectStatusHistoryDTO;
 import com.melontech.landsys.service.mapper.ProjectStatusHistoryMapper;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -37,8 +37,8 @@ class ProjectStatusHistoryResourceIT {
     private static final ProjectStatus DEFAULT_STATUS = ProjectStatus.NEW;
     private static final ProjectStatus UPDATED_STATUS = ProjectStatus.INPROGRESS;
 
-    private static final Instant DEFAULT_WHEN = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_WHEN = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final LocalDate DEFAULT_WHEN = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_WHEN = LocalDate.now(ZoneId.systemDefault());
 
     private static final String DEFAULT_REMARKS = "AAAAAAAAAA";
     private static final String UPDATED_REMARKS = "BBBBBBBBBB";

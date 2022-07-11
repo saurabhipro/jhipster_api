@@ -11,13 +11,14 @@ import com.melontech.landsys.domain.LandCompensation;
 import com.melontech.landsys.domain.PaymentAdvice;
 import com.melontech.landsys.domain.ProjectLand;
 import com.melontech.landsys.domain.Survey;
+import com.melontech.landsys.domain.enumeration.CompensationStatus;
 import com.melontech.landsys.domain.enumeration.HissaType;
 import com.melontech.landsys.repository.LandCompensationRepository;
 import com.melontech.landsys.service.criteria.LandCompensationCriteria;
 import com.melontech.landsys.service.dto.LandCompensationDTO;
 import com.melontech.landsys.service.mapper.LandCompensationMapper;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -46,9 +47,9 @@ class LandCompensationResourceIT {
     private static final Double UPDATED_AREA = 2D;
     private static final Double SMALLER_AREA = 1D - 1D;
 
-    private static final Integer DEFAULT_SHARE_PERCENTAGE = 1;
-    private static final Integer UPDATED_SHARE_PERCENTAGE = 2;
-    private static final Integer SMALLER_SHARE_PERCENTAGE = 1 - 1;
+    private static final Double DEFAULT_SHARE_PERCENTAGE = 1D;
+    private static final Double UPDATED_SHARE_PERCENTAGE = 2D;
+    private static final Double SMALLER_SHARE_PERCENTAGE = 1D - 1D;
 
     private static final Double DEFAULT_LAND_MARKET_VALUE = 1D;
     private static final Double UPDATED_LAND_MARKET_VALUE = 2D;
@@ -74,14 +75,12 @@ class LandCompensationResourceIT {
     private static final Double UPDATED_ADDITIONAL_COMPENSATION = 2D;
     private static final Double SMALLER_ADDITIONAL_COMPENSATION = 1D - 1D;
 
-    private static final String DEFAULT_STATUS = "AAAAAAAAAA";
-    private static final String UPDATED_STATUS = "BBBBBBBBBB";
+    private static final CompensationStatus DEFAULT_STATUS = CompensationStatus.OPEN;
+    private static final CompensationStatus UPDATED_STATUS = CompensationStatus.CLOSED;
 
-    private static final Instant DEFAULT_ORDER_DATE = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_ORDER_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
-
-    private static final Instant DEFAULT_PAYMENT_DATE = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_PAYMENT_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final LocalDate DEFAULT_ORDER_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_ORDER_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_ORDER_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final Double DEFAULT_PAYMENT_AMOUNT = 1D;
     private static final Double UPDATED_PAYMENT_AMOUNT = 2D;
@@ -129,19 +128,18 @@ class LandCompensationResourceIT {
             .additionalCompensation(DEFAULT_ADDITIONAL_COMPENSATION)
             .status(DEFAULT_STATUS)
             .orderDate(DEFAULT_ORDER_DATE)
-            .paymentDate(DEFAULT_PAYMENT_DATE)
             .paymentAmount(DEFAULT_PAYMENT_AMOUNT)
             .transactionId(DEFAULT_TRANSACTION_ID);
         // Add required entity
-        PaymentAdvice paymentAdvice;
-        if (TestUtil.findAll(em, PaymentAdvice.class).isEmpty()) {
-            paymentAdvice = PaymentAdviceResourceIT.createEntity(em);
-            em.persist(paymentAdvice);
+        Khatedar khatedar;
+        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
+            khatedar = KhatedarResourceIT.createEntity(em);
+            em.persist(khatedar);
             em.flush();
         } else {
-            paymentAdvice = TestUtil.findAll(em, PaymentAdvice.class).get(0);
+            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
         }
-        landCompensation.setPaymentAdvice(paymentAdvice);
+        landCompensation.setKhatedar(khatedar);
         // Add required entity
         Survey survey;
         if (TestUtil.findAll(em, Survey.class).isEmpty()) {
@@ -162,6 +160,16 @@ class LandCompensationResourceIT {
             projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
         }
         landCompensation.setProjectLand(projectLand);
+        // Add required entity
+        PaymentAdvice paymentAdvice;
+        if (TestUtil.findAll(em, PaymentAdvice.class).isEmpty()) {
+            paymentAdvice = PaymentAdviceResourceIT.createEntity(em);
+            em.persist(paymentAdvice);
+            em.flush();
+        } else {
+            paymentAdvice = TestUtil.findAll(em, PaymentAdvice.class).get(0);
+        }
+        landCompensation.getPaymentAdvices().add(paymentAdvice);
         return landCompensation;
     }
 
@@ -184,19 +192,18 @@ class LandCompensationResourceIT {
             .additionalCompensation(UPDATED_ADDITIONAL_COMPENSATION)
             .status(UPDATED_STATUS)
             .orderDate(UPDATED_ORDER_DATE)
-            .paymentDate(UPDATED_PAYMENT_DATE)
             .paymentAmount(UPDATED_PAYMENT_AMOUNT)
             .transactionId(UPDATED_TRANSACTION_ID);
         // Add required entity
-        PaymentAdvice paymentAdvice;
-        if (TestUtil.findAll(em, PaymentAdvice.class).isEmpty()) {
-            paymentAdvice = PaymentAdviceResourceIT.createUpdatedEntity(em);
-            em.persist(paymentAdvice);
+        Khatedar khatedar;
+        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
+            khatedar = KhatedarResourceIT.createUpdatedEntity(em);
+            em.persist(khatedar);
             em.flush();
         } else {
-            paymentAdvice = TestUtil.findAll(em, PaymentAdvice.class).get(0);
+            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
         }
-        landCompensation.setPaymentAdvice(paymentAdvice);
+        landCompensation.setKhatedar(khatedar);
         // Add required entity
         Survey survey;
         if (TestUtil.findAll(em, Survey.class).isEmpty()) {
@@ -217,6 +224,16 @@ class LandCompensationResourceIT {
             projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
         }
         landCompensation.setProjectLand(projectLand);
+        // Add required entity
+        PaymentAdvice paymentAdvice;
+        if (TestUtil.findAll(em, PaymentAdvice.class).isEmpty()) {
+            paymentAdvice = PaymentAdviceResourceIT.createUpdatedEntity(em);
+            em.persist(paymentAdvice);
+            em.flush();
+        } else {
+            paymentAdvice = TestUtil.findAll(em, PaymentAdvice.class).get(0);
+        }
+        landCompensation.getPaymentAdvices().add(paymentAdvice);
         return landCompensation;
     }
 
@@ -252,7 +269,6 @@ class LandCompensationResourceIT {
         assertThat(testLandCompensation.getAdditionalCompensation()).isEqualTo(DEFAULT_ADDITIONAL_COMPENSATION);
         assertThat(testLandCompensation.getStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testLandCompensation.getOrderDate()).isEqualTo(DEFAULT_ORDER_DATE);
-        assertThat(testLandCompensation.getPaymentDate()).isEqualTo(DEFAULT_PAYMENT_DATE);
         assertThat(testLandCompensation.getPaymentAmount()).isEqualTo(DEFAULT_PAYMENT_AMOUNT);
         assertThat(testLandCompensation.getTransactionId()).isEqualTo(DEFAULT_TRANSACTION_ID);
     }
@@ -372,16 +388,15 @@ class LandCompensationResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(landCompensation.getId().intValue())))
             .andExpect(jsonPath("$.[*].hissaType").value(hasItem(DEFAULT_HISSA_TYPE.toString())))
             .andExpect(jsonPath("$.[*].area").value(hasItem(DEFAULT_AREA.doubleValue())))
-            .andExpect(jsonPath("$.[*].sharePercentage").value(hasItem(DEFAULT_SHARE_PERCENTAGE)))
+            .andExpect(jsonPath("$.[*].sharePercentage").value(hasItem(DEFAULT_SHARE_PERCENTAGE.doubleValue())))
             .andExpect(jsonPath("$.[*].landMarketValue").value(hasItem(DEFAULT_LAND_MARKET_VALUE.doubleValue())))
             .andExpect(jsonPath("$.[*].structuralCompensation").value(hasItem(DEFAULT_STRUCTURAL_COMPENSATION.doubleValue())))
             .andExpect(jsonPath("$.[*].horticultureCompensation").value(hasItem(DEFAULT_HORTICULTURE_COMPENSATION.doubleValue())))
             .andExpect(jsonPath("$.[*].forestCompensation").value(hasItem(DEFAULT_FOREST_COMPENSATION.doubleValue())))
             .andExpect(jsonPath("$.[*].solatiumMoney").value(hasItem(DEFAULT_SOLATIUM_MONEY.doubleValue())))
             .andExpect(jsonPath("$.[*].additionalCompensation").value(hasItem(DEFAULT_ADDITIONAL_COMPENSATION.doubleValue())))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].orderDate").value(hasItem(DEFAULT_ORDER_DATE.toString())))
-            .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.doubleValue())))
             .andExpect(jsonPath("$.[*].transactionId").value(hasItem(DEFAULT_TRANSACTION_ID)));
     }
@@ -400,16 +415,15 @@ class LandCompensationResourceIT {
             .andExpect(jsonPath("$.id").value(landCompensation.getId().intValue()))
             .andExpect(jsonPath("$.hissaType").value(DEFAULT_HISSA_TYPE.toString()))
             .andExpect(jsonPath("$.area").value(DEFAULT_AREA.doubleValue()))
-            .andExpect(jsonPath("$.sharePercentage").value(DEFAULT_SHARE_PERCENTAGE))
+            .andExpect(jsonPath("$.sharePercentage").value(DEFAULT_SHARE_PERCENTAGE.doubleValue()))
             .andExpect(jsonPath("$.landMarketValue").value(DEFAULT_LAND_MARKET_VALUE.doubleValue()))
             .andExpect(jsonPath("$.structuralCompensation").value(DEFAULT_STRUCTURAL_COMPENSATION.doubleValue()))
             .andExpect(jsonPath("$.horticultureCompensation").value(DEFAULT_HORTICULTURE_COMPENSATION.doubleValue()))
             .andExpect(jsonPath("$.forestCompensation").value(DEFAULT_FOREST_COMPENSATION.doubleValue()))
             .andExpect(jsonPath("$.solatiumMoney").value(DEFAULT_SOLATIUM_MONEY.doubleValue()))
             .andExpect(jsonPath("$.additionalCompensation").value(DEFAULT_ADDITIONAL_COMPENSATION.doubleValue()))
-            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS))
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
             .andExpect(jsonPath("$.orderDate").value(DEFAULT_ORDER_DATE.toString()))
-            .andExpect(jsonPath("$.paymentDate").value(DEFAULT_PAYMENT_DATE.toString()))
             .andExpect(jsonPath("$.paymentAmount").value(DEFAULT_PAYMENT_AMOUNT.doubleValue()))
             .andExpect(jsonPath("$.transactionId").value(DEFAULT_TRANSACTION_ID));
     }
@@ -1376,32 +1390,6 @@ class LandCompensationResourceIT {
 
     @Test
     @Transactional
-    void getAllLandCompensationsByStatusContainsSomething() throws Exception {
-        // Initialize the database
-        landCompensationRepository.saveAndFlush(landCompensation);
-
-        // Get all the landCompensationList where status contains DEFAULT_STATUS
-        defaultLandCompensationShouldBeFound("status.contains=" + DEFAULT_STATUS);
-
-        // Get all the landCompensationList where status contains UPDATED_STATUS
-        defaultLandCompensationShouldNotBeFound("status.contains=" + UPDATED_STATUS);
-    }
-
-    @Test
-    @Transactional
-    void getAllLandCompensationsByStatusNotContainsSomething() throws Exception {
-        // Initialize the database
-        landCompensationRepository.saveAndFlush(landCompensation);
-
-        // Get all the landCompensationList where status does not contain DEFAULT_STATUS
-        defaultLandCompensationShouldNotBeFound("status.doesNotContain=" + DEFAULT_STATUS);
-
-        // Get all the landCompensationList where status does not contain UPDATED_STATUS
-        defaultLandCompensationShouldBeFound("status.doesNotContain=" + UPDATED_STATUS);
-    }
-
-    @Test
-    @Transactional
     void getAllLandCompensationsByOrderDateIsEqualToSomething() throws Exception {
         // Initialize the database
         landCompensationRepository.saveAndFlush(landCompensation);
@@ -1454,54 +1442,54 @@ class LandCompensationResourceIT {
 
     @Test
     @Transactional
-    void getAllLandCompensationsByPaymentDateIsEqualToSomething() throws Exception {
+    void getAllLandCompensationsByOrderDateIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         landCompensationRepository.saveAndFlush(landCompensation);
 
-        // Get all the landCompensationList where paymentDate equals to DEFAULT_PAYMENT_DATE
-        defaultLandCompensationShouldBeFound("paymentDate.equals=" + DEFAULT_PAYMENT_DATE);
+        // Get all the landCompensationList where orderDate is greater than or equal to DEFAULT_ORDER_DATE
+        defaultLandCompensationShouldBeFound("orderDate.greaterThanOrEqual=" + DEFAULT_ORDER_DATE);
 
-        // Get all the landCompensationList where paymentDate equals to UPDATED_PAYMENT_DATE
-        defaultLandCompensationShouldNotBeFound("paymentDate.equals=" + UPDATED_PAYMENT_DATE);
+        // Get all the landCompensationList where orderDate is greater than or equal to UPDATED_ORDER_DATE
+        defaultLandCompensationShouldNotBeFound("orderDate.greaterThanOrEqual=" + UPDATED_ORDER_DATE);
     }
 
     @Test
     @Transactional
-    void getAllLandCompensationsByPaymentDateIsNotEqualToSomething() throws Exception {
+    void getAllLandCompensationsByOrderDateIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
         landCompensationRepository.saveAndFlush(landCompensation);
 
-        // Get all the landCompensationList where paymentDate not equals to DEFAULT_PAYMENT_DATE
-        defaultLandCompensationShouldNotBeFound("paymentDate.notEquals=" + DEFAULT_PAYMENT_DATE);
+        // Get all the landCompensationList where orderDate is less than or equal to DEFAULT_ORDER_DATE
+        defaultLandCompensationShouldBeFound("orderDate.lessThanOrEqual=" + DEFAULT_ORDER_DATE);
 
-        // Get all the landCompensationList where paymentDate not equals to UPDATED_PAYMENT_DATE
-        defaultLandCompensationShouldBeFound("paymentDate.notEquals=" + UPDATED_PAYMENT_DATE);
+        // Get all the landCompensationList where orderDate is less than or equal to SMALLER_ORDER_DATE
+        defaultLandCompensationShouldNotBeFound("orderDate.lessThanOrEqual=" + SMALLER_ORDER_DATE);
     }
 
     @Test
     @Transactional
-    void getAllLandCompensationsByPaymentDateIsInShouldWork() throws Exception {
+    void getAllLandCompensationsByOrderDateIsLessThanSomething() throws Exception {
         // Initialize the database
         landCompensationRepository.saveAndFlush(landCompensation);
 
-        // Get all the landCompensationList where paymentDate in DEFAULT_PAYMENT_DATE or UPDATED_PAYMENT_DATE
-        defaultLandCompensationShouldBeFound("paymentDate.in=" + DEFAULT_PAYMENT_DATE + "," + UPDATED_PAYMENT_DATE);
+        // Get all the landCompensationList where orderDate is less than DEFAULT_ORDER_DATE
+        defaultLandCompensationShouldNotBeFound("orderDate.lessThan=" + DEFAULT_ORDER_DATE);
 
-        // Get all the landCompensationList where paymentDate equals to UPDATED_PAYMENT_DATE
-        defaultLandCompensationShouldNotBeFound("paymentDate.in=" + UPDATED_PAYMENT_DATE);
+        // Get all the landCompensationList where orderDate is less than UPDATED_ORDER_DATE
+        defaultLandCompensationShouldBeFound("orderDate.lessThan=" + UPDATED_ORDER_DATE);
     }
 
     @Test
     @Transactional
-    void getAllLandCompensationsByPaymentDateIsNullOrNotNull() throws Exception {
+    void getAllLandCompensationsByOrderDateIsGreaterThanSomething() throws Exception {
         // Initialize the database
         landCompensationRepository.saveAndFlush(landCompensation);
 
-        // Get all the landCompensationList where paymentDate is not null
-        defaultLandCompensationShouldBeFound("paymentDate.specified=true");
+        // Get all the landCompensationList where orderDate is greater than DEFAULT_ORDER_DATE
+        defaultLandCompensationShouldNotBeFound("orderDate.greaterThan=" + DEFAULT_ORDER_DATE);
 
-        // Get all the landCompensationList where paymentDate is null
-        defaultLandCompensationShouldNotBeFound("paymentDate.specified=false");
+        // Get all the landCompensationList where orderDate is greater than SMALLER_ORDER_DATE
+        defaultLandCompensationShouldBeFound("orderDate.greaterThan=" + SMALLER_ORDER_DATE);
     }
 
     @Test
@@ -1688,21 +1676,6 @@ class LandCompensationResourceIT {
 
     @Test
     @Transactional
-    void getAllLandCompensationsByPaymentAdviceIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        PaymentAdvice paymentAdvice = landCompensation.getPaymentAdvice();
-        landCompensationRepository.saveAndFlush(landCompensation);
-        Long paymentAdviceId = paymentAdvice.getId();
-
-        // Get all the landCompensationList where paymentAdvice equals to paymentAdviceId
-        defaultLandCompensationShouldBeFound("paymentAdviceId.equals=" + paymentAdviceId);
-
-        // Get all the landCompensationList where paymentAdvice equals to (paymentAdviceId + 1)
-        defaultLandCompensationShouldNotBeFound("paymentAdviceId.equals=" + (paymentAdviceId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllLandCompensationsByKhatedarIsEqualToSomething() throws Exception {
         // Initialize the database
         landCompensationRepository.saveAndFlush(landCompensation);
@@ -1779,6 +1752,32 @@ class LandCompensationResourceIT {
         defaultLandCompensationShouldNotBeFound("projectLandId.equals=" + (projectLandId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllLandCompensationsByPaymentAdviceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+        PaymentAdvice paymentAdvice;
+        if (TestUtil.findAll(em, PaymentAdvice.class).isEmpty()) {
+            paymentAdvice = PaymentAdviceResourceIT.createEntity(em);
+            em.persist(paymentAdvice);
+            em.flush();
+        } else {
+            paymentAdvice = TestUtil.findAll(em, PaymentAdvice.class).get(0);
+        }
+        em.persist(paymentAdvice);
+        em.flush();
+        landCompensation.addPaymentAdvice(paymentAdvice);
+        landCompensationRepository.saveAndFlush(landCompensation);
+        Long paymentAdviceId = paymentAdvice.getId();
+
+        // Get all the landCompensationList where paymentAdvice equals to paymentAdviceId
+        defaultLandCompensationShouldBeFound("paymentAdviceId.equals=" + paymentAdviceId);
+
+        // Get all the landCompensationList where paymentAdvice equals to (paymentAdviceId + 1)
+        defaultLandCompensationShouldNotBeFound("paymentAdviceId.equals=" + (paymentAdviceId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -1790,16 +1789,15 @@ class LandCompensationResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(landCompensation.getId().intValue())))
             .andExpect(jsonPath("$.[*].hissaType").value(hasItem(DEFAULT_HISSA_TYPE.toString())))
             .andExpect(jsonPath("$.[*].area").value(hasItem(DEFAULT_AREA.doubleValue())))
-            .andExpect(jsonPath("$.[*].sharePercentage").value(hasItem(DEFAULT_SHARE_PERCENTAGE)))
+            .andExpect(jsonPath("$.[*].sharePercentage").value(hasItem(DEFAULT_SHARE_PERCENTAGE.doubleValue())))
             .andExpect(jsonPath("$.[*].landMarketValue").value(hasItem(DEFAULT_LAND_MARKET_VALUE.doubleValue())))
             .andExpect(jsonPath("$.[*].structuralCompensation").value(hasItem(DEFAULT_STRUCTURAL_COMPENSATION.doubleValue())))
             .andExpect(jsonPath("$.[*].horticultureCompensation").value(hasItem(DEFAULT_HORTICULTURE_COMPENSATION.doubleValue())))
             .andExpect(jsonPath("$.[*].forestCompensation").value(hasItem(DEFAULT_FOREST_COMPENSATION.doubleValue())))
             .andExpect(jsonPath("$.[*].solatiumMoney").value(hasItem(DEFAULT_SOLATIUM_MONEY.doubleValue())))
             .andExpect(jsonPath("$.[*].additionalCompensation").value(hasItem(DEFAULT_ADDITIONAL_COMPENSATION.doubleValue())))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].orderDate").value(hasItem(DEFAULT_ORDER_DATE.toString())))
-            .andExpect(jsonPath("$.[*].paymentDate").value(hasItem(DEFAULT_PAYMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.doubleValue())))
             .andExpect(jsonPath("$.[*].transactionId").value(hasItem(DEFAULT_TRANSACTION_ID)));
 
@@ -1861,7 +1859,6 @@ class LandCompensationResourceIT {
             .additionalCompensation(UPDATED_ADDITIONAL_COMPENSATION)
             .status(UPDATED_STATUS)
             .orderDate(UPDATED_ORDER_DATE)
-            .paymentDate(UPDATED_PAYMENT_DATE)
             .paymentAmount(UPDATED_PAYMENT_AMOUNT)
             .transactionId(UPDATED_TRANSACTION_ID);
         LandCompensationDTO landCompensationDTO = landCompensationMapper.toDto(updatedLandCompensation);
@@ -1889,7 +1886,6 @@ class LandCompensationResourceIT {
         assertThat(testLandCompensation.getAdditionalCompensation()).isEqualTo(UPDATED_ADDITIONAL_COMPENSATION);
         assertThat(testLandCompensation.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testLandCompensation.getOrderDate()).isEqualTo(UPDATED_ORDER_DATE);
-        assertThat(testLandCompensation.getPaymentDate()).isEqualTo(UPDATED_PAYMENT_DATE);
         assertThat(testLandCompensation.getPaymentAmount()).isEqualTo(UPDATED_PAYMENT_AMOUNT);
         assertThat(testLandCompensation.getTransactionId()).isEqualTo(UPDATED_TRANSACTION_ID);
     }
@@ -1984,7 +1980,6 @@ class LandCompensationResourceIT {
             .additionalCompensation(UPDATED_ADDITIONAL_COMPENSATION)
             .status(UPDATED_STATUS)
             .orderDate(UPDATED_ORDER_DATE)
-            .paymentAmount(UPDATED_PAYMENT_AMOUNT)
             .transactionId(UPDATED_TRANSACTION_ID);
 
         restLandCompensationMockMvc
@@ -2010,8 +2005,7 @@ class LandCompensationResourceIT {
         assertThat(testLandCompensation.getAdditionalCompensation()).isEqualTo(UPDATED_ADDITIONAL_COMPENSATION);
         assertThat(testLandCompensation.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testLandCompensation.getOrderDate()).isEqualTo(UPDATED_ORDER_DATE);
-        assertThat(testLandCompensation.getPaymentDate()).isEqualTo(DEFAULT_PAYMENT_DATE);
-        assertThat(testLandCompensation.getPaymentAmount()).isEqualTo(UPDATED_PAYMENT_AMOUNT);
+        assertThat(testLandCompensation.getPaymentAmount()).isEqualTo(DEFAULT_PAYMENT_AMOUNT);
         assertThat(testLandCompensation.getTransactionId()).isEqualTo(UPDATED_TRANSACTION_ID);
     }
 
@@ -2039,7 +2033,6 @@ class LandCompensationResourceIT {
             .additionalCompensation(UPDATED_ADDITIONAL_COMPENSATION)
             .status(UPDATED_STATUS)
             .orderDate(UPDATED_ORDER_DATE)
-            .paymentDate(UPDATED_PAYMENT_DATE)
             .paymentAmount(UPDATED_PAYMENT_AMOUNT)
             .transactionId(UPDATED_TRANSACTION_ID);
 
@@ -2066,7 +2059,6 @@ class LandCompensationResourceIT {
         assertThat(testLandCompensation.getAdditionalCompensation()).isEqualTo(UPDATED_ADDITIONAL_COMPENSATION);
         assertThat(testLandCompensation.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testLandCompensation.getOrderDate()).isEqualTo(UPDATED_ORDER_DATE);
-        assertThat(testLandCompensation.getPaymentDate()).isEqualTo(UPDATED_PAYMENT_DATE);
         assertThat(testLandCompensation.getPaymentAmount()).isEqualTo(UPDATED_PAYMENT_AMOUNT);
         assertThat(testLandCompensation.getTransactionId()).isEqualTo(UPDATED_TRANSACTION_ID);
     }

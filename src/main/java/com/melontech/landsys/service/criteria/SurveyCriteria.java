@@ -1,6 +1,7 @@
 package com.melontech.landsys.service.criteria;
 
 import com.melontech.landsys.domain.enumeration.HissaType;
+import com.melontech.landsys.domain.enumeration.SurveyStatus;
 import java.io.Serializable;
 import java.util.Objects;
 import org.springdoc.api.annotations.ParameterObject;
@@ -42,6 +43,23 @@ public class SurveyCriteria implements Serializable, Criteria {
         }
     }
 
+    /**
+     * Class for filtering SurveyStatus
+     */
+    public static class SurveyStatusFilter extends Filter<SurveyStatus> {
+
+        public SurveyStatusFilter() {}
+
+        public SurveyStatusFilter(SurveyStatusFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public SurveyStatusFilter copy() {
+            return new SurveyStatusFilter(this);
+        }
+    }
+
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
@@ -50,7 +68,7 @@ public class SurveyCriteria implements Serializable, Criteria {
 
     private HissaTypeFilter hissaType;
 
-    private IntegerFilter sharePercentage;
+    private DoubleFilter sharePercentage;
 
     private DoubleFilter area;
 
@@ -66,13 +84,13 @@ public class SurveyCriteria implements Serializable, Criteria {
 
     private StringFilter remarks;
 
-    private StringFilter status;
-
-    private LongFilter landCompensationId;
+    private SurveyStatusFilter status;
 
     private LongFilter khatedarId;
 
     private LongFilter projectLandId;
+
+    private LongFilter landCompensationId;
 
     private Boolean distinct;
 
@@ -91,9 +109,9 @@ public class SurveyCriteria implements Serializable, Criteria {
         this.distanceFromCity = other.distanceFromCity == null ? null : other.distanceFromCity.copy();
         this.remarks = other.remarks == null ? null : other.remarks.copy();
         this.status = other.status == null ? null : other.status.copy();
-        this.landCompensationId = other.landCompensationId == null ? null : other.landCompensationId.copy();
         this.khatedarId = other.khatedarId == null ? null : other.khatedarId.copy();
         this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
+        this.landCompensationId = other.landCompensationId == null ? null : other.landCompensationId.copy();
         this.distinct = other.distinct;
     }
 
@@ -147,18 +165,18 @@ public class SurveyCriteria implements Serializable, Criteria {
         this.hissaType = hissaType;
     }
 
-    public IntegerFilter getSharePercentage() {
+    public DoubleFilter getSharePercentage() {
         return sharePercentage;
     }
 
-    public IntegerFilter sharePercentage() {
+    public DoubleFilter sharePercentage() {
         if (sharePercentage == null) {
-            sharePercentage = new IntegerFilter();
+            sharePercentage = new DoubleFilter();
         }
         return sharePercentage;
     }
 
-    public void setSharePercentage(IntegerFilter sharePercentage) {
+    public void setSharePercentage(DoubleFilter sharePercentage) {
         this.sharePercentage = sharePercentage;
     }
 
@@ -267,34 +285,19 @@ public class SurveyCriteria implements Serializable, Criteria {
         this.remarks = remarks;
     }
 
-    public StringFilter getStatus() {
+    public SurveyStatusFilter getStatus() {
         return status;
     }
 
-    public StringFilter status() {
+    public SurveyStatusFilter status() {
         if (status == null) {
-            status = new StringFilter();
+            status = new SurveyStatusFilter();
         }
         return status;
     }
 
-    public void setStatus(StringFilter status) {
+    public void setStatus(SurveyStatusFilter status) {
         this.status = status;
-    }
-
-    public LongFilter getLandCompensationId() {
-        return landCompensationId;
-    }
-
-    public LongFilter landCompensationId() {
-        if (landCompensationId == null) {
-            landCompensationId = new LongFilter();
-        }
-        return landCompensationId;
-    }
-
-    public void setLandCompensationId(LongFilter landCompensationId) {
-        this.landCompensationId = landCompensationId;
     }
 
     public LongFilter getKhatedarId() {
@@ -327,6 +330,21 @@ public class SurveyCriteria implements Serializable, Criteria {
         this.projectLandId = projectLandId;
     }
 
+    public LongFilter getLandCompensationId() {
+        return landCompensationId;
+    }
+
+    public LongFilter landCompensationId() {
+        if (landCompensationId == null) {
+            landCompensationId = new LongFilter();
+        }
+        return landCompensationId;
+    }
+
+    public void setLandCompensationId(LongFilter landCompensationId) {
+        this.landCompensationId = landCompensationId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -357,9 +375,9 @@ public class SurveyCriteria implements Serializable, Criteria {
             Objects.equals(distanceFromCity, that.distanceFromCity) &&
             Objects.equals(remarks, that.remarks) &&
             Objects.equals(status, that.status) &&
-            Objects.equals(landCompensationId, that.landCompensationId) &&
             Objects.equals(khatedarId, that.khatedarId) &&
             Objects.equals(projectLandId, that.projectLandId) &&
+            Objects.equals(landCompensationId, that.landCompensationId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -379,9 +397,9 @@ public class SurveyCriteria implements Serializable, Criteria {
             distanceFromCity,
             remarks,
             status,
-            landCompensationId,
             khatedarId,
             projectLandId,
+            landCompensationId,
             distinct
         );
     }
@@ -402,9 +420,9 @@ public class SurveyCriteria implements Serializable, Criteria {
             (distanceFromCity != null ? "distanceFromCity=" + distanceFromCity + ", " : "") +
             (remarks != null ? "remarks=" + remarks + ", " : "") +
             (status != null ? "status=" + status + ", " : "") +
-            (landCompensationId != null ? "landCompensationId=" + landCompensationId + ", " : "") +
             (khatedarId != null ? "khatedarId=" + khatedarId + ", " : "") +
             (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
+            (landCompensationId != null ? "landCompensationId=" + landCompensationId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

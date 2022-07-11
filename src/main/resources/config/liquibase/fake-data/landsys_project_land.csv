@@ -1,4 +1,4 @@
-id;remarks;documents;documents_content_type;hissa_type;land_id;project_id
+id;remarks;documents;documents_content_type;hissa_type;project_id;land_id
 1;Vermont New workforce;../fake-data/blob/hipster.png;image/png;SINGLE_OWNER;1;1
 2;Licensed copying;../fake-data/blob/hipster.png;image/png;DIVIDED;2;2
 3;unleash white;../fake-data/blob/hipster.png;image/png;DIVIDED;3;3

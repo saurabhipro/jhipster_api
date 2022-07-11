@@ -1,7 +1,7 @@
 package com.melontech.landsys.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.melontech.landsys.domain.enumeration.KhatedayStatus;
+import com.melontech.landsys.domain.enumeration.KhatedarStatus;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -38,25 +38,32 @@ public class Khatedar implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private KhatedayStatus status;
-
-    @OneToMany(mappedBy = "khatedar")
-    @JsonIgnoreProperties(value = { "landCompensations", "khatedar", "projectLand" }, allowSetters = true)
-    private Set<Survey> surveys = new HashSet<>();
-
-    @OneToMany(mappedBy = "khatedar")
-    @JsonIgnoreProperties(value = { "paymentAdvice", "khatedar", "survey", "projectLand" }, allowSetters = true)
-    private Set<LandCompensation> landCompensations = new HashSet<>();
+    private KhatedarStatus status;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "khatedars", "bankBranch" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "bankBranch", "khatedars" }, allowSetters = true)
     private Citizen citizen;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "land", "khatedars", "surveys", "landCompensations", "paymentAdvices", "project" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "project", "land", "noticeStatusInfo", "khatedars", "surveys", "landCompensations", "paymentAdvices" },
+        allowSetters = true
+    )
     private ProjectLand projectLand;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "khatedars", "projectLands" }, allowSetters = true)
+    private NoticeStatusInfo noticeStatusInfo;
+
+    @JsonIgnoreProperties(value = { "khatedar", "projectLand", "landCompensations" }, allowSetters = true)
+    @OneToOne(mappedBy = "khatedar")
+    private Survey survey;
+
+    @OneToMany(mappedBy = "khatedar")
+    @JsonIgnoreProperties(value = { "khatedar", "survey", "projectLand", "paymentAdvices" }, allowSetters = true)
+    private Set<LandCompensation> landCompensations = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -125,47 +132,74 @@ public class Khatedar implements Serializable {
         this.noticeFileContentType = noticeFileContentType;
     }
 
-    public KhatedayStatus getStatus() {
+    public KhatedarStatus getStatus() {
         return this.status;
     }
 
-    public Khatedar status(KhatedayStatus status) {
+    public Khatedar status(KhatedarStatus status) {
         this.setStatus(status);
         return this;
     }
 
-    public void setStatus(KhatedayStatus status) {
+    public void setStatus(KhatedarStatus status) {
         this.status = status;
     }
 
-    public Set<Survey> getSurveys() {
-        return this.surveys;
+    public Citizen getCitizen() {
+        return this.citizen;
     }
 
-    public void setSurveys(Set<Survey> surveys) {
-        if (this.surveys != null) {
-            this.surveys.forEach(i -> i.setKhatedar(null));
-        }
-        if (surveys != null) {
-            surveys.forEach(i -> i.setKhatedar(this));
-        }
-        this.surveys = surveys;
+    public void setCitizen(Citizen citizen) {
+        this.citizen = citizen;
     }
 
-    public Khatedar surveys(Set<Survey> surveys) {
-        this.setSurveys(surveys);
+    public Khatedar citizen(Citizen citizen) {
+        this.setCitizen(citizen);
         return this;
     }
 
-    public Khatedar addSurvey(Survey survey) {
-        this.surveys.add(survey);
-        survey.setKhatedar(this);
+    public ProjectLand getProjectLand() {
+        return this.projectLand;
+    }
+
+    public void setProjectLand(ProjectLand projectLand) {
+        this.projectLand = projectLand;
+    }
+
+    public Khatedar projectLand(ProjectLand projectLand) {
+        this.setProjectLand(projectLand);
         return this;
     }
 
-    public Khatedar removeSurvey(Survey survey) {
-        this.surveys.remove(survey);
-        survey.setKhatedar(null);
+    public NoticeStatusInfo getNoticeStatusInfo() {
+        return this.noticeStatusInfo;
+    }
+
+    public void setNoticeStatusInfo(NoticeStatusInfo noticeStatusInfo) {
+        this.noticeStatusInfo = noticeStatusInfo;
+    }
+
+    public Khatedar noticeStatusInfo(NoticeStatusInfo noticeStatusInfo) {
+        this.setNoticeStatusInfo(noticeStatusInfo);
+        return this;
+    }
+
+    public Survey getSurvey() {
+        return this.survey;
+    }
+
+    public void setSurvey(Survey survey) {
+        if (this.survey != null) {
+            this.survey.setKhatedar(null);
+        }
+        if (survey != null) {
+            survey.setKhatedar(this);
+        }
+        this.survey = survey;
+    }
+
+    public Khatedar survey(Survey survey) {
+        this.setSurvey(survey);
         return this;
     }
 
@@ -197,32 +231,6 @@ public class Khatedar implements Serializable {
     public Khatedar removeLandCompensation(LandCompensation landCompensation) {
         this.landCompensations.remove(landCompensation);
         landCompensation.setKhatedar(null);
-        return this;
-    }
-
-    public Citizen getCitizen() {
-        return this.citizen;
-    }
-
-    public void setCitizen(Citizen citizen) {
-        this.citizen = citizen;
-    }
-
-    public Khatedar citizen(Citizen citizen) {
-        this.setCitizen(citizen);
-        return this;
-    }
-
-    public ProjectLand getProjectLand() {
-        return this.projectLand;
-    }
-
-    public void setProjectLand(ProjectLand projectLand) {
-        this.projectLand = projectLand;
-    }
-
-    public Khatedar projectLand(ProjectLand projectLand) {
-        this.setProjectLand(projectLand);
         return this;
     }
 

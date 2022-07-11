@@ -5,11 +5,7 @@ import com.melontech.landsys.repository.LandCompensationRepository;
 import com.melontech.landsys.service.LandCompensationService;
 import com.melontech.landsys.service.dto.LandCompensationDTO;
 import com.melontech.landsys.service.mapper.LandCompensationMapper;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -74,20 +70,6 @@ public class LandCompensationServiceImpl implements LandCompensationService {
     public Page<LandCompensationDTO> findAll(Pageable pageable) {
         log.debug("Request to get all LandCompensations");
         return landCompensationRepository.findAll(pageable).map(landCompensationMapper::toDto);
-    }
-
-    /**
-     *  Get all the landCompensations where PaymentAdvice is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<LandCompensationDTO> findAllWherePaymentAdviceIsNull() {
-        log.debug("Request to get all landCompensations where PaymentAdvice is null");
-        return StreamSupport
-            .stream(landCompensationRepository.findAll().spliterator(), false)
-            .filter(landCompensation -> landCompensation.getPaymentAdvice() == null)
-            .map(landCompensationMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override

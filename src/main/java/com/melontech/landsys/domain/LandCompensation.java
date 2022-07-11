@@ -1,9 +1,12 @@
 package com.melontech.landsys.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.melontech.landsys.domain.enumeration.CompensationStatus;
 import com.melontech.landsys.domain.enumeration.HissaType;
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
@@ -33,7 +36,7 @@ public class LandCompensation implements Serializable {
 
     @NotNull
     @Column(name = "share_percentage", nullable = false)
-    private Integer sharePercentage;
+    private Double sharePercentage;
 
     @NotNull
     @Column(name = "land_market_value", nullable = false)
@@ -54,14 +57,12 @@ public class LandCompensation implements Serializable {
     @Column(name = "additional_compensation")
     private Double additionalCompensation;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private CompensationStatus status;
 
     @Column(name = "order_date")
-    private Instant orderDate;
-
-    @Column(name = "payment_date")
-    private Instant paymentDate;
+    private LocalDate orderDate;
 
     @Column(name = "payment_amount")
     private Double paymentAmount;
@@ -69,23 +70,27 @@ public class LandCompensation implements Serializable {
     @Column(name = "transaction_id")
     private String transactionId;
 
-    @JsonIgnoreProperties(value = { "landCompensation", "projectLand" }, allowSetters = true)
-    @OneToOne(mappedBy = "landCompensation")
-    private PaymentAdvice paymentAdvice;
-
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "surveys", "landCompensations", "citizen", "projectLand" }, allowSetters = true)
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "citizen", "projectLand", "noticeStatusInfo", "survey", "landCompensations" }, allowSetters = true)
     private Khatedar khatedar;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "landCompensations", "khatedar", "projectLand" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "khatedar", "projectLand", "landCompensations" }, allowSetters = true)
     private Survey survey;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "land", "khatedars", "surveys", "landCompensations", "paymentAdvices", "project" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "project", "land", "noticeStatusInfo", "khatedars", "surveys", "landCompensations", "paymentAdvices" },
+        allowSetters = true
+    )
     private ProjectLand projectLand;
+
+    @OneToMany(mappedBy = "landCompensation")
+    @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentFileRecon" }, allowSetters = true)
+    private Set<PaymentAdvice> paymentAdvices = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -128,16 +133,16 @@ public class LandCompensation implements Serializable {
         this.area = area;
     }
 
-    public Integer getSharePercentage() {
+    public Double getSharePercentage() {
         return this.sharePercentage;
     }
 
-    public LandCompensation sharePercentage(Integer sharePercentage) {
+    public LandCompensation sharePercentage(Double sharePercentage) {
         this.setSharePercentage(sharePercentage);
         return this;
     }
 
-    public void setSharePercentage(Integer sharePercentage) {
+    public void setSharePercentage(Double sharePercentage) {
         this.sharePercentage = sharePercentage;
     }
 
@@ -219,43 +224,30 @@ public class LandCompensation implements Serializable {
         this.additionalCompensation = additionalCompensation;
     }
 
-    public String getStatus() {
+    public CompensationStatus getStatus() {
         return this.status;
     }
 
-    public LandCompensation status(String status) {
+    public LandCompensation status(CompensationStatus status) {
         this.setStatus(status);
         return this;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(CompensationStatus status) {
         this.status = status;
     }
 
-    public Instant getOrderDate() {
+    public LocalDate getOrderDate() {
         return this.orderDate;
     }
 
-    public LandCompensation orderDate(Instant orderDate) {
+    public LandCompensation orderDate(LocalDate orderDate) {
         this.setOrderDate(orderDate);
         return this;
     }
 
-    public void setOrderDate(Instant orderDate) {
+    public void setOrderDate(LocalDate orderDate) {
         this.orderDate = orderDate;
-    }
-
-    public Instant getPaymentDate() {
-        return this.paymentDate;
-    }
-
-    public LandCompensation paymentDate(Instant paymentDate) {
-        this.setPaymentDate(paymentDate);
-        return this;
-    }
-
-    public void setPaymentDate(Instant paymentDate) {
-        this.paymentDate = paymentDate;
     }
 
     public Double getPaymentAmount() {
@@ -282,25 +274,6 @@ public class LandCompensation implements Serializable {
 
     public void setTransactionId(String transactionId) {
         this.transactionId = transactionId;
-    }
-
-    public PaymentAdvice getPaymentAdvice() {
-        return this.paymentAdvice;
-    }
-
-    public void setPaymentAdvice(PaymentAdvice paymentAdvice) {
-        if (this.paymentAdvice != null) {
-            this.paymentAdvice.setLandCompensation(null);
-        }
-        if (paymentAdvice != null) {
-            paymentAdvice.setLandCompensation(this);
-        }
-        this.paymentAdvice = paymentAdvice;
-    }
-
-    public LandCompensation paymentAdvice(PaymentAdvice paymentAdvice) {
-        this.setPaymentAdvice(paymentAdvice);
-        return this;
     }
 
     public Khatedar getKhatedar() {
@@ -342,6 +315,37 @@ public class LandCompensation implements Serializable {
         return this;
     }
 
+    public Set<PaymentAdvice> getPaymentAdvices() {
+        return this.paymentAdvices;
+    }
+
+    public void setPaymentAdvices(Set<PaymentAdvice> paymentAdvices) {
+        if (this.paymentAdvices != null) {
+            this.paymentAdvices.forEach(i -> i.setLandCompensation(null));
+        }
+        if (paymentAdvices != null) {
+            paymentAdvices.forEach(i -> i.setLandCompensation(this));
+        }
+        this.paymentAdvices = paymentAdvices;
+    }
+
+    public LandCompensation paymentAdvices(Set<PaymentAdvice> paymentAdvices) {
+        this.setPaymentAdvices(paymentAdvices);
+        return this;
+    }
+
+    public LandCompensation addPaymentAdvice(PaymentAdvice paymentAdvice) {
+        this.paymentAdvices.add(paymentAdvice);
+        paymentAdvice.setLandCompensation(this);
+        return this;
+    }
+
+    public LandCompensation removePaymentAdvice(PaymentAdvice paymentAdvice) {
+        this.paymentAdvices.remove(paymentAdvice);
+        paymentAdvice.setLandCompensation(null);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -377,7 +381,6 @@ public class LandCompensation implements Serializable {
             ", additionalCompensation=" + getAdditionalCompensation() +
             ", status='" + getStatus() + "'" +
             ", orderDate='" + getOrderDate() + "'" +
-            ", paymentDate='" + getPaymentDate() + "'" +
             ", paymentAmount=" + getPaymentAmount() +
             ", transactionId='" + getTransactionId() + "'" +
             "}";

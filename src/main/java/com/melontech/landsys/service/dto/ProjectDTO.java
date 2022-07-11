@@ -1,7 +1,7 @@
 package com.melontech.landsys.service.dto;
 
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Objects;
 import javax.validation.constraints.*;
 
@@ -16,10 +16,10 @@ public class ProjectDTO implements Serializable {
     private String name;
 
     @NotNull
-    private Instant startDate;
+    private LocalDate startDate;
 
     @NotNull
-    private Instant endDate;
+    private LocalDate endDate;
 
     @NotNull
     private Double budget;
@@ -46,19 +46,19 @@ public class ProjectDTO implements Serializable {
         this.name = name;
     }
 
-    public Instant getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Instant startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Instant getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Instant endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 

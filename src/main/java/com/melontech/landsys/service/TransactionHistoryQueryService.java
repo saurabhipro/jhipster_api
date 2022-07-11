@@ -134,7 +134,7 @@ public class TransactionHistoryQueryService extends QueryService<TransactionHist
                 specification = specification.and(buildStringSpecification(criteria.getEventType(), TransactionHistory_.eventType));
             }
             if (criteria.getEventStatus() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getEventStatus(), TransactionHistory_.eventStatus));
+                specification = specification.and(buildSpecification(criteria.getEventStatus(), TransactionHistory_.eventStatus));
             }
             if (criteria.getApprover1() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getApprover1(), TransactionHistory_.approver1));

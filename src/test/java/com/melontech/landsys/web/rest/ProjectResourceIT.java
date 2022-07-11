@@ -12,8 +12,8 @@ import com.melontech.landsys.repository.ProjectRepository;
 import com.melontech.landsys.service.criteria.ProjectCriteria;
 import com.melontech.landsys.service.dto.ProjectDTO;
 import com.melontech.landsys.service.mapper.ProjectMapper;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -38,11 +38,13 @@ class ProjectResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final Instant DEFAULT_START_DATE = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_START_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final LocalDate DEFAULT_START_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_START_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_START_DATE = LocalDate.ofEpochDay(-1L);
 
-    private static final Instant DEFAULT_END_DATE = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_END_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final LocalDate DEFAULT_END_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_END_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_END_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final Double DEFAULT_BUDGET = 1D;
     private static final Double UPDATED_BUDGET = 2D;
@@ -92,6 +94,16 @@ class ProjectResourceIT {
             .approver1(DEFAULT_APPROVER_1)
             .approver2(DEFAULT_APPROVER_2)
             .approver3(DEFAULT_APPROVER_3);
+        // Add required entity
+        ProjectLand projectLand;
+        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
+            projectLand = ProjectLandResourceIT.createEntity(em);
+            em.persist(projectLand);
+            em.flush();
+        } else {
+            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
+        }
+        project.getProjectLands().add(projectLand);
         return project;
     }
 
@@ -110,6 +122,16 @@ class ProjectResourceIT {
             .approver1(UPDATED_APPROVER_1)
             .approver2(UPDATED_APPROVER_2)
             .approver3(UPDATED_APPROVER_3);
+        // Add required entity
+        ProjectLand projectLand;
+        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
+            projectLand = ProjectLandResourceIT.createUpdatedEntity(em);
+            em.persist(projectLand);
+            em.flush();
+        } else {
+            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
+        }
+        project.getProjectLands().add(projectLand);
         return project;
     }
 
@@ -424,6 +446,58 @@ class ProjectResourceIT {
 
     @Test
     @Transactional
+    void getAllProjectsByStartDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        projectRepository.saveAndFlush(project);
+
+        // Get all the projectList where startDate is greater than or equal to DEFAULT_START_DATE
+        defaultProjectShouldBeFound("startDate.greaterThanOrEqual=" + DEFAULT_START_DATE);
+
+        // Get all the projectList where startDate is greater than or equal to UPDATED_START_DATE
+        defaultProjectShouldNotBeFound("startDate.greaterThanOrEqual=" + UPDATED_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllProjectsByStartDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        projectRepository.saveAndFlush(project);
+
+        // Get all the projectList where startDate is less than or equal to DEFAULT_START_DATE
+        defaultProjectShouldBeFound("startDate.lessThanOrEqual=" + DEFAULT_START_DATE);
+
+        // Get all the projectList where startDate is less than or equal to SMALLER_START_DATE
+        defaultProjectShouldNotBeFound("startDate.lessThanOrEqual=" + SMALLER_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllProjectsByStartDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        projectRepository.saveAndFlush(project);
+
+        // Get all the projectList where startDate is less than DEFAULT_START_DATE
+        defaultProjectShouldNotBeFound("startDate.lessThan=" + DEFAULT_START_DATE);
+
+        // Get all the projectList where startDate is less than UPDATED_START_DATE
+        defaultProjectShouldBeFound("startDate.lessThan=" + UPDATED_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllProjectsByStartDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        projectRepository.saveAndFlush(project);
+
+        // Get all the projectList where startDate is greater than DEFAULT_START_DATE
+        defaultProjectShouldNotBeFound("startDate.greaterThan=" + DEFAULT_START_DATE);
+
+        // Get all the projectList where startDate is greater than SMALLER_START_DATE
+        defaultProjectShouldBeFound("startDate.greaterThan=" + SMALLER_START_DATE);
+    }
+
+    @Test
+    @Transactional
     void getAllProjectsByEndDateIsEqualToSomething() throws Exception {
         // Initialize the database
         projectRepository.saveAndFlush(project);
@@ -472,6 +546,58 @@ class ProjectResourceIT {
 
         // Get all the projectList where endDate is null
         defaultProjectShouldNotBeFound("endDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllProjectsByEndDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        projectRepository.saveAndFlush(project);
+
+        // Get all the projectList where endDate is greater than or equal to DEFAULT_END_DATE
+        defaultProjectShouldBeFound("endDate.greaterThanOrEqual=" + DEFAULT_END_DATE);
+
+        // Get all the projectList where endDate is greater than or equal to UPDATED_END_DATE
+        defaultProjectShouldNotBeFound("endDate.greaterThanOrEqual=" + UPDATED_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllProjectsByEndDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        projectRepository.saveAndFlush(project);
+
+        // Get all the projectList where endDate is less than or equal to DEFAULT_END_DATE
+        defaultProjectShouldBeFound("endDate.lessThanOrEqual=" + DEFAULT_END_DATE);
+
+        // Get all the projectList where endDate is less than or equal to SMALLER_END_DATE
+        defaultProjectShouldNotBeFound("endDate.lessThanOrEqual=" + SMALLER_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllProjectsByEndDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        projectRepository.saveAndFlush(project);
+
+        // Get all the projectList where endDate is less than DEFAULT_END_DATE
+        defaultProjectShouldNotBeFound("endDate.lessThan=" + DEFAULT_END_DATE);
+
+        // Get all the projectList where endDate is less than UPDATED_END_DATE
+        defaultProjectShouldBeFound("endDate.lessThan=" + UPDATED_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllProjectsByEndDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        projectRepository.saveAndFlush(project);
+
+        // Get all the projectList where endDate is greater than DEFAULT_END_DATE
+        defaultProjectShouldNotBeFound("endDate.greaterThan=" + DEFAULT_END_DATE);
+
+        // Get all the projectList where endDate is greater than SMALLER_END_DATE
+        defaultProjectShouldBeFound("endDate.greaterThan=" + SMALLER_END_DATE);
     }
 
     @Test

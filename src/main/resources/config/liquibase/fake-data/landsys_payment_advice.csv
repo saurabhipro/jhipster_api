@@ -1,4 +1,4 @@
-id;account_holder_name;payment_amount;bank_name;account_number;ifsc_code;check_number;micr_code;payment_advice_type;reference_number;payment_status;hisssa_type;land_compensation_id;project_land_id
+id;account_holder_name;payment_amount;bank_name;account_number;ifsc_code;check_number;micr_code;payment_advice_type;reference_number;payment_status;hissa_type;project_land_id;land_compensation_id
 1;Account Avon;60397;sky;redundant;Optimized Field;Buckinghamshire;auxiliary;CHECQUE;Shirt technologies;PENDING;JOINT_OWNER;1;1
 2;paradigms mission-critical communities;59121;policy;for Knoll;projection Shirt;calculating Avon;synthesize Specialist Steel;OTHER;Fresh;PAID;JOINT_OWNER;2;2
 3;recontextualize;77493;wireless Books payment;Solutions algorithm;Frozen Belarus;infomediaries redundant;invoice;OTHER;Branding;APPROVED;DIVIDED;3;3

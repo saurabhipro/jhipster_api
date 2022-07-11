@@ -31,7 +31,7 @@ public class Unit implements Serializable {
     private Double conversionFactor;
 
     @OneToMany(mappedBy = "unit")
-    @JsonIgnoreProperties(value = { "state", "projectLand", "village", "landType", "unit" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "state", "village", "unit", "landType", "projectLands" }, allowSetters = true)
     private Set<Land> lands = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

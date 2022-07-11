@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.melontech.landsys.IntegrationTest;
 import com.melontech.landsys.domain.TransactionHistory;
+import com.melontech.landsys.domain.enumeration.EventStatus;
 import com.melontech.landsys.repository.TransactionHistoryRepository;
 import com.melontech.landsys.service.criteria.TransactionHistoryCriteria;
 import com.melontech.landsys.service.dto.TransactionHistoryDTO;
@@ -72,8 +73,8 @@ class TransactionHistoryResourceIT {
     private static final String DEFAULT_EVENT_TYPE = "AAAAAAAAAA";
     private static final String UPDATED_EVENT_TYPE = "BBBBBBBBBB";
 
-    private static final String DEFAULT_EVENT_STATUS = "AAAAAAAAAA";
-    private static final String UPDATED_EVENT_STATUS = "BBBBBBBBBB";
+    private static final EventStatus DEFAULT_EVENT_STATUS = EventStatus.NEW;
+    private static final EventStatus UPDATED_EVENT_STATUS = EventStatus.OPEN;
 
     private static final String DEFAULT_APPROVER_1 = "AAAAAAAAAA";
     private static final String UPDATED_APPROVER_1 = "BBBBBBBBBB";
@@ -382,7 +383,7 @@ class TransactionHistoryResourceIT {
             .andExpect(jsonPath("$.[*].transactionId").value(hasItem(DEFAULT_TRANSACTION_ID)))
             .andExpect(jsonPath("$.[*].transactionType").value(hasItem(DEFAULT_TRANSACTION_TYPE)))
             .andExpect(jsonPath("$.[*].eventType").value(hasItem(DEFAULT_EVENT_TYPE)))
-            .andExpect(jsonPath("$.[*].eventStatus").value(hasItem(DEFAULT_EVENT_STATUS)))
+            .andExpect(jsonPath("$.[*].eventStatus").value(hasItem(DEFAULT_EVENT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].approver1").value(hasItem(DEFAULT_APPROVER_1)))
             .andExpect(jsonPath("$.[*].approver2").value(hasItem(DEFAULT_APPROVER_2)))
             .andExpect(jsonPath("$.[*].approver3").value(hasItem(DEFAULT_APPROVER_3)));
@@ -413,7 +414,7 @@ class TransactionHistoryResourceIT {
             .andExpect(jsonPath("$.transactionId").value(DEFAULT_TRANSACTION_ID))
             .andExpect(jsonPath("$.transactionType").value(DEFAULT_TRANSACTION_TYPE))
             .andExpect(jsonPath("$.eventType").value(DEFAULT_EVENT_TYPE))
-            .andExpect(jsonPath("$.eventStatus").value(DEFAULT_EVENT_STATUS))
+            .andExpect(jsonPath("$.eventStatus").value(DEFAULT_EVENT_STATUS.toString()))
             .andExpect(jsonPath("$.approver1").value(DEFAULT_APPROVER_1))
             .andExpect(jsonPath("$.approver2").value(DEFAULT_APPROVER_2))
             .andExpect(jsonPath("$.approver3").value(DEFAULT_APPROVER_3));
@@ -1531,32 +1532,6 @@ class TransactionHistoryResourceIT {
 
     @Test
     @Transactional
-    void getAllTransactionHistoriesByEventStatusContainsSomething() throws Exception {
-        // Initialize the database
-        transactionHistoryRepository.saveAndFlush(transactionHistory);
-
-        // Get all the transactionHistoryList where eventStatus contains DEFAULT_EVENT_STATUS
-        defaultTransactionHistoryShouldBeFound("eventStatus.contains=" + DEFAULT_EVENT_STATUS);
-
-        // Get all the transactionHistoryList where eventStatus contains UPDATED_EVENT_STATUS
-        defaultTransactionHistoryShouldNotBeFound("eventStatus.contains=" + UPDATED_EVENT_STATUS);
-    }
-
-    @Test
-    @Transactional
-    void getAllTransactionHistoriesByEventStatusNotContainsSomething() throws Exception {
-        // Initialize the database
-        transactionHistoryRepository.saveAndFlush(transactionHistory);
-
-        // Get all the transactionHistoryList where eventStatus does not contain DEFAULT_EVENT_STATUS
-        defaultTransactionHistoryShouldNotBeFound("eventStatus.doesNotContain=" + DEFAULT_EVENT_STATUS);
-
-        // Get all the transactionHistoryList where eventStatus does not contain UPDATED_EVENT_STATUS
-        defaultTransactionHistoryShouldBeFound("eventStatus.doesNotContain=" + UPDATED_EVENT_STATUS);
-    }
-
-    @Test
-    @Transactional
     void getAllTransactionHistoriesByApprover1IsEqualToSomething() throws Exception {
         // Initialize the database
         transactionHistoryRepository.saveAndFlush(transactionHistory);
@@ -1811,7 +1786,7 @@ class TransactionHistoryResourceIT {
             .andExpect(jsonPath("$.[*].transactionId").value(hasItem(DEFAULT_TRANSACTION_ID)))
             .andExpect(jsonPath("$.[*].transactionType").value(hasItem(DEFAULT_TRANSACTION_TYPE)))
             .andExpect(jsonPath("$.[*].eventType").value(hasItem(DEFAULT_EVENT_TYPE)))
-            .andExpect(jsonPath("$.[*].eventStatus").value(hasItem(DEFAULT_EVENT_STATUS)))
+            .andExpect(jsonPath("$.[*].eventStatus").value(hasItem(DEFAULT_EVENT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].approver1").value(hasItem(DEFAULT_APPROVER_1)))
             .andExpect(jsonPath("$.[*].approver2").value(hasItem(DEFAULT_APPROVER_2)))
             .andExpect(jsonPath("$.[*].approver3").value(hasItem(DEFAULT_APPROVER_3)));

@@ -1124,32 +1124,6 @@ class CitizenResourceIT {
 
     @Test
     @Transactional
-    void getAllCitizensByKhatedarIsEqualToSomething() throws Exception {
-        // Initialize the database
-        citizenRepository.saveAndFlush(citizen);
-        Khatedar khatedar;
-        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
-            khatedar = KhatedarResourceIT.createEntity(em);
-            em.persist(khatedar);
-            em.flush();
-        } else {
-            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
-        }
-        em.persist(khatedar);
-        em.flush();
-        citizen.addKhatedar(khatedar);
-        citizenRepository.saveAndFlush(citizen);
-        Long khatedarId = khatedar.getId();
-
-        // Get all the citizenList where khatedar equals to khatedarId
-        defaultCitizenShouldBeFound("khatedarId.equals=" + khatedarId);
-
-        // Get all the citizenList where khatedar equals to (khatedarId + 1)
-        defaultCitizenShouldNotBeFound("khatedarId.equals=" + (khatedarId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllCitizensByBankBranchIsEqualToSomething() throws Exception {
         // Initialize the database
         citizenRepository.saveAndFlush(citizen);
@@ -1172,6 +1146,32 @@ class CitizenResourceIT {
 
         // Get all the citizenList where bankBranch equals to (bankBranchId + 1)
         defaultCitizenShouldNotBeFound("bankBranchId.equals=" + (bankBranchId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllCitizensByKhatedarIsEqualToSomething() throws Exception {
+        // Initialize the database
+        citizenRepository.saveAndFlush(citizen);
+        Khatedar khatedar;
+        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
+            khatedar = KhatedarResourceIT.createEntity(em);
+            em.persist(khatedar);
+            em.flush();
+        } else {
+            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
+        }
+        em.persist(khatedar);
+        em.flush();
+        citizen.addKhatedar(khatedar);
+        citizenRepository.saveAndFlush(citizen);
+        Long khatedarId = khatedar.getId();
+
+        // Get all the citizenList where khatedar equals to khatedarId
+        defaultCitizenShouldBeFound("khatedarId.equals=" + khatedarId);
+
+        // Get all the citizenList where khatedar equals to (khatedarId + 1)
+        defaultCitizenShouldNotBeFound("khatedarId.equals=" + (khatedarId + 1));
     }
 
     /**

@@ -5,7 +5,11 @@ import com.melontech.landsys.repository.PaymentAdviceRepository;
 import com.melontech.landsys.service.PaymentAdviceService;
 import com.melontech.landsys.service.dto.PaymentAdviceDTO;
 import com.melontech.landsys.service.mapper.PaymentAdviceMapper;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -67,6 +71,20 @@ public class PaymentAdviceServiceImpl implements PaymentAdviceService {
     public Page<PaymentAdviceDTO> findAll(Pageable pageable) {
         log.debug("Request to get all PaymentAdvices");
         return paymentAdviceRepository.findAll(pageable).map(paymentAdviceMapper::toDto);
+    }
+
+    /**
+     *  Get all the paymentAdvices where PaymentFileRecon is {@code null}.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<PaymentAdviceDTO> findAllWherePaymentFileReconIsNull() {
+        log.debug("Request to get all paymentAdvices where PaymentFileRecon is null");
+        return StreamSupport
+            .stream(paymentAdviceRepository.findAll().spliterator(), false)
+            .filter(paymentAdvice -> paymentAdvice.getPaymentFileRecon() == null)
+            .map(paymentAdviceMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override

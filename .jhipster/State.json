@@ -1,6 +1,6 @@
 {
   "applications": "*",
-  "changelogDate": "20220710085251",
+  "changelogDate": "20220711175439",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "landsys_state",
@@ -21,7 +21,7 @@
       "otherEntityName": "district",
       "otherEntityRelationshipName": "state",
       "relationshipName": "district",
-      "relationshipType": "one-to-many"
+      "relationshipType": "many-to-one"
     },
     {
       "otherEntityField": "khasraNumber",

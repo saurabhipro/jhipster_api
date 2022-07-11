@@ -1,6 +1,7 @@
 package com.melontech.landsys.service;
 
 import com.melontech.landsys.service.dto.KhatedarDTO;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +41,12 @@ public interface KhatedarService {
      * @return the list of entities.
      */
     Page<KhatedarDTO> findAll(Pageable pageable);
+    /**
+     * Get all the KhatedarDTO where Survey is {@code null}.
+     *
+     * @return the {@link List} of entities.
+     */
+    List<KhatedarDTO> findAllWhereSurveyIsNull();
 
     /**
      * Get all the khatedars with eager load of many-to-many relationships.

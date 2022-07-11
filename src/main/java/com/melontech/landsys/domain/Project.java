@@ -2,7 +2,7 @@ package com.melontech.landsys.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -29,11 +29,11 @@ public class Project implements Serializable {
 
     @NotNull
     @Column(name = "start_date", nullable = false)
-    private Instant startDate;
+    private LocalDate startDate;
 
     @NotNull
     @Column(name = "end_date", nullable = false)
-    private Instant endDate;
+    private LocalDate endDate;
 
     @NotNull
     @Column(name = "budget", nullable = false)
@@ -49,7 +49,10 @@ public class Project implements Serializable {
     private String approver3;
 
     @OneToMany(mappedBy = "project")
-    @JsonIgnoreProperties(value = { "land", "khatedars", "surveys", "landCompensations", "paymentAdvices", "project" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "project", "land", "noticeStatusInfo", "khatedars", "surveys", "landCompensations", "paymentAdvices" },
+        allowSetters = true
+    )
     private Set<ProjectLand> projectLands = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -80,29 +83,29 @@ public class Project implements Serializable {
         this.name = name;
     }
 
-    public Instant getStartDate() {
+    public LocalDate getStartDate() {
         return this.startDate;
     }
 
-    public Project startDate(Instant startDate) {
+    public Project startDate(LocalDate startDate) {
         this.setStartDate(startDate);
         return this;
     }
 
-    public void setStartDate(Instant startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Instant getEndDate() {
+    public LocalDate getEndDate() {
         return this.endDate;
     }
 
-    public Project endDate(Instant endDate) {
+    public Project endDate(LocalDate endDate) {
         this.setEndDate(endDate);
         return this;
     }
 
-    public void setEndDate(Instant endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 

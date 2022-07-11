@@ -1,6 +1,6 @@
 package com.melontech.landsys.service.criteria;
 
-import com.melontech.landsys.domain.enumeration.KhatedayStatus;
+import com.melontech.landsys.domain.enumeration.KhatedarStatus;
 import java.io.Serializable;
 import java.util.Objects;
 import org.springdoc.api.annotations.ParameterObject;
@@ -26,19 +26,19 @@ import tech.jhipster.service.filter.StringFilter;
 public class KhatedarCriteria implements Serializable, Criteria {
 
     /**
-     * Class for filtering KhatedayStatus
+     * Class for filtering KhatedarStatus
      */
-    public static class KhatedayStatusFilter extends Filter<KhatedayStatus> {
+    public static class KhatedarStatusFilter extends Filter<KhatedarStatus> {
 
-        public KhatedayStatusFilter() {}
+        public KhatedarStatusFilter() {}
 
-        public KhatedayStatusFilter(KhatedayStatusFilter filter) {
+        public KhatedarStatusFilter(KhatedarStatusFilter filter) {
             super(filter);
         }
 
         @Override
-        public KhatedayStatusFilter copy() {
-            return new KhatedayStatusFilter(this);
+        public KhatedarStatusFilter copy() {
+            return new KhatedarStatusFilter(this);
         }
     }
 
@@ -50,15 +50,17 @@ public class KhatedarCriteria implements Serializable, Criteria {
 
     private StringFilter remarks;
 
-    private KhatedayStatusFilter status;
-
-    private LongFilter surveyId;
-
-    private LongFilter landCompensationId;
+    private KhatedarStatusFilter status;
 
     private LongFilter citizenId;
 
     private LongFilter projectLandId;
+
+    private LongFilter noticeStatusInfoId;
+
+    private LongFilter surveyId;
+
+    private LongFilter landCompensationId;
 
     private Boolean distinct;
 
@@ -69,10 +71,11 @@ public class KhatedarCriteria implements Serializable, Criteria {
         this.caseFileNo = other.caseFileNo == null ? null : other.caseFileNo.copy();
         this.remarks = other.remarks == null ? null : other.remarks.copy();
         this.status = other.status == null ? null : other.status.copy();
-        this.surveyId = other.surveyId == null ? null : other.surveyId.copy();
-        this.landCompensationId = other.landCompensationId == null ? null : other.landCompensationId.copy();
         this.citizenId = other.citizenId == null ? null : other.citizenId.copy();
         this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
+        this.noticeStatusInfoId = other.noticeStatusInfoId == null ? null : other.noticeStatusInfoId.copy();
+        this.surveyId = other.surveyId == null ? null : other.surveyId.copy();
+        this.landCompensationId = other.landCompensationId == null ? null : other.landCompensationId.copy();
         this.distinct = other.distinct;
     }
 
@@ -126,49 +129,19 @@ public class KhatedarCriteria implements Serializable, Criteria {
         this.remarks = remarks;
     }
 
-    public KhatedayStatusFilter getStatus() {
+    public KhatedarStatusFilter getStatus() {
         return status;
     }
 
-    public KhatedayStatusFilter status() {
+    public KhatedarStatusFilter status() {
         if (status == null) {
-            status = new KhatedayStatusFilter();
+            status = new KhatedarStatusFilter();
         }
         return status;
     }
 
-    public void setStatus(KhatedayStatusFilter status) {
+    public void setStatus(KhatedarStatusFilter status) {
         this.status = status;
-    }
-
-    public LongFilter getSurveyId() {
-        return surveyId;
-    }
-
-    public LongFilter surveyId() {
-        if (surveyId == null) {
-            surveyId = new LongFilter();
-        }
-        return surveyId;
-    }
-
-    public void setSurveyId(LongFilter surveyId) {
-        this.surveyId = surveyId;
-    }
-
-    public LongFilter getLandCompensationId() {
-        return landCompensationId;
-    }
-
-    public LongFilter landCompensationId() {
-        if (landCompensationId == null) {
-            landCompensationId = new LongFilter();
-        }
-        return landCompensationId;
-    }
-
-    public void setLandCompensationId(LongFilter landCompensationId) {
-        this.landCompensationId = landCompensationId;
     }
 
     public LongFilter getCitizenId() {
@@ -201,6 +174,51 @@ public class KhatedarCriteria implements Serializable, Criteria {
         this.projectLandId = projectLandId;
     }
 
+    public LongFilter getNoticeStatusInfoId() {
+        return noticeStatusInfoId;
+    }
+
+    public LongFilter noticeStatusInfoId() {
+        if (noticeStatusInfoId == null) {
+            noticeStatusInfoId = new LongFilter();
+        }
+        return noticeStatusInfoId;
+    }
+
+    public void setNoticeStatusInfoId(LongFilter noticeStatusInfoId) {
+        this.noticeStatusInfoId = noticeStatusInfoId;
+    }
+
+    public LongFilter getSurveyId() {
+        return surveyId;
+    }
+
+    public LongFilter surveyId() {
+        if (surveyId == null) {
+            surveyId = new LongFilter();
+        }
+        return surveyId;
+    }
+
+    public void setSurveyId(LongFilter surveyId) {
+        this.surveyId = surveyId;
+    }
+
+    public LongFilter getLandCompensationId() {
+        return landCompensationId;
+    }
+
+    public LongFilter landCompensationId() {
+        if (landCompensationId == null) {
+            landCompensationId = new LongFilter();
+        }
+        return landCompensationId;
+    }
+
+    public void setLandCompensationId(LongFilter landCompensationId) {
+        this.landCompensationId = landCompensationId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -223,17 +241,29 @@ public class KhatedarCriteria implements Serializable, Criteria {
             Objects.equals(caseFileNo, that.caseFileNo) &&
             Objects.equals(remarks, that.remarks) &&
             Objects.equals(status, that.status) &&
-            Objects.equals(surveyId, that.surveyId) &&
-            Objects.equals(landCompensationId, that.landCompensationId) &&
             Objects.equals(citizenId, that.citizenId) &&
             Objects.equals(projectLandId, that.projectLandId) &&
+            Objects.equals(noticeStatusInfoId, that.noticeStatusInfoId) &&
+            Objects.equals(surveyId, that.surveyId) &&
+            Objects.equals(landCompensationId, that.landCompensationId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, caseFileNo, remarks, status, surveyId, landCompensationId, citizenId, projectLandId, distinct);
+        return Objects.hash(
+            id,
+            caseFileNo,
+            remarks,
+            status,
+            citizenId,
+            projectLandId,
+            noticeStatusInfoId,
+            surveyId,
+            landCompensationId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -244,10 +274,11 @@ public class KhatedarCriteria implements Serializable, Criteria {
             (caseFileNo != null ? "caseFileNo=" + caseFileNo + ", " : "") +
             (remarks != null ? "remarks=" + remarks + ", " : "") +
             (status != null ? "status=" + status + ", " : "") +
-            (surveyId != null ? "surveyId=" + surveyId + ", " : "") +
-            (landCompensationId != null ? "landCompensationId=" + landCompensationId + ", " : "") +
             (citizenId != null ? "citizenId=" + citizenId + ", " : "") +
             (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
+            (noticeStatusInfoId != null ? "noticeStatusInfoId=" + noticeStatusInfoId + ", " : "") +
+            (surveyId != null ? "surveyId=" + surveyId + ", " : "") +
+            (landCompensationId != null ? "landCompensationId=" + landCompensationId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

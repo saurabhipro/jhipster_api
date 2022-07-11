@@ -1,6 +1,6 @@
 {
   "applications": "*",
-  "changelogDate": "20220710085257",
+  "changelogDate": "20220711175445",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "landsys_land",
@@ -58,18 +58,18 @@
       "relationshipType": "one-to-one"
     },
     {
-      "otherEntityName": "projectLand",
-      "otherEntityRelationshipName": "land",
-      "ownerSide": false,
-      "relationshipName": "projectLand",
-      "relationshipType": "one-to-one",
-      "relationshipValidateRules": "required"
-    },
-    {
       "otherEntityField": "name",
       "otherEntityName": "village",
       "otherEntityRelationshipName": "land",
       "relationshipName": "village",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "unit",
+      "otherEntityRelationshipName": "land",
+      "relationshipName": "unit",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": "required"
     },
@@ -82,11 +82,11 @@
       "relationshipValidateRules": "required"
     },
     {
-      "otherEntityField": "name",
-      "otherEntityName": "unit",
+      "otherEntityName": "projectLand",
       "otherEntityRelationshipName": "land",
-      "relationshipName": "unit",
-      "relationshipType": "many-to-one"
+      "relationshipName": "projectLand",
+      "relationshipType": "one-to-many",
+      "relationshipValidateRules": "required"
     }
   ],
   "service": "serviceImpl"

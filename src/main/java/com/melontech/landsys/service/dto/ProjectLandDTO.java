@@ -21,9 +21,11 @@ public class ProjectLandDTO implements Serializable {
     private String documentsContentType;
     private HissaType hissaType;
 
+    private ProjectDTO project;
+
     private LandDTO land;
 
-    private ProjectDTO project;
+    private NoticeStatusInfoDTO noticeStatusInfo;
 
     public Long getId() {
         return id;
@@ -65,6 +67,14 @@ public class ProjectLandDTO implements Serializable {
         this.hissaType = hissaType;
     }
 
+    public ProjectDTO getProject() {
+        return project;
+    }
+
+    public void setProject(ProjectDTO project) {
+        this.project = project;
+    }
+
     public LandDTO getLand() {
         return land;
     }
@@ -73,12 +83,12 @@ public class ProjectLandDTO implements Serializable {
         this.land = land;
     }
 
-    public ProjectDTO getProject() {
-        return project;
+    public NoticeStatusInfoDTO getNoticeStatusInfo() {
+        return noticeStatusInfo;
     }
 
-    public void setProject(ProjectDTO project) {
-        this.project = project;
+    public void setNoticeStatusInfo(NoticeStatusInfoDTO noticeStatusInfo) {
+        this.noticeStatusInfo = noticeStatusInfo;
     }
 
     @Override
@@ -110,8 +120,9 @@ public class ProjectLandDTO implements Serializable {
             ", remarks='" + getRemarks() + "'" +
             ", documents='" + getDocuments() + "'" +
             ", hissaType='" + getHissaType() + "'" +
-            ", land=" + getLand() +
             ", project=" + getProject() +
+            ", land=" + getLand() +
+            ", noticeStatusInfo=" + getNoticeStatusInfo() +
             "}";
     }
 }

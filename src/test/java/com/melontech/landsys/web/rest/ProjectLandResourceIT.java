@@ -7,10 +7,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.melontech.landsys.IntegrationTest;
+import com.melontech.landsys.domain.Khatedar;
 import com.melontech.landsys.domain.Land;
+import com.melontech.landsys.domain.LandCompensation;
 import com.melontech.landsys.domain.PaymentAdvice;
 import com.melontech.landsys.domain.Project;
 import com.melontech.landsys.domain.ProjectLand;
+import com.melontech.landsys.domain.Survey;
 import com.melontech.landsys.domain.enumeration.HissaType;
 import com.melontech.landsys.repository.ProjectLandRepository;
 import com.melontech.landsys.service.ProjectLandService;
@@ -95,6 +98,16 @@ class ProjectLandResourceIT {
             .documentsContentType(DEFAULT_DOCUMENTS_CONTENT_TYPE)
             .hissaType(DEFAULT_HISSA_TYPE);
         // Add required entity
+        Project project;
+        if (TestUtil.findAll(em, Project.class).isEmpty()) {
+            project = ProjectResourceIT.createEntity(em);
+            em.persist(project);
+            em.flush();
+        } else {
+            project = TestUtil.findAll(em, Project.class).get(0);
+        }
+        projectLand.setProject(project);
+        // Add required entity
         Land land;
         if (TestUtil.findAll(em, Land.class).isEmpty()) {
             land = LandResourceIT.createEntity(em);
@@ -105,6 +118,36 @@ class ProjectLandResourceIT {
         }
         projectLand.setLand(land);
         // Add required entity
+        Khatedar khatedar;
+        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
+            khatedar = KhatedarResourceIT.createEntity(em);
+            em.persist(khatedar);
+            em.flush();
+        } else {
+            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
+        }
+        projectLand.getKhatedars().add(khatedar);
+        // Add required entity
+        Survey survey;
+        if (TestUtil.findAll(em, Survey.class).isEmpty()) {
+            survey = SurveyResourceIT.createEntity(em);
+            em.persist(survey);
+            em.flush();
+        } else {
+            survey = TestUtil.findAll(em, Survey.class).get(0);
+        }
+        projectLand.getSurveys().add(survey);
+        // Add required entity
+        LandCompensation landCompensation;
+        if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
+            landCompensation = LandCompensationResourceIT.createEntity(em);
+            em.persist(landCompensation);
+            em.flush();
+        } else {
+            landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
+        }
+        projectLand.getLandCompensations().add(landCompensation);
+        // Add required entity
         PaymentAdvice paymentAdvice;
         if (TestUtil.findAll(em, PaymentAdvice.class).isEmpty()) {
             paymentAdvice = PaymentAdviceResourceIT.createEntity(em);
@@ -114,16 +157,6 @@ class ProjectLandResourceIT {
             paymentAdvice = TestUtil.findAll(em, PaymentAdvice.class).get(0);
         }
         projectLand.getPaymentAdvices().add(paymentAdvice);
-        // Add required entity
-        Project project;
-        if (TestUtil.findAll(em, Project.class).isEmpty()) {
-            project = ProjectResourceIT.createEntity(em);
-            em.persist(project);
-            em.flush();
-        } else {
-            project = TestUtil.findAll(em, Project.class).get(0);
-        }
-        projectLand.setProject(project);
         return projectLand;
     }
 
@@ -140,6 +173,16 @@ class ProjectLandResourceIT {
             .documentsContentType(UPDATED_DOCUMENTS_CONTENT_TYPE)
             .hissaType(UPDATED_HISSA_TYPE);
         // Add required entity
+        Project project;
+        if (TestUtil.findAll(em, Project.class).isEmpty()) {
+            project = ProjectResourceIT.createUpdatedEntity(em);
+            em.persist(project);
+            em.flush();
+        } else {
+            project = TestUtil.findAll(em, Project.class).get(0);
+        }
+        projectLand.setProject(project);
+        // Add required entity
         Land land;
         if (TestUtil.findAll(em, Land.class).isEmpty()) {
             land = LandResourceIT.createUpdatedEntity(em);
@@ -150,6 +193,36 @@ class ProjectLandResourceIT {
         }
         projectLand.setLand(land);
         // Add required entity
+        Khatedar khatedar;
+        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
+            khatedar = KhatedarResourceIT.createUpdatedEntity(em);
+            em.persist(khatedar);
+            em.flush();
+        } else {
+            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
+        }
+        projectLand.getKhatedars().add(khatedar);
+        // Add required entity
+        Survey survey;
+        if (TestUtil.findAll(em, Survey.class).isEmpty()) {
+            survey = SurveyResourceIT.createUpdatedEntity(em);
+            em.persist(survey);
+            em.flush();
+        } else {
+            survey = TestUtil.findAll(em, Survey.class).get(0);
+        }
+        projectLand.getSurveys().add(survey);
+        // Add required entity
+        LandCompensation landCompensation;
+        if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
+            landCompensation = LandCompensationResourceIT.createUpdatedEntity(em);
+            em.persist(landCompensation);
+            em.flush();
+        } else {
+            landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
+        }
+        projectLand.getLandCompensations().add(landCompensation);
+        // Add required entity
         PaymentAdvice paymentAdvice;
         if (TestUtil.findAll(em, PaymentAdvice.class).isEmpty()) {
             paymentAdvice = PaymentAdviceResourceIT.createUpdatedEntity(em);
@@ -159,16 +232,6 @@ class ProjectLandResourceIT {
             paymentAdvice = TestUtil.findAll(em, PaymentAdvice.class).get(0);
         }
         projectLand.getPaymentAdvices().add(paymentAdvice);
-        // Add required entity
-        Project project;
-        if (TestUtil.findAll(em, Project.class).isEmpty()) {
-            project = ProjectResourceIT.createUpdatedEntity(em);
-            em.persist(project);
-            em.flush();
-        } else {
-            project = TestUtil.findAll(em, Project.class).get(0);
-        }
-        projectLand.setProject(project);
         return projectLand;
     }
 

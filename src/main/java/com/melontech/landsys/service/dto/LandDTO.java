@@ -34,9 +34,9 @@ public class LandDTO implements Serializable {
 
     private VillageDTO village;
 
-    private LandTypeDTO landType;
-
     private UnitDTO unit;
+
+    private LandTypeDTO landType;
 
     public Long getId() {
         return id;
@@ -134,20 +134,20 @@ public class LandDTO implements Serializable {
         this.village = village;
     }
 
-    public LandTypeDTO getLandType() {
-        return landType;
-    }
-
-    public void setLandType(LandTypeDTO landType) {
-        this.landType = landType;
-    }
-
     public UnitDTO getUnit() {
         return unit;
     }
 
     public void setUnit(UnitDTO unit) {
         this.unit = unit;
+    }
+
+    public LandTypeDTO getLandType() {
+        return landType;
+    }
+
+    public void setLandType(LandTypeDTO landType) {
+        this.landType = landType;
     }
 
     @Override
@@ -187,8 +187,8 @@ public class LandDTO implements Serializable {
             ", totalLandValue=" + getTotalLandValue() +
             ", state=" + getState() +
             ", village=" + getVillage() +
-            ", landType=" + getLandType() +
             ", unit=" + getUnit() +
+            ", landType=" + getLandType() +
             "}";
     }
 }

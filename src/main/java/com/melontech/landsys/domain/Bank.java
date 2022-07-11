@@ -31,7 +31,7 @@ public class Bank implements Serializable {
     private String code;
 
     @OneToMany(mappedBy = "bank")
-    @JsonIgnoreProperties(value = { "citizens", "bank" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "bank", "citizens" }, allowSetters = true)
     private Set<BankBranch> bankNames = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

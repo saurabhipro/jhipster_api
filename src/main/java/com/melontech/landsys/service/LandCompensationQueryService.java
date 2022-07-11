@@ -133,28 +133,16 @@ public class LandCompensationQueryService extends QueryService<LandCompensation>
                     );
             }
             if (criteria.getStatus() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getStatus(), LandCompensation_.status));
+                specification = specification.and(buildSpecification(criteria.getStatus(), LandCompensation_.status));
             }
             if (criteria.getOrderDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getOrderDate(), LandCompensation_.orderDate));
-            }
-            if (criteria.getPaymentDate() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getPaymentDate(), LandCompensation_.paymentDate));
             }
             if (criteria.getPaymentAmount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getPaymentAmount(), LandCompensation_.paymentAmount));
             }
             if (criteria.getTransactionId() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getTransactionId(), LandCompensation_.transactionId));
-            }
-            if (criteria.getPaymentAdviceId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getPaymentAdviceId(),
-                            root -> root.join(LandCompensation_.paymentAdvice, JoinType.LEFT).get(PaymentAdvice_.id)
-                        )
-                    );
             }
             if (criteria.getKhatedarId() != null) {
                 specification =
@@ -180,6 +168,15 @@ public class LandCompensationQueryService extends QueryService<LandCompensation>
                         buildSpecification(
                             criteria.getProjectLandId(),
                             root -> root.join(LandCompensation_.projectLand, JoinType.LEFT).get(ProjectLand_.id)
+                        )
+                    );
+            }
+            if (criteria.getPaymentAdviceId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPaymentAdviceId(),
+                            root -> root.join(LandCompensation_.paymentAdvices, JoinType.LEFT).get(PaymentAdvice_.id)
                         )
                     );
             }

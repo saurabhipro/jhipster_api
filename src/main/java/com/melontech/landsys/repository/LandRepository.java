@@ -27,18 +27,18 @@ public interface LandRepository extends JpaRepository<Land, Long> {
     }
 
     @Query(
-        value = "select distinct land from Land land left join fetch land.state left join fetch land.village left join fetch land.landType left join fetch land.unit",
+        value = "select distinct land from Land land left join fetch land.state left join fetch land.village left join fetch land.unit left join fetch land.landType",
         countQuery = "select count(distinct land) from Land land"
     )
     Page<Land> findAllWithToOneRelationships(Pageable pageable);
 
     @Query(
-        "select distinct land from Land land left join fetch land.state left join fetch land.village left join fetch land.landType left join fetch land.unit"
+        "select distinct land from Land land left join fetch land.state left join fetch land.village left join fetch land.unit left join fetch land.landType"
     )
     List<Land> findAllWithToOneRelationships();
 
     @Query(
-        "select land from Land land left join fetch land.state left join fetch land.village left join fetch land.landType left join fetch land.unit where land.id =:id"
+        "select land from Land land left join fetch land.state left join fetch land.village left join fetch land.unit left join fetch land.landType where land.id =:id"
     )
     Optional<Land> findOneWithToOneRelationships(@Param("id") Long id);
 }

@@ -1,7 +1,7 @@
 package com.melontech.landsys.service.dto;
 
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Objects;
 import javax.persistence.Lob;
 
@@ -12,7 +12,7 @@ public class PublicNotificationDTO implements Serializable {
 
     private Long id;
 
-    private Instant date;
+    private LocalDate date;
 
     @Lob
     private byte[] file;
@@ -27,11 +27,11 @@ public class PublicNotificationDTO implements Serializable {
         this.id = id;
     }
 
-    public Instant getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Instant date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

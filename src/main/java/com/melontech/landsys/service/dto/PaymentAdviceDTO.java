@@ -41,11 +41,11 @@ public class PaymentAdviceDTO implements Serializable {
     private PaymentStatus paymentStatus;
 
     @NotNull
-    private HissaType hisssaType;
-
-    private LandCompensationDTO landCompensation;
+    private HissaType hissaType;
 
     private ProjectLandDTO projectLand;
+
+    private LandCompensationDTO landCompensation;
 
     public Long getId() {
         return id;
@@ -135,20 +135,12 @@ public class PaymentAdviceDTO implements Serializable {
         this.paymentStatus = paymentStatus;
     }
 
-    public HissaType getHisssaType() {
-        return hisssaType;
+    public HissaType getHissaType() {
+        return hissaType;
     }
 
-    public void setHisssaType(HissaType hisssaType) {
-        this.hisssaType = hisssaType;
-    }
-
-    public LandCompensationDTO getLandCompensation() {
-        return landCompensation;
-    }
-
-    public void setLandCompensation(LandCompensationDTO landCompensation) {
-        this.landCompensation = landCompensation;
+    public void setHissaType(HissaType hissaType) {
+        this.hissaType = hissaType;
     }
 
     public ProjectLandDTO getProjectLand() {
@@ -157,6 +149,14 @@ public class PaymentAdviceDTO implements Serializable {
 
     public void setProjectLand(ProjectLandDTO projectLand) {
         this.projectLand = projectLand;
+    }
+
+    public LandCompensationDTO getLandCompensation() {
+        return landCompensation;
+    }
+
+    public void setLandCompensation(LandCompensationDTO landCompensation) {
+        this.landCompensation = landCompensation;
     }
 
     @Override
@@ -195,9 +195,9 @@ public class PaymentAdviceDTO implements Serializable {
             ", paymentAdviceType='" + getPaymentAdviceType() + "'" +
             ", referenceNumber='" + getReferenceNumber() + "'" +
             ", paymentStatus='" + getPaymentStatus() + "'" +
-            ", hisssaType='" + getHisssaType() + "'" +
-            ", landCompensation=" + getLandCompensation() +
+            ", hissaType='" + getHissaType() + "'" +
             ", projectLand=" + getProjectLand() +
+            ", landCompensation=" + getLandCompensation() +
             "}";
     }
 }

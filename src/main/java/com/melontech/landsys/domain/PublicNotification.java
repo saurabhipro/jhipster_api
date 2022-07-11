@@ -1,7 +1,7 @@
 package com.melontech.landsys.domain;
 
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDate;
 import javax.persistence.*;
 
 /**
@@ -20,7 +20,7 @@ public class PublicNotification implements Serializable {
     private Long id;
 
     @Column(name = "date")
-    private Instant date;
+    private LocalDate date;
 
     @Lob
     @Column(name = "file")
@@ -44,16 +44,16 @@ public class PublicNotification implements Serializable {
         this.id = id;
     }
 
-    public Instant getDate() {
+    public LocalDate getDate() {
         return this.date;
     }
 
-    public PublicNotification date(Instant date) {
+    public PublicNotification date(LocalDate date) {
         this.setDate(date);
         return this;
     }
 
-    public void setDate(Instant date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

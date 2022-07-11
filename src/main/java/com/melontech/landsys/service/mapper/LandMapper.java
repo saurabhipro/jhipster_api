@@ -19,8 +19,8 @@ import org.mapstruct.*;
 public interface LandMapper extends EntityMapper<LandDTO, Land> {
     @Mapping(target = "state", source = "state", qualifiedByName = "stateName")
     @Mapping(target = "village", source = "village", qualifiedByName = "villageName")
-    @Mapping(target = "landType", source = "landType", qualifiedByName = "landTypeName")
     @Mapping(target = "unit", source = "unit", qualifiedByName = "unitName")
+    @Mapping(target = "landType", source = "landType", qualifiedByName = "landTypeName")
     LandDTO toDto(Land s);
 
     @Named("stateName")
@@ -35,15 +35,15 @@ public interface LandMapper extends EntityMapper<LandDTO, Land> {
     @Mapping(target = "name", source = "name")
     VillageDTO toDtoVillageName(Village village);
 
-    @Named("landTypeName")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "name", source = "name")
-    LandTypeDTO toDtoLandTypeName(LandType landType);
-
     @Named("unitName")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "name")
     UnitDTO toDtoUnitName(Unit unit);
+
+    @Named("landTypeName")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
+    LandTypeDTO toDtoLandTypeName(LandType landType);
 }

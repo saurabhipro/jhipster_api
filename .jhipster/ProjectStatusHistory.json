@@ -1,6 +1,6 @@
 {
   "applications": "*",
-  "changelogDate": "20220710085259",
+  "changelogDate": "20220711175447",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "landsys_project_status_history",
@@ -12,7 +12,7 @@
     },
     {
       "fieldName": "when",
-      "fieldType": "Instant"
+      "fieldType": "LocalDate"
     },
     {
       "fieldName": "remarks",

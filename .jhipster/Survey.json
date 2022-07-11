@@ -1,6 +1,6 @@
 {
   "applications": "*",
-  "changelogDate": "20220710085309",
+  "changelogDate": "20220711175458",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "landsys_survey",
@@ -18,7 +18,7 @@
     },
     {
       "fieldName": "sharePercentage",
-      "fieldType": "Integer",
+      "fieldType": "Double",
       "fieldValidateRules": ["required"]
     },
     {
@@ -53,7 +53,8 @@
     },
     {
       "fieldName": "status",
-      "fieldType": "String"
+      "fieldType": "SurveyStatus",
+      "fieldValues": "OPEN,CLOSED"
     }
   ],
   "fluentMethods": true,
@@ -63,23 +64,25 @@
   "readOnly": false,
   "relationships": [
     {
-      "otherEntityName": "landCompensation",
-      "otherEntityRelationshipName": "survey",
-      "relationshipName": "landCompensation",
-      "relationshipType": "one-to-many"
-    },
-    {
       "otherEntityName": "khatedar",
       "otherEntityRelationshipName": "survey",
+      "ownerSide": true,
       "relationshipName": "khatedar",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": "required"
+      "relationshipType": "one-to-one"
     },
     {
       "otherEntityName": "projectLand",
       "otherEntityRelationshipName": "survey",
       "relationshipName": "projectLand",
-      "relationshipType": "many-to-one"
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "landCompensation",
+      "otherEntityRelationshipName": "survey",
+      "relationshipName": "landCompensation",
+      "relationshipType": "one-to-many",
+      "relationshipValidateRules": "required"
     }
   ],
   "service": "serviceImpl"

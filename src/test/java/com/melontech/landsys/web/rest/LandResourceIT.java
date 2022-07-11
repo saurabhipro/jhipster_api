@@ -10,6 +10,7 @@ import com.melontech.landsys.IntegrationTest;
 import com.melontech.landsys.domain.Land;
 import com.melontech.landsys.domain.LandType;
 import com.melontech.landsys.domain.ProjectLand;
+import com.melontech.landsys.domain.Unit;
 import com.melontech.landsys.domain.Village;
 import com.melontech.landsys.repository.LandRepository;
 import com.melontech.landsys.service.LandService;
@@ -114,16 +115,6 @@ class LandResourceIT {
             .distanceFromCity(DEFAULT_DISTANCE_FROM_CITY)
             .totalLandValue(DEFAULT_TOTAL_LAND_VALUE);
         // Add required entity
-        ProjectLand projectLand;
-        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
-            projectLand = ProjectLandResourceIT.createEntity(em);
-            em.persist(projectLand);
-            em.flush();
-        } else {
-            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
-        }
-        land.setProjectLand(projectLand);
-        // Add required entity
         Village village;
         if (TestUtil.findAll(em, Village.class).isEmpty()) {
             village = VillageResourceIT.createEntity(em);
@@ -134,6 +125,16 @@ class LandResourceIT {
         }
         land.setVillage(village);
         // Add required entity
+        Unit unit;
+        if (TestUtil.findAll(em, Unit.class).isEmpty()) {
+            unit = UnitResourceIT.createEntity(em);
+            em.persist(unit);
+            em.flush();
+        } else {
+            unit = TestUtil.findAll(em, Unit.class).get(0);
+        }
+        land.setUnit(unit);
+        // Add required entity
         LandType landType;
         if (TestUtil.findAll(em, LandType.class).isEmpty()) {
             landType = LandTypeResourceIT.createEntity(em);
@@ -143,6 +144,16 @@ class LandResourceIT {
             landType = TestUtil.findAll(em, LandType.class).get(0);
         }
         land.setLandType(landType);
+        // Add required entity
+        ProjectLand projectLand;
+        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
+            projectLand = ProjectLandResourceIT.createEntity(em);
+            em.persist(projectLand);
+            em.flush();
+        } else {
+            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
+        }
+        land.getProjectLands().add(projectLand);
         return land;
     }
 
@@ -164,16 +175,6 @@ class LandResourceIT {
             .distanceFromCity(UPDATED_DISTANCE_FROM_CITY)
             .totalLandValue(UPDATED_TOTAL_LAND_VALUE);
         // Add required entity
-        ProjectLand projectLand;
-        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
-            projectLand = ProjectLandResourceIT.createUpdatedEntity(em);
-            em.persist(projectLand);
-            em.flush();
-        } else {
-            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
-        }
-        land.setProjectLand(projectLand);
-        // Add required entity
         Village village;
         if (TestUtil.findAll(em, Village.class).isEmpty()) {
             village = VillageResourceIT.createUpdatedEntity(em);
@@ -184,6 +185,16 @@ class LandResourceIT {
         }
         land.setVillage(village);
         // Add required entity
+        Unit unit;
+        if (TestUtil.findAll(em, Unit.class).isEmpty()) {
+            unit = UnitResourceIT.createUpdatedEntity(em);
+            em.persist(unit);
+            em.flush();
+        } else {
+            unit = TestUtil.findAll(em, Unit.class).get(0);
+        }
+        land.setUnit(unit);
+        // Add required entity
         LandType landType;
         if (TestUtil.findAll(em, LandType.class).isEmpty()) {
             landType = LandTypeResourceIT.createUpdatedEntity(em);
@@ -193,6 +204,16 @@ class LandResourceIT {
             landType = TestUtil.findAll(em, LandType.class).get(0);
         }
         land.setLandType(landType);
+        // Add required entity
+        ProjectLand projectLand;
+        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
+            projectLand = ProjectLandResourceIT.createUpdatedEntity(em);
+            em.persist(projectLand);
+            em.flush();
+        } else {
+            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
+        }
+        land.getProjectLands().add(projectLand);
         return land;
     }
 

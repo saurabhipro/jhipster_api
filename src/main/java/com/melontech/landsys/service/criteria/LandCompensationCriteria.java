@@ -1,5 +1,6 @@
 package com.melontech.landsys.service.criteria;
 
+import com.melontech.landsys.domain.enumeration.CompensationStatus;
 import com.melontech.landsys.domain.enumeration.HissaType;
 import java.io.Serializable;
 import java.util.Objects;
@@ -9,8 +10,8 @@ import tech.jhipster.service.filter.BooleanFilter;
 import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
-import tech.jhipster.service.filter.InstantFilter;
 import tech.jhipster.service.filter.IntegerFilter;
+import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 
@@ -43,6 +44,23 @@ public class LandCompensationCriteria implements Serializable, Criteria {
         }
     }
 
+    /**
+     * Class for filtering CompensationStatus
+     */
+    public static class CompensationStatusFilter extends Filter<CompensationStatus> {
+
+        public CompensationStatusFilter() {}
+
+        public CompensationStatusFilter(CompensationStatusFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public CompensationStatusFilter copy() {
+            return new CompensationStatusFilter(this);
+        }
+    }
+
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
@@ -51,7 +69,7 @@ public class LandCompensationCriteria implements Serializable, Criteria {
 
     private DoubleFilter area;
 
-    private IntegerFilter sharePercentage;
+    private DoubleFilter sharePercentage;
 
     private DoubleFilter landMarketValue;
 
@@ -65,23 +83,21 @@ public class LandCompensationCriteria implements Serializable, Criteria {
 
     private DoubleFilter additionalCompensation;
 
-    private StringFilter status;
+    private CompensationStatusFilter status;
 
-    private InstantFilter orderDate;
-
-    private InstantFilter paymentDate;
+    private LocalDateFilter orderDate;
 
     private DoubleFilter paymentAmount;
 
     private StringFilter transactionId;
-
-    private LongFilter paymentAdviceId;
 
     private LongFilter khatedarId;
 
     private LongFilter surveyId;
 
     private LongFilter projectLandId;
+
+    private LongFilter paymentAdviceId;
 
     private Boolean distinct;
 
@@ -100,13 +116,12 @@ public class LandCompensationCriteria implements Serializable, Criteria {
         this.additionalCompensation = other.additionalCompensation == null ? null : other.additionalCompensation.copy();
         this.status = other.status == null ? null : other.status.copy();
         this.orderDate = other.orderDate == null ? null : other.orderDate.copy();
-        this.paymentDate = other.paymentDate == null ? null : other.paymentDate.copy();
         this.paymentAmount = other.paymentAmount == null ? null : other.paymentAmount.copy();
         this.transactionId = other.transactionId == null ? null : other.transactionId.copy();
-        this.paymentAdviceId = other.paymentAdviceId == null ? null : other.paymentAdviceId.copy();
         this.khatedarId = other.khatedarId == null ? null : other.khatedarId.copy();
         this.surveyId = other.surveyId == null ? null : other.surveyId.copy();
         this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
+        this.paymentAdviceId = other.paymentAdviceId == null ? null : other.paymentAdviceId.copy();
         this.distinct = other.distinct;
     }
 
@@ -160,18 +175,18 @@ public class LandCompensationCriteria implements Serializable, Criteria {
         this.area = area;
     }
 
-    public IntegerFilter getSharePercentage() {
+    public DoubleFilter getSharePercentage() {
         return sharePercentage;
     }
 
-    public IntegerFilter sharePercentage() {
+    public DoubleFilter sharePercentage() {
         if (sharePercentage == null) {
-            sharePercentage = new IntegerFilter();
+            sharePercentage = new DoubleFilter();
         }
         return sharePercentage;
     }
 
-    public void setSharePercentage(IntegerFilter sharePercentage) {
+    public void setSharePercentage(DoubleFilter sharePercentage) {
         this.sharePercentage = sharePercentage;
     }
 
@@ -265,49 +280,34 @@ public class LandCompensationCriteria implements Serializable, Criteria {
         this.additionalCompensation = additionalCompensation;
     }
 
-    public StringFilter getStatus() {
+    public CompensationStatusFilter getStatus() {
         return status;
     }
 
-    public StringFilter status() {
+    public CompensationStatusFilter status() {
         if (status == null) {
-            status = new StringFilter();
+            status = new CompensationStatusFilter();
         }
         return status;
     }
 
-    public void setStatus(StringFilter status) {
+    public void setStatus(CompensationStatusFilter status) {
         this.status = status;
     }
 
-    public InstantFilter getOrderDate() {
+    public LocalDateFilter getOrderDate() {
         return orderDate;
     }
 
-    public InstantFilter orderDate() {
+    public LocalDateFilter orderDate() {
         if (orderDate == null) {
-            orderDate = new InstantFilter();
+            orderDate = new LocalDateFilter();
         }
         return orderDate;
     }
 
-    public void setOrderDate(InstantFilter orderDate) {
+    public void setOrderDate(LocalDateFilter orderDate) {
         this.orderDate = orderDate;
-    }
-
-    public InstantFilter getPaymentDate() {
-        return paymentDate;
-    }
-
-    public InstantFilter paymentDate() {
-        if (paymentDate == null) {
-            paymentDate = new InstantFilter();
-        }
-        return paymentDate;
-    }
-
-    public void setPaymentDate(InstantFilter paymentDate) {
-        this.paymentDate = paymentDate;
     }
 
     public DoubleFilter getPaymentAmount() {
@@ -338,21 +338,6 @@ public class LandCompensationCriteria implements Serializable, Criteria {
 
     public void setTransactionId(StringFilter transactionId) {
         this.transactionId = transactionId;
-    }
-
-    public LongFilter getPaymentAdviceId() {
-        return paymentAdviceId;
-    }
-
-    public LongFilter paymentAdviceId() {
-        if (paymentAdviceId == null) {
-            paymentAdviceId = new LongFilter();
-        }
-        return paymentAdviceId;
-    }
-
-    public void setPaymentAdviceId(LongFilter paymentAdviceId) {
-        this.paymentAdviceId = paymentAdviceId;
     }
 
     public LongFilter getKhatedarId() {
@@ -400,6 +385,21 @@ public class LandCompensationCriteria implements Serializable, Criteria {
         this.projectLandId = projectLandId;
     }
 
+    public LongFilter getPaymentAdviceId() {
+        return paymentAdviceId;
+    }
+
+    public LongFilter paymentAdviceId() {
+        if (paymentAdviceId == null) {
+            paymentAdviceId = new LongFilter();
+        }
+        return paymentAdviceId;
+    }
+
+    public void setPaymentAdviceId(LongFilter paymentAdviceId) {
+        this.paymentAdviceId = paymentAdviceId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -430,13 +430,12 @@ public class LandCompensationCriteria implements Serializable, Criteria {
             Objects.equals(additionalCompensation, that.additionalCompensation) &&
             Objects.equals(status, that.status) &&
             Objects.equals(orderDate, that.orderDate) &&
-            Objects.equals(paymentDate, that.paymentDate) &&
             Objects.equals(paymentAmount, that.paymentAmount) &&
             Objects.equals(transactionId, that.transactionId) &&
-            Objects.equals(paymentAdviceId, that.paymentAdviceId) &&
             Objects.equals(khatedarId, that.khatedarId) &&
             Objects.equals(surveyId, that.surveyId) &&
             Objects.equals(projectLandId, that.projectLandId) &&
+            Objects.equals(paymentAdviceId, that.paymentAdviceId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -456,13 +455,12 @@ public class LandCompensationCriteria implements Serializable, Criteria {
             additionalCompensation,
             status,
             orderDate,
-            paymentDate,
             paymentAmount,
             transactionId,
-            paymentAdviceId,
             khatedarId,
             surveyId,
             projectLandId,
+            paymentAdviceId,
             distinct
         );
     }
@@ -483,13 +481,12 @@ public class LandCompensationCriteria implements Serializable, Criteria {
             (additionalCompensation != null ? "additionalCompensation=" + additionalCompensation + ", " : "") +
             (status != null ? "status=" + status + ", " : "") +
             (orderDate != null ? "orderDate=" + orderDate + ", " : "") +
-            (paymentDate != null ? "paymentDate=" + paymentDate + ", " : "") +
             (paymentAmount != null ? "paymentAmount=" + paymentAmount + ", " : "") +
             (transactionId != null ? "transactionId=" + transactionId + ", " : "") +
-            (paymentAdviceId != null ? "paymentAdviceId=" + paymentAdviceId + ", " : "") +
             (khatedarId != null ? "khatedarId=" + khatedarId + ", " : "") +
             (surveyId != null ? "surveyId=" + surveyId + ", " : "") +
             (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
+            (paymentAdviceId != null ? "paymentAdviceId=" + paymentAdviceId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

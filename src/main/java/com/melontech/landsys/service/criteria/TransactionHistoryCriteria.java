@@ -1,5 +1,6 @@
 package com.melontech.landsys.service.criteria;
 
+import com.melontech.landsys.domain.enumeration.EventStatus;
 import java.io.Serializable;
 import java.util.Objects;
 import org.springdoc.api.annotations.ParameterObject;
@@ -23,6 +24,23 @@ import tech.jhipster.service.filter.StringFilter;
  */
 @ParameterObject
 public class TransactionHistoryCriteria implements Serializable, Criteria {
+
+    /**
+     * Class for filtering EventStatus
+     */
+    public static class EventStatusFilter extends Filter<EventStatus> {
+
+        public EventStatusFilter() {}
+
+        public EventStatusFilter(EventStatusFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public EventStatusFilter copy() {
+            return new EventStatusFilter(this);
+        }
+    }
 
     private static final long serialVersionUID = 1L;
 
@@ -54,7 +72,7 @@ public class TransactionHistoryCriteria implements Serializable, Criteria {
 
     private StringFilter eventType;
 
-    private StringFilter eventStatus;
+    private EventStatusFilter eventStatus;
 
     private StringFilter approver1;
 
@@ -303,18 +321,18 @@ public class TransactionHistoryCriteria implements Serializable, Criteria {
         this.eventType = eventType;
     }
 
-    public StringFilter getEventStatus() {
+    public EventStatusFilter getEventStatus() {
         return eventStatus;
     }
 
-    public StringFilter eventStatus() {
+    public EventStatusFilter eventStatus() {
         if (eventStatus == null) {
-            eventStatus = new StringFilter();
+            eventStatus = new EventStatusFilter();
         }
         return eventStatus;
     }
 
-    public void setEventStatus(StringFilter eventStatus) {
+    public void setEventStatus(EventStatusFilter eventStatus) {
         this.eventStatus = eventStatus;
     }
 

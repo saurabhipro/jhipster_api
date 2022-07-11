@@ -1,7 +1,6 @@
 package com.melontech.landsys.service;
 
 import com.melontech.landsys.service.dto.LandDTO;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,12 +40,6 @@ public interface LandService {
      * @return the list of entities.
      */
     Page<LandDTO> findAll(Pageable pageable);
-    /**
-     * Get all the LandDTO where ProjectLand is {@code null}.
-     *
-     * @return the {@link List} of entities.
-     */
-    List<LandDTO> findAllWhereProjectLandIsNull();
 
     /**
      * Get all the lands with eager load of many-to-many relationships.

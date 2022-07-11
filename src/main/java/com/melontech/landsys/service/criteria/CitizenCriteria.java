@@ -46,9 +46,9 @@ public class CitizenCriteria implements Serializable, Criteria {
 
     private StringFilter accountNo;
 
-    private LongFilter khatedarId;
-
     private LongFilter bankBranchId;
+
+    private LongFilter khatedarId;
 
     private Boolean distinct;
 
@@ -65,8 +65,8 @@ public class CitizenCriteria implements Serializable, Criteria {
         this.aadhar = other.aadhar == null ? null : other.aadhar.copy();
         this.pan = other.pan == null ? null : other.pan.copy();
         this.accountNo = other.accountNo == null ? null : other.accountNo.copy();
-        this.khatedarId = other.khatedarId == null ? null : other.khatedarId.copy();
         this.bankBranchId = other.bankBranchId == null ? null : other.bankBranchId.copy();
+        this.khatedarId = other.khatedarId == null ? null : other.khatedarId.copy();
         this.distinct = other.distinct;
     }
 
@@ -225,21 +225,6 @@ public class CitizenCriteria implements Serializable, Criteria {
         this.accountNo = accountNo;
     }
 
-    public LongFilter getKhatedarId() {
-        return khatedarId;
-    }
-
-    public LongFilter khatedarId() {
-        if (khatedarId == null) {
-            khatedarId = new LongFilter();
-        }
-        return khatedarId;
-    }
-
-    public void setKhatedarId(LongFilter khatedarId) {
-        this.khatedarId = khatedarId;
-    }
-
     public LongFilter getBankBranchId() {
         return bankBranchId;
     }
@@ -253,6 +238,21 @@ public class CitizenCriteria implements Serializable, Criteria {
 
     public void setBankBranchId(LongFilter bankBranchId) {
         this.bankBranchId = bankBranchId;
+    }
+
+    public LongFilter getKhatedarId() {
+        return khatedarId;
+    }
+
+    public LongFilter khatedarId() {
+        if (khatedarId == null) {
+            khatedarId = new LongFilter();
+        }
+        return khatedarId;
+    }
+
+    public void setKhatedarId(LongFilter khatedarId) {
+        this.khatedarId = khatedarId;
     }
 
     public Boolean getDistinct() {
@@ -283,8 +283,8 @@ public class CitizenCriteria implements Serializable, Criteria {
             Objects.equals(aadhar, that.aadhar) &&
             Objects.equals(pan, that.pan) &&
             Objects.equals(accountNo, that.accountNo) &&
-            Objects.equals(khatedarId, that.khatedarId) &&
             Objects.equals(bankBranchId, that.bankBranchId) &&
+            Objects.equals(khatedarId, that.khatedarId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -302,8 +302,8 @@ public class CitizenCriteria implements Serializable, Criteria {
             aadhar,
             pan,
             accountNo,
-            khatedarId,
             bankBranchId,
+            khatedarId,
             distinct
         );
     }
@@ -322,8 +322,8 @@ public class CitizenCriteria implements Serializable, Criteria {
             (aadhar != null ? "aadhar=" + aadhar + ", " : "") +
             (pan != null ? "pan=" + pan + ", " : "") +
             (accountNo != null ? "accountNo=" + accountNo + ", " : "") +
-            (khatedarId != null ? "khatedarId=" + khatedarId + ", " : "") +
             (bankBranchId != null ? "bankBranchId=" + bankBranchId + ", " : "") +
+            (khatedarId != null ? "khatedarId=" + khatedarId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

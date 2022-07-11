@@ -10,8 +10,8 @@ import com.melontech.landsys.domain.PublicNotification;
 import com.melontech.landsys.repository.PublicNotificationRepository;
 import com.melontech.landsys.service.dto.PublicNotificationDTO;
 import com.melontech.landsys.service.mapper.PublicNotificationMapper;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -34,8 +34,8 @@ import org.springframework.util.Base64Utils;
 @WithMockUser
 class PublicNotificationResourceIT {
 
-    private static final Instant DEFAULT_DATE = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final LocalDate DEFAULT_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATE = LocalDate.now(ZoneId.systemDefault());
 
     private static final byte[] DEFAULT_FILE = TestUtil.createByteArray(1, "0");
     private static final byte[] UPDATED_FILE = TestUtil.createByteArray(1, "1");

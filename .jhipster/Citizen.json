@@ -1,6 +1,6 @@
 {
   "applications": "*",
-  "changelogDate": "20220710085305",
+  "changelogDate": "20220711175453",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "landsys_citizen",
@@ -75,18 +75,18 @@
   "readOnly": false,
   "relationships": [
     {
-      "otherEntityName": "khatedar",
-      "otherEntityRelationshipName": "citizen",
-      "relationshipName": "khatedar",
-      "relationshipType": "one-to-many",
-      "relationshipValidateRules": "required"
-    },
-    {
       "otherEntityField": "name",
       "otherEntityName": "bankBranch",
       "otherEntityRelationshipName": "citizen",
       "relationshipName": "bankBranch",
       "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "khatedar",
+      "otherEntityRelationshipName": "citizen",
+      "relationshipName": "khatedar",
+      "relationshipType": "one-to-many",
+      "relationshipValidateRules": "required"
     }
   ],
   "service": "serviceImpl"

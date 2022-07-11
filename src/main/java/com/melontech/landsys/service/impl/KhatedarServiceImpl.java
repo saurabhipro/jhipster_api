@@ -5,7 +5,11 @@ import com.melontech.landsys.repository.KhatedarRepository;
 import com.melontech.landsys.service.KhatedarService;
 import com.melontech.landsys.service.dto.KhatedarDTO;
 import com.melontech.landsys.service.mapper.KhatedarMapper;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -71,6 +75,20 @@ public class KhatedarServiceImpl implements KhatedarService {
 
     public Page<KhatedarDTO> findAllWithEagerRelationships(Pageable pageable) {
         return khatedarRepository.findAllWithEagerRelationships(pageable).map(khatedarMapper::toDto);
+    }
+
+    /**
+     *  Get all the khatedars where Survey is {@code null}.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<KhatedarDTO> findAllWhereSurveyIsNull() {
+        log.debug("Request to get all khatedars where Survey is null");
+        return StreamSupport
+            .stream(khatedarRepository.findAll().spliterator(), false)
+            .filter(khatedar -> khatedar.getSurvey() == null)
+            .map(khatedarMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override

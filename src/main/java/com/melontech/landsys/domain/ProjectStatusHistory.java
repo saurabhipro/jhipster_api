@@ -2,7 +2,7 @@ package com.melontech.landsys.domain;
 
 import com.melontech.landsys.domain.enumeration.ProjectStatus;
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDate;
 import javax.persistence.*;
 
 /**
@@ -25,7 +25,7 @@ public class ProjectStatusHistory implements Serializable {
     private ProjectStatus status;
 
     @Column(name = "jhi_when")
-    private Instant when;
+    private LocalDate when;
 
     @Column(name = "remarks")
     private String remarks;
@@ -58,16 +58,16 @@ public class ProjectStatusHistory implements Serializable {
         this.status = status;
     }
 
-    public Instant getWhen() {
+    public LocalDate getWhen() {
         return this.when;
     }
 
-    public ProjectStatusHistory when(Instant when) {
+    public ProjectStatusHistory when(LocalDate when) {
         this.setWhen(when);
         return this;
     }
 
-    public void setWhen(Instant when) {
+    public void setWhen(LocalDate when) {
         this.when = when;
     }
 

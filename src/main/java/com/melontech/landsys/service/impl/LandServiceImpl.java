@@ -5,11 +5,7 @@ import com.melontech.landsys.repository.LandRepository;
 import com.melontech.landsys.service.LandService;
 import com.melontech.landsys.service.dto.LandDTO;
 import com.melontech.landsys.service.mapper.LandMapper;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -75,20 +71,6 @@ public class LandServiceImpl implements LandService {
 
     public Page<LandDTO> findAllWithEagerRelationships(Pageable pageable) {
         return landRepository.findAllWithEagerRelationships(pageable).map(landMapper::toDto);
-    }
-
-    /**
-     *  Get all the lands where ProjectLand is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<LandDTO> findAllWhereProjectLandIsNull() {
-        log.debug("Request to get all lands where ProjectLand is null");
-        return StreamSupport
-            .stream(landRepository.findAll().spliterator(), false)
-            .filter(land -> land.getProjectLand() == null)
-            .map(landMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override

@@ -13,17 +13,17 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface PaymentAdviceMapper extends EntityMapper<PaymentAdviceDTO, PaymentAdvice> {
-    @Mapping(target = "landCompensation", source = "landCompensation", qualifiedByName = "landCompensationId")
     @Mapping(target = "projectLand", source = "projectLand", qualifiedByName = "projectLandId")
+    @Mapping(target = "landCompensation", source = "landCompensation", qualifiedByName = "landCompensationId")
     PaymentAdviceDTO toDto(PaymentAdvice s);
-
-    @Named("landCompensationId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    LandCompensationDTO toDtoLandCompensationId(LandCompensation landCompensation);
 
     @Named("projectLandId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     ProjectLandDTO toDtoProjectLandId(ProjectLand projectLand);
+
+    @Named("landCompensationId")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    LandCompensationDTO toDtoLandCompensationId(LandCompensation landCompensation);
 }

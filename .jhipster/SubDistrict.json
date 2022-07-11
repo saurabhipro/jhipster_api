@@ -1,6 +1,6 @@
 {
   "applications": "*",
-  "changelogDate": "20220710085253",
+  "changelogDate": "20220711175441",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "landsys_sub_district",
@@ -18,17 +18,18 @@
   "readOnly": false,
   "relationships": [
     {
-      "otherEntityName": "village",
-      "otherEntityRelationshipName": "subDistrict",
-      "relationshipName": "village",
-      "relationshipType": "one-to-many"
-    },
-    {
       "otherEntityField": "name",
       "otherEntityName": "district",
       "otherEntityRelationshipName": "subDistrict",
       "relationshipName": "district",
       "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "village",
+      "otherEntityRelationshipName": "subDistrict",
+      "relationshipName": "village",
+      "relationshipType": "one-to-many",
       "relationshipValidateRules": "required"
     }
   ],

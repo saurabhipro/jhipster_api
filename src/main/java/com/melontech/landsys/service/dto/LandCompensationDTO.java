@@ -1,8 +1,9 @@
 package com.melontech.landsys.service.dto;
 
+import com.melontech.landsys.domain.enumeration.CompensationStatus;
 import com.melontech.landsys.domain.enumeration.HissaType;
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Objects;
 import javax.validation.constraints.*;
 
@@ -20,7 +21,7 @@ public class LandCompensationDTO implements Serializable {
     private Double area;
 
     @NotNull
-    private Integer sharePercentage;
+    private Double sharePercentage;
 
     @NotNull
     private Double landMarketValue;
@@ -35,11 +36,9 @@ public class LandCompensationDTO implements Serializable {
 
     private Double additionalCompensation;
 
-    private String status;
+    private CompensationStatus status;
 
-    private Instant orderDate;
-
-    private Instant paymentDate;
+    private LocalDate orderDate;
 
     private Double paymentAmount;
 
@@ -75,11 +74,11 @@ public class LandCompensationDTO implements Serializable {
         this.area = area;
     }
 
-    public Integer getSharePercentage() {
+    public Double getSharePercentage() {
         return sharePercentage;
     }
 
-    public void setSharePercentage(Integer sharePercentage) {
+    public void setSharePercentage(Double sharePercentage) {
         this.sharePercentage = sharePercentage;
     }
 
@@ -131,28 +130,20 @@ public class LandCompensationDTO implements Serializable {
         this.additionalCompensation = additionalCompensation;
     }
 
-    public String getStatus() {
+    public CompensationStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(CompensationStatus status) {
         this.status = status;
     }
 
-    public Instant getOrderDate() {
+    public LocalDate getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(Instant orderDate) {
+    public void setOrderDate(LocalDate orderDate) {
         this.orderDate = orderDate;
-    }
-
-    public Instant getPaymentDate() {
-        return paymentDate;
-    }
-
-    public void setPaymentDate(Instant paymentDate) {
-        this.paymentDate = paymentDate;
     }
 
     public Double getPaymentAmount() {
@@ -232,7 +223,6 @@ public class LandCompensationDTO implements Serializable {
             ", additionalCompensation=" + getAdditionalCompensation() +
             ", status='" + getStatus() + "'" +
             ", orderDate='" + getOrderDate() + "'" +
-            ", paymentDate='" + getPaymentDate() + "'" +
             ", paymentAmount=" + getPaymentAmount() +
             ", transactionId='" + getTransactionId() + "'" +
             ", khatedar=" + getKhatedar() +

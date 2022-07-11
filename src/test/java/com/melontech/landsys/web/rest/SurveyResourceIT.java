@@ -11,6 +11,7 @@ import com.melontech.landsys.domain.LandCompensation;
 import com.melontech.landsys.domain.ProjectLand;
 import com.melontech.landsys.domain.Survey;
 import com.melontech.landsys.domain.enumeration.HissaType;
+import com.melontech.landsys.domain.enumeration.SurveyStatus;
 import com.melontech.landsys.repository.SurveyRepository;
 import com.melontech.landsys.service.criteria.SurveyCriteria;
 import com.melontech.landsys.service.dto.SurveyDTO;
@@ -42,9 +43,9 @@ class SurveyResourceIT {
     private static final HissaType DEFAULT_HISSA_TYPE = HissaType.SINGLE_OWNER;
     private static final HissaType UPDATED_HISSA_TYPE = HissaType.JOINT_OWNER;
 
-    private static final Integer DEFAULT_SHARE_PERCENTAGE = 1;
-    private static final Integer UPDATED_SHARE_PERCENTAGE = 2;
-    private static final Integer SMALLER_SHARE_PERCENTAGE = 1 - 1;
+    private static final Double DEFAULT_SHARE_PERCENTAGE = 1D;
+    private static final Double UPDATED_SHARE_PERCENTAGE = 2D;
+    private static final Double SMALLER_SHARE_PERCENTAGE = 1D - 1D;
 
     private static final Double DEFAULT_AREA = 1D;
     private static final Double UPDATED_AREA = 2D;
@@ -73,8 +74,8 @@ class SurveyResourceIT {
     private static final String DEFAULT_REMARKS = "AAAAAAAAAA";
     private static final String UPDATED_REMARKS = "BBBBBBBBBB";
 
-    private static final String DEFAULT_STATUS = "AAAAAAAAAA";
-    private static final String UPDATED_STATUS = "BBBBBBBBBB";
+    private static final SurveyStatus DEFAULT_STATUS = SurveyStatus.OPEN;
+    private static final SurveyStatus UPDATED_STATUS = SurveyStatus.CLOSED;
 
     private static final String ENTITY_API_URL = "/api/surveys";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -116,15 +117,25 @@ class SurveyResourceIT {
             .remarks(DEFAULT_REMARKS)
             .status(DEFAULT_STATUS);
         // Add required entity
-        Khatedar khatedar;
-        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
-            khatedar = KhatedarResourceIT.createEntity(em);
-            em.persist(khatedar);
+        ProjectLand projectLand;
+        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
+            projectLand = ProjectLandResourceIT.createEntity(em);
+            em.persist(projectLand);
             em.flush();
         } else {
-            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
+            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
         }
-        survey.setKhatedar(khatedar);
+        survey.setProjectLand(projectLand);
+        // Add required entity
+        LandCompensation landCompensation;
+        if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
+            landCompensation = LandCompensationResourceIT.createEntity(em);
+            em.persist(landCompensation);
+            em.flush();
+        } else {
+            landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
+        }
+        survey.getLandCompensations().add(landCompensation);
         return survey;
     }
 
@@ -148,15 +159,25 @@ class SurveyResourceIT {
             .remarks(UPDATED_REMARKS)
             .status(UPDATED_STATUS);
         // Add required entity
-        Khatedar khatedar;
-        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
-            khatedar = KhatedarResourceIT.createUpdatedEntity(em);
-            em.persist(khatedar);
+        ProjectLand projectLand;
+        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
+            projectLand = ProjectLandResourceIT.createUpdatedEntity(em);
+            em.persist(projectLand);
             em.flush();
         } else {
-            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
+            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
         }
-        survey.setKhatedar(khatedar);
+        survey.setProjectLand(projectLand);
+        // Add required entity
+        LandCompensation landCompensation;
+        if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
+            landCompensation = LandCompensationResourceIT.createUpdatedEntity(em);
+            em.persist(landCompensation);
+            em.flush();
+        } else {
+            landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
+        }
+        survey.getLandCompensations().add(landCompensation);
         return survey;
     }
 
@@ -315,7 +336,7 @@ class SurveyResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(survey.getId().intValue())))
             .andExpect(jsonPath("$.[*].surveyor").value(hasItem(DEFAULT_SURVEYOR)))
             .andExpect(jsonPath("$.[*].hissaType").value(hasItem(DEFAULT_HISSA_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].sharePercentage").value(hasItem(DEFAULT_SHARE_PERCENTAGE)))
+            .andExpect(jsonPath("$.[*].sharePercentage").value(hasItem(DEFAULT_SHARE_PERCENTAGE.doubleValue())))
             .andExpect(jsonPath("$.[*].area").value(hasItem(DEFAULT_AREA.doubleValue())))
             .andExpect(jsonPath("$.[*].landMarketValue").value(hasItem(DEFAULT_LAND_MARKET_VALUE.doubleValue())))
             .andExpect(jsonPath("$.[*].structuralValue").value(hasItem(DEFAULT_STRUCTURAL_VALUE.doubleValue())))
@@ -323,7 +344,7 @@ class SurveyResourceIT {
             .andExpect(jsonPath("$.[*].forestValue").value(hasItem(DEFAULT_FOREST_VALUE.doubleValue())))
             .andExpect(jsonPath("$.[*].distanceFromCity").value(hasItem(DEFAULT_DISTANCE_FROM_CITY.doubleValue())))
             .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS)))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)));
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
     }
 
     @Test
@@ -340,7 +361,7 @@ class SurveyResourceIT {
             .andExpect(jsonPath("$.id").value(survey.getId().intValue()))
             .andExpect(jsonPath("$.surveyor").value(DEFAULT_SURVEYOR))
             .andExpect(jsonPath("$.hissaType").value(DEFAULT_HISSA_TYPE.toString()))
-            .andExpect(jsonPath("$.sharePercentage").value(DEFAULT_SHARE_PERCENTAGE))
+            .andExpect(jsonPath("$.sharePercentage").value(DEFAULT_SHARE_PERCENTAGE.doubleValue()))
             .andExpect(jsonPath("$.area").value(DEFAULT_AREA.doubleValue()))
             .andExpect(jsonPath("$.landMarketValue").value(DEFAULT_LAND_MARKET_VALUE.doubleValue()))
             .andExpect(jsonPath("$.structuralValue").value(DEFAULT_STRUCTURAL_VALUE.doubleValue()))
@@ -348,7 +369,7 @@ class SurveyResourceIT {
             .andExpect(jsonPath("$.forestValue").value(DEFAULT_FOREST_VALUE.doubleValue()))
             .andExpect(jsonPath("$.distanceFromCity").value(DEFAULT_DISTANCE_FROM_CITY.doubleValue()))
             .andExpect(jsonPath("$.remarks").value(DEFAULT_REMARKS))
-            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS));
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()));
     }
 
     @Test
@@ -1359,58 +1380,6 @@ class SurveyResourceIT {
 
     @Test
     @Transactional
-    void getAllSurveysByStatusContainsSomething() throws Exception {
-        // Initialize the database
-        surveyRepository.saveAndFlush(survey);
-
-        // Get all the surveyList where status contains DEFAULT_STATUS
-        defaultSurveyShouldBeFound("status.contains=" + DEFAULT_STATUS);
-
-        // Get all the surveyList where status contains UPDATED_STATUS
-        defaultSurveyShouldNotBeFound("status.contains=" + UPDATED_STATUS);
-    }
-
-    @Test
-    @Transactional
-    void getAllSurveysByStatusNotContainsSomething() throws Exception {
-        // Initialize the database
-        surveyRepository.saveAndFlush(survey);
-
-        // Get all the surveyList where status does not contain DEFAULT_STATUS
-        defaultSurveyShouldNotBeFound("status.doesNotContain=" + DEFAULT_STATUS);
-
-        // Get all the surveyList where status does not contain UPDATED_STATUS
-        defaultSurveyShouldBeFound("status.doesNotContain=" + UPDATED_STATUS);
-    }
-
-    @Test
-    @Transactional
-    void getAllSurveysByLandCompensationIsEqualToSomething() throws Exception {
-        // Initialize the database
-        surveyRepository.saveAndFlush(survey);
-        LandCompensation landCompensation;
-        if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
-            landCompensation = LandCompensationResourceIT.createEntity(em);
-            em.persist(landCompensation);
-            em.flush();
-        } else {
-            landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
-        }
-        em.persist(landCompensation);
-        em.flush();
-        survey.addLandCompensation(landCompensation);
-        surveyRepository.saveAndFlush(survey);
-        Long landCompensationId = landCompensation.getId();
-
-        // Get all the surveyList where landCompensation equals to landCompensationId
-        defaultSurveyShouldBeFound("landCompensationId.equals=" + landCompensationId);
-
-        // Get all the surveyList where landCompensation equals to (landCompensationId + 1)
-        defaultSurveyShouldNotBeFound("landCompensationId.equals=" + (landCompensationId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllSurveysByKhatedarIsEqualToSomething() throws Exception {
         // Initialize the database
         surveyRepository.saveAndFlush(survey);
@@ -1461,6 +1430,32 @@ class SurveyResourceIT {
         defaultSurveyShouldNotBeFound("projectLandId.equals=" + (projectLandId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllSurveysByLandCompensationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        surveyRepository.saveAndFlush(survey);
+        LandCompensation landCompensation;
+        if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
+            landCompensation = LandCompensationResourceIT.createEntity(em);
+            em.persist(landCompensation);
+            em.flush();
+        } else {
+            landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
+        }
+        em.persist(landCompensation);
+        em.flush();
+        survey.addLandCompensation(landCompensation);
+        surveyRepository.saveAndFlush(survey);
+        Long landCompensationId = landCompensation.getId();
+
+        // Get all the surveyList where landCompensation equals to landCompensationId
+        defaultSurveyShouldBeFound("landCompensationId.equals=" + landCompensationId);
+
+        // Get all the surveyList where landCompensation equals to (landCompensationId + 1)
+        defaultSurveyShouldNotBeFound("landCompensationId.equals=" + (landCompensationId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -1472,7 +1467,7 @@ class SurveyResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(survey.getId().intValue())))
             .andExpect(jsonPath("$.[*].surveyor").value(hasItem(DEFAULT_SURVEYOR)))
             .andExpect(jsonPath("$.[*].hissaType").value(hasItem(DEFAULT_HISSA_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].sharePercentage").value(hasItem(DEFAULT_SHARE_PERCENTAGE)))
+            .andExpect(jsonPath("$.[*].sharePercentage").value(hasItem(DEFAULT_SHARE_PERCENTAGE.doubleValue())))
             .andExpect(jsonPath("$.[*].area").value(hasItem(DEFAULT_AREA.doubleValue())))
             .andExpect(jsonPath("$.[*].landMarketValue").value(hasItem(DEFAULT_LAND_MARKET_VALUE.doubleValue())))
             .andExpect(jsonPath("$.[*].structuralValue").value(hasItem(DEFAULT_STRUCTURAL_VALUE.doubleValue())))
@@ -1480,7 +1475,7 @@ class SurveyResourceIT {
             .andExpect(jsonPath("$.[*].forestValue").value(hasItem(DEFAULT_FOREST_VALUE.doubleValue())))
             .andExpect(jsonPath("$.[*].distanceFromCity").value(hasItem(DEFAULT_DISTANCE_FROM_CITY.doubleValue())))
             .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS)))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)));
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
 
         // Check, that the count call also returns 1
         restSurveyMockMvc

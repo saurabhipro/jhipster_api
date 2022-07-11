@@ -10,9 +10,10 @@ import com.melontech.landsys.IntegrationTest;
 import com.melontech.landsys.domain.Citizen;
 import com.melontech.landsys.domain.Khatedar;
 import com.melontech.landsys.domain.LandCompensation;
+import com.melontech.landsys.domain.NoticeStatusInfo;
 import com.melontech.landsys.domain.ProjectLand;
 import com.melontech.landsys.domain.Survey;
-import com.melontech.landsys.domain.enumeration.KhatedayStatus;
+import com.melontech.landsys.domain.enumeration.KhatedarStatus;
 import com.melontech.landsys.repository.KhatedarRepository;
 import com.melontech.landsys.service.KhatedarService;
 import com.melontech.landsys.service.criteria.KhatedarCriteria;
@@ -58,8 +59,8 @@ class KhatedarResourceIT {
     private static final String DEFAULT_NOTICE_FILE_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_NOTICE_FILE_CONTENT_TYPE = "image/png";
 
-    private static final KhatedayStatus DEFAULT_STATUS = KhatedayStatus.SURVEYCREATED;
-    private static final KhatedayStatus UPDATED_STATUS = KhatedayStatus.COMPENSATIONCREATED;
+    private static final KhatedarStatus DEFAULT_STATUS = KhatedarStatus.PENDING_FOR_SURVEY;
+    private static final KhatedarStatus UPDATED_STATUS = KhatedarStatus.SURVEY_CREATED;
 
     private static final String ENTITY_API_URL = "/api/khatedars";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -120,6 +121,26 @@ class KhatedarResourceIT {
             projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
         }
         khatedar.setProjectLand(projectLand);
+        // Add required entity
+        Survey survey;
+        if (TestUtil.findAll(em, Survey.class).isEmpty()) {
+            survey = SurveyResourceIT.createEntity(em);
+            em.persist(survey);
+            em.flush();
+        } else {
+            survey = TestUtil.findAll(em, Survey.class).get(0);
+        }
+        khatedar.setSurvey(survey);
+        // Add required entity
+        LandCompensation landCompensation;
+        if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
+            landCompensation = LandCompensationResourceIT.createEntity(em);
+            em.persist(landCompensation);
+            em.flush();
+        } else {
+            landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
+        }
+        khatedar.getLandCompensations().add(landCompensation);
         return khatedar;
     }
 
@@ -156,6 +177,26 @@ class KhatedarResourceIT {
             projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
         }
         khatedar.setProjectLand(projectLand);
+        // Add required entity
+        Survey survey;
+        if (TestUtil.findAll(em, Survey.class).isEmpty()) {
+            survey = SurveyResourceIT.createUpdatedEntity(em);
+            em.persist(survey);
+            em.flush();
+        } else {
+            survey = TestUtil.findAll(em, Survey.class).get(0);
+        }
+        khatedar.setSurvey(survey);
+        // Add required entity
+        LandCompensation landCompensation;
+        if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
+            landCompensation = LandCompensationResourceIT.createUpdatedEntity(em);
+            em.persist(landCompensation);
+            em.flush();
+        } else {
+            landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
+        }
+        khatedar.getLandCompensations().add(landCompensation);
         return khatedar;
     }
 
@@ -488,58 +529,6 @@ class KhatedarResourceIT {
 
     @Test
     @Transactional
-    void getAllKhatedarsBySurveyIsEqualToSomething() throws Exception {
-        // Initialize the database
-        khatedarRepository.saveAndFlush(khatedar);
-        Survey survey;
-        if (TestUtil.findAll(em, Survey.class).isEmpty()) {
-            survey = SurveyResourceIT.createEntity(em);
-            em.persist(survey);
-            em.flush();
-        } else {
-            survey = TestUtil.findAll(em, Survey.class).get(0);
-        }
-        em.persist(survey);
-        em.flush();
-        khatedar.addSurvey(survey);
-        khatedarRepository.saveAndFlush(khatedar);
-        Long surveyId = survey.getId();
-
-        // Get all the khatedarList where survey equals to surveyId
-        defaultKhatedarShouldBeFound("surveyId.equals=" + surveyId);
-
-        // Get all the khatedarList where survey equals to (surveyId + 1)
-        defaultKhatedarShouldNotBeFound("surveyId.equals=" + (surveyId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllKhatedarsByLandCompensationIsEqualToSomething() throws Exception {
-        // Initialize the database
-        khatedarRepository.saveAndFlush(khatedar);
-        LandCompensation landCompensation;
-        if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
-            landCompensation = LandCompensationResourceIT.createEntity(em);
-            em.persist(landCompensation);
-            em.flush();
-        } else {
-            landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
-        }
-        em.persist(landCompensation);
-        em.flush();
-        khatedar.addLandCompensation(landCompensation);
-        khatedarRepository.saveAndFlush(khatedar);
-        Long landCompensationId = landCompensation.getId();
-
-        // Get all the khatedarList where landCompensation equals to landCompensationId
-        defaultKhatedarShouldBeFound("landCompensationId.equals=" + landCompensationId);
-
-        // Get all the khatedarList where landCompensation equals to (landCompensationId + 1)
-        defaultKhatedarShouldNotBeFound("landCompensationId.equals=" + (landCompensationId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllKhatedarsByCitizenIsEqualToSomething() throws Exception {
         // Initialize the database
         khatedarRepository.saveAndFlush(khatedar);
@@ -588,6 +577,73 @@ class KhatedarResourceIT {
 
         // Get all the khatedarList where projectLand equals to (projectLandId + 1)
         defaultKhatedarShouldNotBeFound("projectLandId.equals=" + (projectLandId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllKhatedarsByNoticeStatusInfoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        khatedarRepository.saveAndFlush(khatedar);
+        NoticeStatusInfo noticeStatusInfo;
+        if (TestUtil.findAll(em, NoticeStatusInfo.class).isEmpty()) {
+            noticeStatusInfo = NoticeStatusInfoResourceIT.createEntity(em);
+            em.persist(noticeStatusInfo);
+            em.flush();
+        } else {
+            noticeStatusInfo = TestUtil.findAll(em, NoticeStatusInfo.class).get(0);
+        }
+        em.persist(noticeStatusInfo);
+        em.flush();
+        khatedar.setNoticeStatusInfo(noticeStatusInfo);
+        khatedarRepository.saveAndFlush(khatedar);
+        Long noticeStatusInfoId = noticeStatusInfo.getId();
+
+        // Get all the khatedarList where noticeStatusInfo equals to noticeStatusInfoId
+        defaultKhatedarShouldBeFound("noticeStatusInfoId.equals=" + noticeStatusInfoId);
+
+        // Get all the khatedarList where noticeStatusInfo equals to (noticeStatusInfoId + 1)
+        defaultKhatedarShouldNotBeFound("noticeStatusInfoId.equals=" + (noticeStatusInfoId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllKhatedarsBySurveyIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        Survey survey = khatedar.getSurvey();
+        khatedarRepository.saveAndFlush(khatedar);
+        Long surveyId = survey.getId();
+
+        // Get all the khatedarList where survey equals to surveyId
+        defaultKhatedarShouldBeFound("surveyId.equals=" + surveyId);
+
+        // Get all the khatedarList where survey equals to (surveyId + 1)
+        defaultKhatedarShouldNotBeFound("surveyId.equals=" + (surveyId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllKhatedarsByLandCompensationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        khatedarRepository.saveAndFlush(khatedar);
+        LandCompensation landCompensation;
+        if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
+            landCompensation = LandCompensationResourceIT.createEntity(em);
+            em.persist(landCompensation);
+            em.flush();
+        } else {
+            landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
+        }
+        em.persist(landCompensation);
+        em.flush();
+        khatedar.addLandCompensation(landCompensation);
+        khatedarRepository.saveAndFlush(khatedar);
+        Long landCompensationId = landCompensation.getId();
+
+        // Get all the khatedarList where landCompensation equals to landCompensationId
+        defaultKhatedarShouldBeFound("landCompensationId.equals=" + landCompensationId);
+
+        // Get all the khatedarList where landCompensation equals to (landCompensationId + 1)
+        defaultKhatedarShouldNotBeFound("landCompensationId.equals=" + (landCompensationId + 1));
     }
 
     /**

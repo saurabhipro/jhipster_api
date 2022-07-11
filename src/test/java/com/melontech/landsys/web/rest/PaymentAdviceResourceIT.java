@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.melontech.landsys.IntegrationTest;
 import com.melontech.landsys.domain.LandCompensation;
 import com.melontech.landsys.domain.PaymentAdvice;
+import com.melontech.landsys.domain.PaymentFileRecon;
 import com.melontech.landsys.domain.ProjectLand;
 import com.melontech.landsys.domain.enumeration.HissaType;
 import com.melontech.landsys.domain.enumeration.PaymentAdviceType;
@@ -68,8 +69,8 @@ class PaymentAdviceResourceIT {
     private static final PaymentStatus DEFAULT_PAYMENT_STATUS = PaymentStatus.PENDING;
     private static final PaymentStatus UPDATED_PAYMENT_STATUS = PaymentStatus.APPROVED;
 
-    private static final HissaType DEFAULT_HISSSA_TYPE = HissaType.SINGLE_OWNER;
-    private static final HissaType UPDATED_HISSSA_TYPE = HissaType.JOINT_OWNER;
+    private static final HissaType DEFAULT_HISSA_TYPE = HissaType.SINGLE_OWNER;
+    private static final HissaType UPDATED_HISSA_TYPE = HissaType.JOINT_OWNER;
 
     private static final String ENTITY_API_URL = "/api/payment-advices";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -109,7 +110,17 @@ class PaymentAdviceResourceIT {
             .paymentAdviceType(DEFAULT_PAYMENT_ADVICE_TYPE)
             .referenceNumber(DEFAULT_REFERENCE_NUMBER)
             .paymentStatus(DEFAULT_PAYMENT_STATUS)
-            .hisssaType(DEFAULT_HISSSA_TYPE);
+            .hissaType(DEFAULT_HISSA_TYPE);
+        // Add required entity
+        ProjectLand projectLand;
+        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
+            projectLand = ProjectLandResourceIT.createEntity(em);
+            em.persist(projectLand);
+            em.flush();
+        } else {
+            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
+        }
+        paymentAdvice.setProjectLand(projectLand);
         // Add required entity
         LandCompensation landCompensation;
         if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
@@ -121,15 +132,15 @@ class PaymentAdviceResourceIT {
         }
         paymentAdvice.setLandCompensation(landCompensation);
         // Add required entity
-        ProjectLand projectLand;
-        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
-            projectLand = ProjectLandResourceIT.createEntity(em);
-            em.persist(projectLand);
+        PaymentFileRecon paymentFileRecon;
+        if (TestUtil.findAll(em, PaymentFileRecon.class).isEmpty()) {
+            paymentFileRecon = PaymentFileReconResourceIT.createEntity(em);
+            em.persist(paymentFileRecon);
             em.flush();
         } else {
-            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
+            paymentFileRecon = TestUtil.findAll(em, PaymentFileRecon.class).get(0);
         }
-        paymentAdvice.setProjectLand(projectLand);
+        paymentAdvice.setPaymentFileRecon(paymentFileRecon);
         return paymentAdvice;
     }
 
@@ -151,7 +162,17 @@ class PaymentAdviceResourceIT {
             .paymentAdviceType(UPDATED_PAYMENT_ADVICE_TYPE)
             .referenceNumber(UPDATED_REFERENCE_NUMBER)
             .paymentStatus(UPDATED_PAYMENT_STATUS)
-            .hisssaType(UPDATED_HISSSA_TYPE);
+            .hissaType(UPDATED_HISSA_TYPE);
+        // Add required entity
+        ProjectLand projectLand;
+        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
+            projectLand = ProjectLandResourceIT.createUpdatedEntity(em);
+            em.persist(projectLand);
+            em.flush();
+        } else {
+            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
+        }
+        paymentAdvice.setProjectLand(projectLand);
         // Add required entity
         LandCompensation landCompensation;
         if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
@@ -163,15 +184,15 @@ class PaymentAdviceResourceIT {
         }
         paymentAdvice.setLandCompensation(landCompensation);
         // Add required entity
-        ProjectLand projectLand;
-        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
-            projectLand = ProjectLandResourceIT.createUpdatedEntity(em);
-            em.persist(projectLand);
+        PaymentFileRecon paymentFileRecon;
+        if (TestUtil.findAll(em, PaymentFileRecon.class).isEmpty()) {
+            paymentFileRecon = PaymentFileReconResourceIT.createUpdatedEntity(em);
+            em.persist(paymentFileRecon);
             em.flush();
         } else {
-            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
+            paymentFileRecon = TestUtil.findAll(em, PaymentFileRecon.class).get(0);
         }
-        paymentAdvice.setProjectLand(projectLand);
+        paymentAdvice.setPaymentFileRecon(paymentFileRecon);
         return paymentAdvice;
     }
 
@@ -206,7 +227,7 @@ class PaymentAdviceResourceIT {
         assertThat(testPaymentAdvice.getPaymentAdviceType()).isEqualTo(DEFAULT_PAYMENT_ADVICE_TYPE);
         assertThat(testPaymentAdvice.getReferenceNumber()).isEqualTo(DEFAULT_REFERENCE_NUMBER);
         assertThat(testPaymentAdvice.getPaymentStatus()).isEqualTo(DEFAULT_PAYMENT_STATUS);
-        assertThat(testPaymentAdvice.getHisssaType()).isEqualTo(DEFAULT_HISSSA_TYPE);
+        assertThat(testPaymentAdvice.getHissaType()).isEqualTo(DEFAULT_HISSA_TYPE);
     }
 
     @Test
@@ -352,10 +373,10 @@ class PaymentAdviceResourceIT {
 
     @Test
     @Transactional
-    void checkHisssaTypeIsRequired() throws Exception {
+    void checkHissaTypeIsRequired() throws Exception {
         int databaseSizeBeforeTest = paymentAdviceRepository.findAll().size();
         // set the field null
-        paymentAdvice.setHisssaType(null);
+        paymentAdvice.setHissaType(null);
 
         // Create the PaymentAdvice, which fails.
         PaymentAdviceDTO paymentAdviceDTO = paymentAdviceMapper.toDto(paymentAdvice);
@@ -392,7 +413,7 @@ class PaymentAdviceResourceIT {
             .andExpect(jsonPath("$.[*].paymentAdviceType").value(hasItem(DEFAULT_PAYMENT_ADVICE_TYPE.toString())))
             .andExpect(jsonPath("$.[*].referenceNumber").value(hasItem(DEFAULT_REFERENCE_NUMBER)))
             .andExpect(jsonPath("$.[*].paymentStatus").value(hasItem(DEFAULT_PAYMENT_STATUS.toString())))
-            .andExpect(jsonPath("$.[*].hisssaType").value(hasItem(DEFAULT_HISSSA_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].hissaType").value(hasItem(DEFAULT_HISSA_TYPE.toString())));
     }
 
     @Test
@@ -417,7 +438,7 @@ class PaymentAdviceResourceIT {
             .andExpect(jsonPath("$.paymentAdviceType").value(DEFAULT_PAYMENT_ADVICE_TYPE.toString()))
             .andExpect(jsonPath("$.referenceNumber").value(DEFAULT_REFERENCE_NUMBER))
             .andExpect(jsonPath("$.paymentStatus").value(DEFAULT_PAYMENT_STATUS.toString()))
-            .andExpect(jsonPath("$.hisssaType").value(DEFAULT_HISSSA_TYPE.toString()));
+            .andExpect(jsonPath("$.hissaType").value(DEFAULT_HISSA_TYPE.toString()));
     }
 
     @Test
@@ -1194,69 +1215,54 @@ class PaymentAdviceResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentAdvicesByHisssaTypeIsEqualToSomething() throws Exception {
+    void getAllPaymentAdvicesByHissaTypeIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentAdviceRepository.saveAndFlush(paymentAdvice);
 
-        // Get all the paymentAdviceList where hisssaType equals to DEFAULT_HISSSA_TYPE
-        defaultPaymentAdviceShouldBeFound("hisssaType.equals=" + DEFAULT_HISSSA_TYPE);
+        // Get all the paymentAdviceList where hissaType equals to DEFAULT_HISSA_TYPE
+        defaultPaymentAdviceShouldBeFound("hissaType.equals=" + DEFAULT_HISSA_TYPE);
 
-        // Get all the paymentAdviceList where hisssaType equals to UPDATED_HISSSA_TYPE
-        defaultPaymentAdviceShouldNotBeFound("hisssaType.equals=" + UPDATED_HISSSA_TYPE);
+        // Get all the paymentAdviceList where hissaType equals to UPDATED_HISSA_TYPE
+        defaultPaymentAdviceShouldNotBeFound("hissaType.equals=" + UPDATED_HISSA_TYPE);
     }
 
     @Test
     @Transactional
-    void getAllPaymentAdvicesByHisssaTypeIsNotEqualToSomething() throws Exception {
+    void getAllPaymentAdvicesByHissaTypeIsNotEqualToSomething() throws Exception {
         // Initialize the database
         paymentAdviceRepository.saveAndFlush(paymentAdvice);
 
-        // Get all the paymentAdviceList where hisssaType not equals to DEFAULT_HISSSA_TYPE
-        defaultPaymentAdviceShouldNotBeFound("hisssaType.notEquals=" + DEFAULT_HISSSA_TYPE);
+        // Get all the paymentAdviceList where hissaType not equals to DEFAULT_HISSA_TYPE
+        defaultPaymentAdviceShouldNotBeFound("hissaType.notEquals=" + DEFAULT_HISSA_TYPE);
 
-        // Get all the paymentAdviceList where hisssaType not equals to UPDATED_HISSSA_TYPE
-        defaultPaymentAdviceShouldBeFound("hisssaType.notEquals=" + UPDATED_HISSSA_TYPE);
+        // Get all the paymentAdviceList where hissaType not equals to UPDATED_HISSA_TYPE
+        defaultPaymentAdviceShouldBeFound("hissaType.notEquals=" + UPDATED_HISSA_TYPE);
     }
 
     @Test
     @Transactional
-    void getAllPaymentAdvicesByHisssaTypeIsInShouldWork() throws Exception {
+    void getAllPaymentAdvicesByHissaTypeIsInShouldWork() throws Exception {
         // Initialize the database
         paymentAdviceRepository.saveAndFlush(paymentAdvice);
 
-        // Get all the paymentAdviceList where hisssaType in DEFAULT_HISSSA_TYPE or UPDATED_HISSSA_TYPE
-        defaultPaymentAdviceShouldBeFound("hisssaType.in=" + DEFAULT_HISSSA_TYPE + "," + UPDATED_HISSSA_TYPE);
+        // Get all the paymentAdviceList where hissaType in DEFAULT_HISSA_TYPE or UPDATED_HISSA_TYPE
+        defaultPaymentAdviceShouldBeFound("hissaType.in=" + DEFAULT_HISSA_TYPE + "," + UPDATED_HISSA_TYPE);
 
-        // Get all the paymentAdviceList where hisssaType equals to UPDATED_HISSSA_TYPE
-        defaultPaymentAdviceShouldNotBeFound("hisssaType.in=" + UPDATED_HISSSA_TYPE);
+        // Get all the paymentAdviceList where hissaType equals to UPDATED_HISSA_TYPE
+        defaultPaymentAdviceShouldNotBeFound("hissaType.in=" + UPDATED_HISSA_TYPE);
     }
 
     @Test
     @Transactional
-    void getAllPaymentAdvicesByHisssaTypeIsNullOrNotNull() throws Exception {
+    void getAllPaymentAdvicesByHissaTypeIsNullOrNotNull() throws Exception {
         // Initialize the database
         paymentAdviceRepository.saveAndFlush(paymentAdvice);
 
-        // Get all the paymentAdviceList where hisssaType is not null
-        defaultPaymentAdviceShouldBeFound("hisssaType.specified=true");
+        // Get all the paymentAdviceList where hissaType is not null
+        defaultPaymentAdviceShouldBeFound("hissaType.specified=true");
 
-        // Get all the paymentAdviceList where hisssaType is null
-        defaultPaymentAdviceShouldNotBeFound("hisssaType.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentAdvicesByLandCompensationIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        LandCompensation landCompensation = paymentAdvice.getLandCompensation();
-        paymentAdviceRepository.saveAndFlush(paymentAdvice);
-        Long landCompensationId = landCompensation.getId();
-
-        // Get all the paymentAdviceList where landCompensation equals to landCompensationId
-        defaultPaymentAdviceShouldBeFound("landCompensationId.equals=" + landCompensationId);
-
-        // Get all the paymentAdviceList where landCompensation equals to (landCompensationId + 1)
-        defaultPaymentAdviceShouldNotBeFound("landCompensationId.equals=" + (landCompensationId + 1));
+        // Get all the paymentAdviceList where hissaType is null
+        defaultPaymentAdviceShouldNotBeFound("hissaType.specified=false");
     }
 
     @Test
@@ -1285,6 +1291,47 @@ class PaymentAdviceResourceIT {
         defaultPaymentAdviceShouldNotBeFound("projectLandId.equals=" + (projectLandId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllPaymentAdvicesByLandCompensationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+        LandCompensation landCompensation;
+        if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
+            landCompensation = LandCompensationResourceIT.createEntity(em);
+            em.persist(landCompensation);
+            em.flush();
+        } else {
+            landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
+        }
+        em.persist(landCompensation);
+        em.flush();
+        paymentAdvice.setLandCompensation(landCompensation);
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+        Long landCompensationId = landCompensation.getId();
+
+        // Get all the paymentAdviceList where landCompensation equals to landCompensationId
+        defaultPaymentAdviceShouldBeFound("landCompensationId.equals=" + landCompensationId);
+
+        // Get all the paymentAdviceList where landCompensation equals to (landCompensationId + 1)
+        defaultPaymentAdviceShouldNotBeFound("landCompensationId.equals=" + (landCompensationId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentAdvicesByPaymentFileReconIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        PaymentFileRecon paymentFileRecon = paymentAdvice.getPaymentFileRecon();
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+        Long paymentFileReconId = paymentFileRecon.getId();
+
+        // Get all the paymentAdviceList where paymentFileRecon equals to paymentFileReconId
+        defaultPaymentAdviceShouldBeFound("paymentFileReconId.equals=" + paymentFileReconId);
+
+        // Get all the paymentAdviceList where paymentFileRecon equals to (paymentFileReconId + 1)
+        defaultPaymentAdviceShouldNotBeFound("paymentFileReconId.equals=" + (paymentFileReconId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -1304,7 +1351,7 @@ class PaymentAdviceResourceIT {
             .andExpect(jsonPath("$.[*].paymentAdviceType").value(hasItem(DEFAULT_PAYMENT_ADVICE_TYPE.toString())))
             .andExpect(jsonPath("$.[*].referenceNumber").value(hasItem(DEFAULT_REFERENCE_NUMBER)))
             .andExpect(jsonPath("$.[*].paymentStatus").value(hasItem(DEFAULT_PAYMENT_STATUS.toString())))
-            .andExpect(jsonPath("$.[*].hisssaType").value(hasItem(DEFAULT_HISSSA_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].hissaType").value(hasItem(DEFAULT_HISSA_TYPE.toString())));
 
         // Check, that the count call also returns 1
         restPaymentAdviceMockMvc
@@ -1363,7 +1410,7 @@ class PaymentAdviceResourceIT {
             .paymentAdviceType(UPDATED_PAYMENT_ADVICE_TYPE)
             .referenceNumber(UPDATED_REFERENCE_NUMBER)
             .paymentStatus(UPDATED_PAYMENT_STATUS)
-            .hisssaType(UPDATED_HISSSA_TYPE);
+            .hissaType(UPDATED_HISSA_TYPE);
         PaymentAdviceDTO paymentAdviceDTO = paymentAdviceMapper.toDto(updatedPaymentAdvice);
 
         restPaymentAdviceMockMvc
@@ -1388,7 +1435,7 @@ class PaymentAdviceResourceIT {
         assertThat(testPaymentAdvice.getPaymentAdviceType()).isEqualTo(UPDATED_PAYMENT_ADVICE_TYPE);
         assertThat(testPaymentAdvice.getReferenceNumber()).isEqualTo(UPDATED_REFERENCE_NUMBER);
         assertThat(testPaymentAdvice.getPaymentStatus()).isEqualTo(UPDATED_PAYMENT_STATUS);
-        assertThat(testPaymentAdvice.getHisssaType()).isEqualTo(UPDATED_HISSSA_TYPE);
+        assertThat(testPaymentAdvice.getHissaType()).isEqualTo(UPDATED_HISSA_TYPE);
     }
 
     @Test
@@ -1498,7 +1545,7 @@ class PaymentAdviceResourceIT {
         assertThat(testPaymentAdvice.getPaymentAdviceType()).isEqualTo(DEFAULT_PAYMENT_ADVICE_TYPE);
         assertThat(testPaymentAdvice.getReferenceNumber()).isEqualTo(DEFAULT_REFERENCE_NUMBER);
         assertThat(testPaymentAdvice.getPaymentStatus()).isEqualTo(DEFAULT_PAYMENT_STATUS);
-        assertThat(testPaymentAdvice.getHisssaType()).isEqualTo(DEFAULT_HISSSA_TYPE);
+        assertThat(testPaymentAdvice.getHissaType()).isEqualTo(DEFAULT_HISSA_TYPE);
     }
 
     @Test
@@ -1524,7 +1571,7 @@ class PaymentAdviceResourceIT {
             .paymentAdviceType(UPDATED_PAYMENT_ADVICE_TYPE)
             .referenceNumber(UPDATED_REFERENCE_NUMBER)
             .paymentStatus(UPDATED_PAYMENT_STATUS)
-            .hisssaType(UPDATED_HISSSA_TYPE);
+            .hissaType(UPDATED_HISSA_TYPE);
 
         restPaymentAdviceMockMvc
             .perform(
@@ -1548,7 +1595,7 @@ class PaymentAdviceResourceIT {
         assertThat(testPaymentAdvice.getPaymentAdviceType()).isEqualTo(UPDATED_PAYMENT_ADVICE_TYPE);
         assertThat(testPaymentAdvice.getReferenceNumber()).isEqualTo(UPDATED_REFERENCE_NUMBER);
         assertThat(testPaymentAdvice.getPaymentStatus()).isEqualTo(UPDATED_PAYMENT_STATUS);
-        assertThat(testPaymentAdvice.getHisssaType()).isEqualTo(UPDATED_HISSSA_TYPE);
+        assertThat(testPaymentAdvice.getHissaType()).isEqualTo(UPDATED_HISSA_TYPE);
     }
 
     @Test

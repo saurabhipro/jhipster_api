@@ -8,8 +8,8 @@ import tech.jhipster.service.filter.BooleanFilter;
 import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
-import tech.jhipster.service.filter.InstantFilter;
 import tech.jhipster.service.filter.IntegerFilter;
+import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 
@@ -31,9 +31,9 @@ public class ProjectCriteria implements Serializable, Criteria {
 
     private StringFilter name;
 
-    private InstantFilter startDate;
+    private LocalDateFilter startDate;
 
-    private InstantFilter endDate;
+    private LocalDateFilter endDate;
 
     private DoubleFilter budget;
 
@@ -97,33 +97,33 @@ public class ProjectCriteria implements Serializable, Criteria {
         this.name = name;
     }
 
-    public InstantFilter getStartDate() {
+    public LocalDateFilter getStartDate() {
         return startDate;
     }
 
-    public InstantFilter startDate() {
+    public LocalDateFilter startDate() {
         if (startDate == null) {
-            startDate = new InstantFilter();
+            startDate = new LocalDateFilter();
         }
         return startDate;
     }
 
-    public void setStartDate(InstantFilter startDate) {
+    public void setStartDate(LocalDateFilter startDate) {
         this.startDate = startDate;
     }
 
-    public InstantFilter getEndDate() {
+    public LocalDateFilter getEndDate() {
         return endDate;
     }
 
-    public InstantFilter endDate() {
+    public LocalDateFilter endDate() {
         if (endDate == null) {
-            endDate = new InstantFilter();
+            endDate = new LocalDateFilter();
         }
         return endDate;
     }
 
-    public void setEndDate(InstantFilter endDate) {
+    public void setEndDate(LocalDateFilter endDate) {
         this.endDate = endDate;
     }
 

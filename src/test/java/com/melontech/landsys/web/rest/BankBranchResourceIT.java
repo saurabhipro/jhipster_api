@@ -7,8 +7,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.melontech.landsys.IntegrationTest;
-import com.melontech.landsys.domain.Bank;
 import com.melontech.landsys.domain.BankBranch;
+import com.melontech.landsys.domain.Citizen;
 import com.melontech.landsys.repository.BankBranchRepository;
 import com.melontech.landsys.service.BankBranchService;
 import com.melontech.landsys.service.dto.BankBranchDTO;
@@ -85,15 +85,15 @@ class BankBranchResourceIT {
     public static BankBranch createEntity(EntityManager em) {
         BankBranch bankBranch = new BankBranch().name(DEFAULT_NAME).ifsc(DEFAULT_IFSC).address(DEFAULT_ADDRESS);
         // Add required entity
-        Bank bank;
-        if (TestUtil.findAll(em, Bank.class).isEmpty()) {
-            bank = BankResourceIT.createEntity(em);
-            em.persist(bank);
+        Citizen citizen;
+        if (TestUtil.findAll(em, Citizen.class).isEmpty()) {
+            citizen = CitizenResourceIT.createEntity(em);
+            em.persist(citizen);
             em.flush();
         } else {
-            bank = TestUtil.findAll(em, Bank.class).get(0);
+            citizen = TestUtil.findAll(em, Citizen.class).get(0);
         }
-        bankBranch.setBank(bank);
+        bankBranch.getCitizens().add(citizen);
         return bankBranch;
     }
 
@@ -106,15 +106,15 @@ class BankBranchResourceIT {
     public static BankBranch createUpdatedEntity(EntityManager em) {
         BankBranch bankBranch = new BankBranch().name(UPDATED_NAME).ifsc(UPDATED_IFSC).address(UPDATED_ADDRESS);
         // Add required entity
-        Bank bank;
-        if (TestUtil.findAll(em, Bank.class).isEmpty()) {
-            bank = BankResourceIT.createUpdatedEntity(em);
-            em.persist(bank);
+        Citizen citizen;
+        if (TestUtil.findAll(em, Citizen.class).isEmpty()) {
+            citizen = CitizenResourceIT.createUpdatedEntity(em);
+            em.persist(citizen);
             em.flush();
         } else {
-            bank = TestUtil.findAll(em, Bank.class).get(0);
+            citizen = TestUtil.findAll(em, Citizen.class).get(0);
         }
-        bankBranch.setBank(bank);
+        bankBranch.getCitizens().add(citizen);
         return bankBranch;
     }
 

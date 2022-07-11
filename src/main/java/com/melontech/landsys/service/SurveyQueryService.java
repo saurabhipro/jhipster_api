@@ -121,16 +121,7 @@ public class SurveyQueryService extends QueryService<Survey> {
                 specification = specification.and(buildStringSpecification(criteria.getRemarks(), Survey_.remarks));
             }
             if (criteria.getStatus() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getStatus(), Survey_.status));
-            }
-            if (criteria.getLandCompensationId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getLandCompensationId(),
-                            root -> root.join(Survey_.landCompensations, JoinType.LEFT).get(LandCompensation_.id)
-                        )
-                    );
+                specification = specification.and(buildSpecification(criteria.getStatus(), Survey_.status));
             }
             if (criteria.getKhatedarId() != null) {
                 specification =
@@ -144,6 +135,15 @@ public class SurveyQueryService extends QueryService<Survey> {
                         buildSpecification(
                             criteria.getProjectLandId(),
                             root -> root.join(Survey_.projectLand, JoinType.LEFT).get(ProjectLand_.id)
+                        )
+                    );
+            }
+            if (criteria.getLandCompensationId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLandCompensationId(),
+                            root -> root.join(Survey_.landCompensations, JoinType.LEFT).get(LandCompensation_.id)
                         )
                     );
             }

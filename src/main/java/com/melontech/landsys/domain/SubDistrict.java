@@ -26,14 +26,14 @@ public class SubDistrict implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "subDistrict")
-    @JsonIgnoreProperties(value = { "lands", "subDistrict" }, allowSetters = true)
-    private Set<Village> villages = new HashSet<>();
-
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "subDistricts", "state" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "subDistricts", "states" }, allowSetters = true)
     private District district;
+
+    @OneToMany(mappedBy = "subDistrict")
+    @JsonIgnoreProperties(value = { "subDistrict", "lands" }, allowSetters = true)
+    private Set<Village> villages = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -61,6 +61,19 @@ public class SubDistrict implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public District getDistrict() {
+        return this.district;
+    }
+
+    public void setDistrict(District district) {
+        this.district = district;
+    }
+
+    public SubDistrict district(District district) {
+        this.setDistrict(district);
+        return this;
     }
 
     public Set<Village> getVillages() {
@@ -91,19 +104,6 @@ public class SubDistrict implements Serializable {
     public SubDistrict removeVillage(Village village) {
         this.villages.remove(village);
         village.setSubDistrict(null);
-        return this;
-    }
-
-    public District getDistrict() {
-        return this.district;
-    }
-
-    public void setDistrict(District district) {
-        this.district = district;
-    }
-
-    public SubDistrict district(District district) {
-        this.setDistrict(district);
         return this;
     }
 

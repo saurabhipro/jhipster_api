@@ -37,32 +37,35 @@ public class ProjectLand implements Serializable {
     @Column(name = "hissa_type")
     private HissaType hissaType;
 
-    @JsonIgnoreProperties(value = { "state", "projectLand", "village", "landType", "unit" }, allowSetters = true)
-    @OneToOne(optional = false)
-    @NotNull
-    @JoinColumn(unique = true)
-    private Land land;
-
-    @OneToMany(mappedBy = "projectLand")
-    @JsonIgnoreProperties(value = { "surveys", "landCompensations", "citizen", "projectLand" }, allowSetters = true)
-    private Set<Khatedar> khatedars = new HashSet<>();
-
-    @OneToMany(mappedBy = "projectLand")
-    @JsonIgnoreProperties(value = { "landCompensations", "khatedar", "projectLand" }, allowSetters = true)
-    private Set<Survey> surveys = new HashSet<>();
-
-    @OneToMany(mappedBy = "projectLand")
-    @JsonIgnoreProperties(value = { "paymentAdvice", "khatedar", "survey", "projectLand" }, allowSetters = true)
-    private Set<LandCompensation> landCompensations = new HashSet<>();
-
-    @OneToMany(mappedBy = "projectLand")
-    @JsonIgnoreProperties(value = { "landCompensation", "projectLand" }, allowSetters = true)
-    private Set<PaymentAdvice> paymentAdvices = new HashSet<>();
-
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = { "projectLands" }, allowSetters = true)
     private Project project;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "state", "village", "unit", "landType", "projectLands" }, allowSetters = true)
+    private Land land;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "khatedars", "projectLands" }, allowSetters = true)
+    private NoticeStatusInfo noticeStatusInfo;
+
+    @OneToMany(mappedBy = "projectLand")
+    @JsonIgnoreProperties(value = { "citizen", "projectLand", "noticeStatusInfo", "survey", "landCompensations" }, allowSetters = true)
+    private Set<Khatedar> khatedars = new HashSet<>();
+
+    @OneToMany(mappedBy = "projectLand")
+    @JsonIgnoreProperties(value = { "khatedar", "projectLand", "landCompensations" }, allowSetters = true)
+    private Set<Survey> surveys = new HashSet<>();
+
+    @OneToMany(mappedBy = "projectLand")
+    @JsonIgnoreProperties(value = { "khatedar", "survey", "projectLand", "paymentAdvices" }, allowSetters = true)
+    private Set<LandCompensation> landCompensations = new HashSet<>();
+
+    @OneToMany(mappedBy = "projectLand")
+    @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentFileRecon" }, allowSetters = true)
+    private Set<PaymentAdvice> paymentAdvices = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -131,6 +134,19 @@ public class ProjectLand implements Serializable {
         this.hissaType = hissaType;
     }
 
+    public Project getProject() {
+        return this.project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public ProjectLand project(Project project) {
+        this.setProject(project);
+        return this;
+    }
+
     public Land getLand() {
         return this.land;
     }
@@ -141,6 +157,19 @@ public class ProjectLand implements Serializable {
 
     public ProjectLand land(Land land) {
         this.setLand(land);
+        return this;
+    }
+
+    public NoticeStatusInfo getNoticeStatusInfo() {
+        return this.noticeStatusInfo;
+    }
+
+    public void setNoticeStatusInfo(NoticeStatusInfo noticeStatusInfo) {
+        this.noticeStatusInfo = noticeStatusInfo;
+    }
+
+    public ProjectLand noticeStatusInfo(NoticeStatusInfo noticeStatusInfo) {
+        this.setNoticeStatusInfo(noticeStatusInfo);
         return this;
     }
 
@@ -265,19 +294,6 @@ public class ProjectLand implements Serializable {
     public ProjectLand removePaymentAdvice(PaymentAdvice paymentAdvice) {
         this.paymentAdvices.remove(paymentAdvice);
         paymentAdvice.setProjectLand(null);
-        return this;
-    }
-
-    public Project getProject() {
-        return this.project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
-    }
-
-    public ProjectLand project(Project project) {
-        this.setProject(project);
         return this;
     }
 

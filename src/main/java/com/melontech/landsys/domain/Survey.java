@@ -2,6 +2,7 @@ package com.melontech.landsys.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.melontech.landsys.domain.enumeration.HissaType;
+import com.melontech.landsys.domain.enumeration.SurveyStatus;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -34,7 +35,7 @@ public class Survey implements Serializable {
 
     @NotNull
     @Column(name = "share_percentage", nullable = false)
-    private Integer sharePercentage;
+    private Double sharePercentage;
 
     @NotNull
     @Column(name = "area", nullable = false)
@@ -59,21 +60,26 @@ public class Survey implements Serializable {
     @Column(name = "remarks")
     private String remarks;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private SurveyStatus status;
 
-    @OneToMany(mappedBy = "survey")
-    @JsonIgnoreProperties(value = { "paymentAdvice", "khatedar", "survey", "projectLand" }, allowSetters = true)
-    private Set<LandCompensation> landCompensations = new HashSet<>();
+    @JsonIgnoreProperties(value = { "citizen", "projectLand", "noticeStatusInfo", "survey", "landCompensations" }, allowSetters = true)
+    @OneToOne
+    @JoinColumn(unique = true)
+    private Khatedar khatedar;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "surveys", "landCompensations", "citizen", "projectLand" }, allowSetters = true)
-    private Khatedar khatedar;
-
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "land", "khatedars", "surveys", "landCompensations", "paymentAdvices", "project" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "project", "land", "noticeStatusInfo", "khatedars", "surveys", "landCompensations", "paymentAdvices" },
+        allowSetters = true
+    )
     private ProjectLand projectLand;
+
+    @OneToMany(mappedBy = "survey")
+    @JsonIgnoreProperties(value = { "khatedar", "survey", "projectLand", "paymentAdvices" }, allowSetters = true)
+    private Set<LandCompensation> landCompensations = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -116,16 +122,16 @@ public class Survey implements Serializable {
         this.hissaType = hissaType;
     }
 
-    public Integer getSharePercentage() {
+    public Double getSharePercentage() {
         return this.sharePercentage;
     }
 
-    public Survey sharePercentage(Integer sharePercentage) {
+    public Survey sharePercentage(Double sharePercentage) {
         this.setSharePercentage(sharePercentage);
         return this;
     }
 
-    public void setSharePercentage(Integer sharePercentage) {
+    public void setSharePercentage(Double sharePercentage) {
         this.sharePercentage = sharePercentage;
     }
 
@@ -220,17 +226,43 @@ public class Survey implements Serializable {
         this.remarks = remarks;
     }
 
-    public String getStatus() {
+    public SurveyStatus getStatus() {
         return this.status;
     }
 
-    public Survey status(String status) {
+    public Survey status(SurveyStatus status) {
         this.setStatus(status);
         return this;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(SurveyStatus status) {
         this.status = status;
+    }
+
+    public Khatedar getKhatedar() {
+        return this.khatedar;
+    }
+
+    public void setKhatedar(Khatedar khatedar) {
+        this.khatedar = khatedar;
+    }
+
+    public Survey khatedar(Khatedar khatedar) {
+        this.setKhatedar(khatedar);
+        return this;
+    }
+
+    public ProjectLand getProjectLand() {
+        return this.projectLand;
+    }
+
+    public void setProjectLand(ProjectLand projectLand) {
+        this.projectLand = projectLand;
+    }
+
+    public Survey projectLand(ProjectLand projectLand) {
+        this.setProjectLand(projectLand);
+        return this;
     }
 
     public Set<LandCompensation> getLandCompensations() {
@@ -261,32 +293,6 @@ public class Survey implements Serializable {
     public Survey removeLandCompensation(LandCompensation landCompensation) {
         this.landCompensations.remove(landCompensation);
         landCompensation.setSurvey(null);
-        return this;
-    }
-
-    public Khatedar getKhatedar() {
-        return this.khatedar;
-    }
-
-    public void setKhatedar(Khatedar khatedar) {
-        this.khatedar = khatedar;
-    }
-
-    public Survey khatedar(Khatedar khatedar) {
-        this.setKhatedar(khatedar);
-        return this;
-    }
-
-    public ProjectLand getProjectLand() {
-        return this.projectLand;
-    }
-
-    public void setProjectLand(ProjectLand projectLand) {
-        this.projectLand = projectLand;
-    }
-
-    public Survey projectLand(ProjectLand projectLand) {
-        this.setProjectLand(projectLand);
         return this;
     }
 

@@ -2,31 +2,24 @@ package com.melontech.landsys.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.melontech.landsys.IntegrationTest;
 import com.melontech.landsys.domain.District;
 import com.melontech.landsys.domain.State;
+import com.melontech.landsys.domain.SubDistrict;
 import com.melontech.landsys.repository.DistrictRepository;
-import com.melontech.landsys.service.DistrictService;
 import com.melontech.landsys.service.dto.DistrictDTO;
 import com.melontech.landsys.service.mapper.DistrictMapper;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -36,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link DistrictResource} REST controller.
  */
 @IntegrationTest
-@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class DistrictResourceIT {
@@ -53,14 +45,8 @@ class DistrictResourceIT {
     @Autowired
     private DistrictRepository districtRepository;
 
-    @Mock
-    private DistrictRepository districtRepositoryMock;
-
     @Autowired
     private DistrictMapper districtMapper;
-
-    @Mock
-    private DistrictService districtServiceMock;
 
     @Autowired
     private EntityManager em;
@@ -79,6 +65,16 @@ class DistrictResourceIT {
     public static District createEntity(EntityManager em) {
         District district = new District().name(DEFAULT_NAME);
         // Add required entity
+        SubDistrict subDistrict;
+        if (TestUtil.findAll(em, SubDistrict.class).isEmpty()) {
+            subDistrict = SubDistrictResourceIT.createEntity(em);
+            em.persist(subDistrict);
+            em.flush();
+        } else {
+            subDistrict = TestUtil.findAll(em, SubDistrict.class).get(0);
+        }
+        district.getSubDistricts().add(subDistrict);
+        // Add required entity
         State state;
         if (TestUtil.findAll(em, State.class).isEmpty()) {
             state = StateResourceIT.createEntity(em);
@@ -87,7 +83,7 @@ class DistrictResourceIT {
         } else {
             state = TestUtil.findAll(em, State.class).get(0);
         }
-        district.setState(state);
+        district.getStates().add(state);
         return district;
     }
 
@@ -100,6 +96,16 @@ class DistrictResourceIT {
     public static District createUpdatedEntity(EntityManager em) {
         District district = new District().name(UPDATED_NAME);
         // Add required entity
+        SubDistrict subDistrict;
+        if (TestUtil.findAll(em, SubDistrict.class).isEmpty()) {
+            subDistrict = SubDistrictResourceIT.createUpdatedEntity(em);
+            em.persist(subDistrict);
+            em.flush();
+        } else {
+            subDistrict = TestUtil.findAll(em, SubDistrict.class).get(0);
+        }
+        district.getSubDistricts().add(subDistrict);
+        // Add required entity
         State state;
         if (TestUtil.findAll(em, State.class).isEmpty()) {
             state = StateResourceIT.createUpdatedEntity(em);
@@ -108,7 +114,7 @@ class DistrictResourceIT {
         } else {
             state = TestUtil.findAll(em, State.class).get(0);
         }
-        district.setState(state);
+        district.getStates().add(state);
         return district;
     }
 
@@ -184,24 +190,6 @@ class DistrictResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(district.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
-    }
-
-    @SuppressWarnings({ "unchecked" })
-    void getAllDistrictsWithEagerRelationshipsIsEnabled() throws Exception {
-        when(districtServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-
-        restDistrictMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
-
-        verify(districtServiceMock, times(1)).findAllWithEagerRelationships(any());
-    }
-
-    @SuppressWarnings({ "unchecked" })
-    void getAllDistrictsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        when(districtServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-
-        restDistrictMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
-
-        verify(districtServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test

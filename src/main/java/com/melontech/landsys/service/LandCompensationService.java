@@ -1,7 +1,6 @@
 package com.melontech.landsys.service;
 
 import com.melontech.landsys.service.dto.LandCompensationDTO;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,12 +40,6 @@ public interface LandCompensationService {
      * @return the list of entities.
      */
     Page<LandCompensationDTO> findAll(Pageable pageable);
-    /**
-     * Get all the LandCompensationDTO where PaymentAdvice is {@code null}.
-     *
-     * @return the {@link List} of entities.
-     */
-    List<LandCompensationDTO> findAllWherePaymentAdviceIsNull();
 
     /**
      * Get the "id" landCompensation.

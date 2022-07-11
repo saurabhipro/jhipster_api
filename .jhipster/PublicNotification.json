@@ -1,13 +1,13 @@
 {
   "applications": "*",
-  "changelogDate": "20220710085302",
+  "changelogDate": "20220711175450",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "landsys_public_notification",
   "fields": [
     {
       "fieldName": "date",
-      "fieldType": "Instant"
+      "fieldType": "LocalDate"
     },
     {
       "fieldName": "file",

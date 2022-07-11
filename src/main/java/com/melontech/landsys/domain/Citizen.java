@@ -81,13 +81,13 @@ public class Citizen implements Serializable {
     @Column(name = "acc_no_image_content_type")
     private String accNoImageContentType;
 
-    @OneToMany(mappedBy = "citizen")
-    @JsonIgnoreProperties(value = { "surveys", "landCompensations", "citizen", "projectLand" }, allowSetters = true)
-    private Set<Khatedar> khatedars = new HashSet<>();
-
     @ManyToOne
-    @JsonIgnoreProperties(value = { "citizens", "bank" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "bank", "citizens" }, allowSetters = true)
     private BankBranch bankBranch;
+
+    @OneToMany(mappedBy = "citizen")
+    @JsonIgnoreProperties(value = { "citizen", "projectLand", "noticeStatusInfo", "survey", "landCompensations" }, allowSetters = true)
+    private Set<Khatedar> khatedars = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -325,6 +325,19 @@ public class Citizen implements Serializable {
         this.accNoImageContentType = accNoImageContentType;
     }
 
+    public BankBranch getBankBranch() {
+        return this.bankBranch;
+    }
+
+    public void setBankBranch(BankBranch bankBranch) {
+        this.bankBranch = bankBranch;
+    }
+
+    public Citizen bankBranch(BankBranch bankBranch) {
+        this.setBankBranch(bankBranch);
+        return this;
+    }
+
     public Set<Khatedar> getKhatedars() {
         return this.khatedars;
     }
@@ -353,19 +366,6 @@ public class Citizen implements Serializable {
     public Citizen removeKhatedar(Khatedar khatedar) {
         this.khatedars.remove(khatedar);
         khatedar.setCitizen(null);
-        return this;
-    }
-
-    public BankBranch getBankBranch() {
-        return this.bankBranch;
-    }
-
-    public void setBankBranch(BankBranch bankBranch) {
-        this.bankBranch = bankBranch;
-    }
-
-    public Citizen bankBranch(BankBranch bankBranch) {
-        this.setBankBranch(bankBranch);
         return this;
     }
 

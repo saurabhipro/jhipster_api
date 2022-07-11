@@ -1,6 +1,7 @@
 package com.melontech.landsys.service.dto;
 
 import com.melontech.landsys.domain.enumeration.HissaType;
+import com.melontech.landsys.domain.enumeration.SurveyStatus;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.validation.constraints.*;
@@ -19,7 +20,7 @@ public class SurveyDTO implements Serializable {
     private HissaType hissaType;
 
     @NotNull
-    private Integer sharePercentage;
+    private Double sharePercentage;
 
     @NotNull
     private Double area;
@@ -37,7 +38,7 @@ public class SurveyDTO implements Serializable {
 
     private String remarks;
 
-    private String status;
+    private SurveyStatus status;
 
     private KhatedarDTO khatedar;
 
@@ -67,11 +68,11 @@ public class SurveyDTO implements Serializable {
         this.hissaType = hissaType;
     }
 
-    public Integer getSharePercentage() {
+    public Double getSharePercentage() {
         return sharePercentage;
     }
 
-    public void setSharePercentage(Integer sharePercentage) {
+    public void setSharePercentage(Double sharePercentage) {
         this.sharePercentage = sharePercentage;
     }
 
@@ -131,11 +132,11 @@ public class SurveyDTO implements Serializable {
         this.remarks = remarks;
     }
 
-    public String getStatus() {
+    public SurveyStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(SurveyStatus status) {
         this.status = status;
     }
 

@@ -1,6 +1,6 @@
 {
   "applications": "*",
-  "changelogDate": "20220710085307",
+  "changelogDate": "20220711175455",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "land_compensation",
@@ -18,7 +18,7 @@
     },
     {
       "fieldName": "sharePercentage",
-      "fieldType": "Integer",
+      "fieldType": "Double",
       "fieldValidateRules": ["required"]
     },
     {
@@ -48,15 +48,12 @@
     },
     {
       "fieldName": "status",
-      "fieldType": "String"
+      "fieldType": "CompensationStatus",
+      "fieldValues": "OPEN,CLOSED"
     },
     {
       "fieldName": "orderDate",
-      "fieldType": "Instant"
-    },
-    {
-      "fieldName": "paymentDate",
-      "fieldType": "Instant"
+      "fieldType": "LocalDate"
     },
     {
       "fieldName": "paymentAmount",
@@ -74,18 +71,11 @@
   "readOnly": false,
   "relationships": [
     {
-      "otherEntityName": "paymentAdvice",
-      "otherEntityRelationshipName": "landCompensation",
-      "ownerSide": false,
-      "relationshipName": "paymentAdvice",
-      "relationshipType": "one-to-one",
-      "relationshipValidateRules": "required"
-    },
-    {
       "otherEntityName": "khatedar",
       "otherEntityRelationshipName": "landCompensation",
       "relationshipName": "khatedar",
-      "relationshipType": "many-to-one"
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
     },
     {
       "otherEntityName": "survey",
@@ -99,6 +89,13 @@
       "otherEntityRelationshipName": "landCompensation",
       "relationshipName": "projectLand",
       "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "paymentAdvice",
+      "otherEntityRelationshipName": "landCompensation",
+      "relationshipName": "paymentAdvice",
+      "relationshipType": "one-to-many",
       "relationshipValidateRules": "required"
     }
   ],

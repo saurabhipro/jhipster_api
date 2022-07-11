@@ -27,13 +27,12 @@ public class District implements Serializable {
     private String name;
 
     @OneToMany(mappedBy = "district")
-    @JsonIgnoreProperties(value = { "villages", "district" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "district", "villages" }, allowSetters = true)
     private Set<SubDistrict> subDistricts = new HashSet<>();
 
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties(value = { "districts", "land" }, allowSetters = true)
-    private State state;
+    @OneToMany(mappedBy = "district")
+    @JsonIgnoreProperties(value = { "district", "land" }, allowSetters = true)
+    private Set<State> states = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -94,16 +93,34 @@ public class District implements Serializable {
         return this;
     }
 
-    public State getState() {
-        return this.state;
+    public Set<State> getStates() {
+        return this.states;
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public void setStates(Set<State> states) {
+        if (this.states != null) {
+            this.states.forEach(i -> i.setDistrict(null));
+        }
+        if (states != null) {
+            states.forEach(i -> i.setDistrict(this));
+        }
+        this.states = states;
     }
 
-    public District state(State state) {
-        this.setState(state);
+    public District states(Set<State> states) {
+        this.setStates(states);
+        return this;
+    }
+
+    public District addState(State state) {
+        this.states.add(state);
+        state.setDistrict(this);
+        return this;
+    }
+
+    public District removeState(State state) {
+        this.states.remove(state);
+        state.setDistrict(null);
         return this;
     }
 

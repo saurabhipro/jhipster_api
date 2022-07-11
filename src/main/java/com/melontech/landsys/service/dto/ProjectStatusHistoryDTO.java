@@ -2,7 +2,7 @@ package com.melontech.landsys.service.dto;
 
 import com.melontech.landsys.domain.enumeration.ProjectStatus;
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -14,7 +14,7 @@ public class ProjectStatusHistoryDTO implements Serializable {
 
     private ProjectStatus status;
 
-    private Instant when;
+    private LocalDate when;
 
     private String remarks;
 
@@ -34,11 +34,11 @@ public class ProjectStatusHistoryDTO implements Serializable {
         this.status = status;
     }
 
-    public Instant getWhen() {
+    public LocalDate getWhen() {
         return when;
     }
 
-    public void setWhen(Instant when) {
+    public void setWhen(LocalDate when) {
         this.when = when;
     }
 

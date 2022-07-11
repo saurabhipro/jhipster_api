@@ -63,19 +63,25 @@ public class PaymentAdvice implements Serializable {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "hisssa_type", nullable = false)
-    private HissaType hisssaType;
-
-    @JsonIgnoreProperties(value = { "paymentAdvice", "khatedar", "survey", "projectLand" }, allowSetters = true)
-    @OneToOne(optional = false)
-    @NotNull
-    @JoinColumn(unique = true)
-    private LandCompensation landCompensation;
+    @Column(name = "hissa_type", nullable = false)
+    private HissaType hissaType;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "land", "khatedars", "surveys", "landCompensations", "paymentAdvices", "project" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "project", "land", "noticeStatusInfo", "khatedars", "surveys", "landCompensations", "paymentAdvices" },
+        allowSetters = true
+    )
     private ProjectLand projectLand;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "khatedar", "survey", "projectLand", "paymentAdvices" }, allowSetters = true)
+    private LandCompensation landCompensation;
+
+    @JsonIgnoreProperties(value = { "paymentAdvice" }, allowSetters = true)
+    @OneToOne(mappedBy = "paymentAdvice")
+    private PaymentFileRecon paymentFileRecon;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -222,17 +228,30 @@ public class PaymentAdvice implements Serializable {
         this.paymentStatus = paymentStatus;
     }
 
-    public HissaType getHisssaType() {
-        return this.hisssaType;
+    public HissaType getHissaType() {
+        return this.hissaType;
     }
 
-    public PaymentAdvice hisssaType(HissaType hisssaType) {
-        this.setHisssaType(hisssaType);
+    public PaymentAdvice hissaType(HissaType hissaType) {
+        this.setHissaType(hissaType);
         return this;
     }
 
-    public void setHisssaType(HissaType hisssaType) {
-        this.hisssaType = hisssaType;
+    public void setHissaType(HissaType hissaType) {
+        this.hissaType = hissaType;
+    }
+
+    public ProjectLand getProjectLand() {
+        return this.projectLand;
+    }
+
+    public void setProjectLand(ProjectLand projectLand) {
+        this.projectLand = projectLand;
+    }
+
+    public PaymentAdvice projectLand(ProjectLand projectLand) {
+        this.setProjectLand(projectLand);
+        return this;
     }
 
     public LandCompensation getLandCompensation() {
@@ -248,16 +267,22 @@ public class PaymentAdvice implements Serializable {
         return this;
     }
 
-    public ProjectLand getProjectLand() {
-        return this.projectLand;
+    public PaymentFileRecon getPaymentFileRecon() {
+        return this.paymentFileRecon;
     }
 
-    public void setProjectLand(ProjectLand projectLand) {
-        this.projectLand = projectLand;
+    public void setPaymentFileRecon(PaymentFileRecon paymentFileRecon) {
+        if (this.paymentFileRecon != null) {
+            this.paymentFileRecon.setPaymentAdvice(null);
+        }
+        if (paymentFileRecon != null) {
+            paymentFileRecon.setPaymentAdvice(this);
+        }
+        this.paymentFileRecon = paymentFileRecon;
     }
 
-    public PaymentAdvice projectLand(ProjectLand projectLand) {
-        this.setProjectLand(projectLand);
+    public PaymentAdvice paymentFileRecon(PaymentFileRecon paymentFileRecon) {
+        this.setPaymentFileRecon(paymentFileRecon);
         return this;
     }
 
@@ -295,7 +320,7 @@ public class PaymentAdvice implements Serializable {
             ", paymentAdviceType='" + getPaymentAdviceType() + "'" +
             ", referenceNumber='" + getReferenceNumber() + "'" +
             ", paymentStatus='" + getPaymentStatus() + "'" +
-            ", hisssaType='" + getHisssaType() + "'" +
+            ", hissaType='" + getHissaType() + "'" +
             "}";
     }
 }

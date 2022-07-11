@@ -34,14 +34,13 @@ public class BankBranch implements Serializable {
     @Column(name = "address", nullable = false)
     private String address;
 
-    @OneToMany(mappedBy = "bankBranch")
-    @JsonIgnoreProperties(value = { "khatedars", "bankBranch" }, allowSetters = true)
-    private Set<Citizen> citizens = new HashSet<>();
-
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne
     @JsonIgnoreProperties(value = { "bankNames" }, allowSetters = true)
     private Bank bank;
+
+    @OneToMany(mappedBy = "bankBranch")
+    @JsonIgnoreProperties(value = { "bankBranch", "khatedars" }, allowSetters = true)
+    private Set<Citizen> citizens = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -97,6 +96,19 @@ public class BankBranch implements Serializable {
         this.address = address;
     }
 
+    public Bank getBank() {
+        return this.bank;
+    }
+
+    public void setBank(Bank bank) {
+        this.bank = bank;
+    }
+
+    public BankBranch bank(Bank bank) {
+        this.setBank(bank);
+        return this;
+    }
+
     public Set<Citizen> getCitizens() {
         return this.citizens;
     }
@@ -125,19 +137,6 @@ public class BankBranch implements Serializable {
     public BankBranch removeCitizen(Citizen citizen) {
         this.citizens.remove(citizen);
         citizen.setBankBranch(null);
-        return this;
-    }
-
-    public Bank getBank() {
-        return this.bank;
-    }
-
-    public void setBank(Bank bank) {
-        this.bank = bank;
-    }
-
-    public BankBranch bank(Bank bank) {
-        this.setBank(bank);
         return this;
     }
 

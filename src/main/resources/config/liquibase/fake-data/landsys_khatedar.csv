@@ -1,11 +1,11 @@
 id;case_file_no;remarks;notice_file;notice_file_content_type;status;citizen_id;project_land_id
-1;encompassing Accounts;Riyal Gorgeous Concrete;../fake-data/blob/hipster.png;image/png;COMPENSATIONCREATED;1;1
-2;open-source Creative;Developer RAM;../fake-data/blob/hipster.png;image/png;COMPENSATIONCREATED;2;2
-3;core Cambridgeshire;Intelligent Soap;../fake-data/blob/hipster.png;image/png;SURVEYCREATED;3;3
-4;Rustic;challenge;../fake-data/blob/hipster.png;image/png;PAYMENTDONE;4;4
-5;SQL green;Ranch Mouse;../fake-data/blob/hipster.png;image/png;COMPENSATIONCREATED;5;5
-6;deposit;firewall Borders;../fake-data/blob/hipster.png;image/png;SURVEYCREATED;6;6
-7;harness Drive Cotton;Technician Rupee Self-enabling;../fake-data/blob/hipster.png;image/png;PAYMENTDONE;7;7
-8;withdrawal help-desk;Orchestrator projection;../fake-data/blob/hipster.png;image/png;PAYMENTDONE;8;8
-9;bypass;Executive driver Colon;../fake-data/blob/hipster.png;image/png;SURVEYCREATED;9;9
-10;interfaces Shilling Wisconsin;fault-tolerant Towels deposit;../fake-data/blob/hipster.png;image/png;AWARDGENERATED;10;10
+1;encompassing Accounts;Riyal Gorgeous Concrete;../fake-data/blob/hipster.png;image/png;SURVEY_CREATED;1;1
+2;open-source Creative;Developer RAM;../fake-data/blob/hipster.png;image/png;PENDING_FOR_COMPENSATION;2;2
+3;core Cambridgeshire;Intelligent Soap;../fake-data/blob/hipster.png;image/png;PENDING_FOR_SURVEY;3;3
+4;Rustic;challenge;../fake-data/blob/hipster.png;image/png;CLOSED;4;4
+5;SQL green;Ranch Mouse;../fake-data/blob/hipster.png;image/png;PENDING_FOR_COMPENSATION;5;5
+6;deposit;firewall Borders;../fake-data/blob/hipster.png;image/png;PENDING_FOR_SURVEY;6;6
+7;harness Drive Cotton;Technician Rupee Self-enabling;../fake-data/blob/hipster.png;image/png;CLOSED;7;7
+8;withdrawal help-desk;Orchestrator projection;../fake-data/blob/hipster.png;image/png;CLOSED;8;8
+9;bypass;Executive driver Colon;../fake-data/blob/hipster.png;image/png;PENDING_FOR_SURVEY;9;9
+10;interfaces Shilling Wisconsin;fault-tolerant Towels deposit;../fake-data/blob/hipster.png;image/png;PENDING_FOR_PAYMENT;10;10
