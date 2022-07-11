@@ -142,6 +142,15 @@ public class PaymentAdviceQueryService extends QueryService<PaymentAdvice> {
                         )
                     );
             }
+            if (criteria.getPaymentFileId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPaymentFileId(),
+                            root -> root.join(PaymentAdvice_.paymentFile, JoinType.LEFT).get(PaymentFile_.id)
+                        )
+                    );
+            }
             if (criteria.getPaymentFileReconId() != null) {
                 specification =
                     specification.and(

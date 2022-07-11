@@ -45,7 +45,7 @@ public class PaymentFileRecon implements Serializable {
     @Column(name = "payment_status", nullable = false)
     private PaymentStatus paymentStatus;
 
-    @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentFileRecon" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentFile", "paymentFileRecon" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
     private PaymentAdvice paymentAdvice;

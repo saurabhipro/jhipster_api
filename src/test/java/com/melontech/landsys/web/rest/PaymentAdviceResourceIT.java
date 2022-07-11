@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.melontech.landsys.IntegrationTest;
 import com.melontech.landsys.domain.LandCompensation;
 import com.melontech.landsys.domain.PaymentAdvice;
+import com.melontech.landsys.domain.PaymentFile;
 import com.melontech.landsys.domain.PaymentFileRecon;
 import com.melontech.landsys.domain.ProjectLand;
 import com.melontech.landsys.domain.enumeration.HissaType;
@@ -132,6 +133,16 @@ class PaymentAdviceResourceIT {
         }
         paymentAdvice.setLandCompensation(landCompensation);
         // Add required entity
+        PaymentFile paymentFile;
+        if (TestUtil.findAll(em, PaymentFile.class).isEmpty()) {
+            paymentFile = PaymentFileResourceIT.createEntity(em);
+            em.persist(paymentFile);
+            em.flush();
+        } else {
+            paymentFile = TestUtil.findAll(em, PaymentFile.class).get(0);
+        }
+        paymentAdvice.setPaymentFile(paymentFile);
+        // Add required entity
         PaymentFileRecon paymentFileRecon;
         if (TestUtil.findAll(em, PaymentFileRecon.class).isEmpty()) {
             paymentFileRecon = PaymentFileReconResourceIT.createEntity(em);
@@ -183,6 +194,16 @@ class PaymentAdviceResourceIT {
             landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
         }
         paymentAdvice.setLandCompensation(landCompensation);
+        // Add required entity
+        PaymentFile paymentFile;
+        if (TestUtil.findAll(em, PaymentFile.class).isEmpty()) {
+            paymentFile = PaymentFileResourceIT.createUpdatedEntity(em);
+            em.persist(paymentFile);
+            em.flush();
+        } else {
+            paymentFile = TestUtil.findAll(em, PaymentFile.class).get(0);
+        }
+        paymentAdvice.setPaymentFile(paymentFile);
         // Add required entity
         PaymentFileRecon paymentFileRecon;
         if (TestUtil.findAll(em, PaymentFileRecon.class).isEmpty()) {
@@ -1315,6 +1336,32 @@ class PaymentAdviceResourceIT {
 
         // Get all the paymentAdviceList where landCompensation equals to (landCompensationId + 1)
         defaultPaymentAdviceShouldNotBeFound("landCompensationId.equals=" + (landCompensationId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentAdvicesByPaymentFileIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+        PaymentFile paymentFile;
+        if (TestUtil.findAll(em, PaymentFile.class).isEmpty()) {
+            paymentFile = PaymentFileResourceIT.createEntity(em);
+            em.persist(paymentFile);
+            em.flush();
+        } else {
+            paymentFile = TestUtil.findAll(em, PaymentFile.class).get(0);
+        }
+        em.persist(paymentFile);
+        em.flush();
+        paymentAdvice.setPaymentFile(paymentFile);
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+        Long paymentFileId = paymentFile.getId();
+
+        // Get all the paymentAdviceList where paymentFile equals to paymentFileId
+        defaultPaymentAdviceShouldBeFound("paymentFileId.equals=" + paymentFileId);
+
+        // Get all the paymentAdviceList where paymentFile equals to (paymentFileId + 1)
+        defaultPaymentAdviceShouldNotBeFound("paymentFileId.equals=" + (paymentFileId + 1));
     }
 
     @Test

@@ -108,6 +108,8 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
 
     private LongFilter landCompensationId;
 
+    private LongFilter paymentFileId;
+
     private LongFilter paymentFileReconId;
 
     private Boolean distinct;
@@ -129,6 +131,7 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
         this.hissaType = other.hissaType == null ? null : other.hissaType.copy();
         this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
         this.landCompensationId = other.landCompensationId == null ? null : other.landCompensationId.copy();
+        this.paymentFileId = other.paymentFileId == null ? null : other.paymentFileId.copy();
         this.paymentFileReconId = other.paymentFileReconId == null ? null : other.paymentFileReconId.copy();
         this.distinct = other.distinct;
     }
@@ -348,6 +351,21 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
         this.landCompensationId = landCompensationId;
     }
 
+    public LongFilter getPaymentFileId() {
+        return paymentFileId;
+    }
+
+    public LongFilter paymentFileId() {
+        if (paymentFileId == null) {
+            paymentFileId = new LongFilter();
+        }
+        return paymentFileId;
+    }
+
+    public void setPaymentFileId(LongFilter paymentFileId) {
+        this.paymentFileId = paymentFileId;
+    }
+
     public LongFilter getPaymentFileReconId() {
         return paymentFileReconId;
     }
@@ -395,6 +413,7 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
             Objects.equals(hissaType, that.hissaType) &&
             Objects.equals(projectLandId, that.projectLandId) &&
             Objects.equals(landCompensationId, that.landCompensationId) &&
+            Objects.equals(paymentFileId, that.paymentFileId) &&
             Objects.equals(paymentFileReconId, that.paymentFileReconId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -417,6 +436,7 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
             hissaType,
             projectLandId,
             landCompensationId,
+            paymentFileId,
             paymentFileReconId,
             distinct
         );
@@ -440,6 +460,7 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
             (hissaType != null ? "hissaType=" + hissaType + ", " : "") +
             (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
             (landCompensationId != null ? "landCompensationId=" + landCompensationId + ", " : "") +
+            (paymentFileId != null ? "paymentFileId=" + paymentFileId + ", " : "") +
             (paymentFileReconId != null ? "paymentFileReconId=" + paymentFileReconId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

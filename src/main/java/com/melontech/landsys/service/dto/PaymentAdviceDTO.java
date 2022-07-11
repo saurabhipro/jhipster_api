@@ -47,6 +47,8 @@ public class PaymentAdviceDTO implements Serializable {
 
     private LandCompensationDTO landCompensation;
 
+    private PaymentFileDTO paymentFile;
+
     public Long getId() {
         return id;
     }
@@ -159,6 +161,14 @@ public class PaymentAdviceDTO implements Serializable {
         this.landCompensation = landCompensation;
     }
 
+    public PaymentFileDTO getPaymentFile() {
+        return paymentFile;
+    }
+
+    public void setPaymentFile(PaymentFileDTO paymentFile) {
+        this.paymentFile = paymentFile;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -198,6 +208,7 @@ public class PaymentAdviceDTO implements Serializable {
             ", hissaType='" + getHissaType() + "'" +
             ", projectLand=" + getProjectLand() +
             ", landCompensation=" + getLandCompensation() +
+            ", paymentFile=" + getPaymentFile() +
             "}";
     }
 }

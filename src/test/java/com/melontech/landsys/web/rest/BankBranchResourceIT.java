@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.melontech.landsys.IntegrationTest;
+import com.melontech.landsys.domain.Bank;
 import com.melontech.landsys.domain.BankBranch;
 import com.melontech.landsys.domain.Citizen;
 import com.melontech.landsys.repository.BankBranchRepository;
@@ -85,6 +86,16 @@ class BankBranchResourceIT {
     public static BankBranch createEntity(EntityManager em) {
         BankBranch bankBranch = new BankBranch().name(DEFAULT_NAME).ifsc(DEFAULT_IFSC).address(DEFAULT_ADDRESS);
         // Add required entity
+        Bank bank;
+        if (TestUtil.findAll(em, Bank.class).isEmpty()) {
+            bank = BankResourceIT.createEntity(em);
+            em.persist(bank);
+            em.flush();
+        } else {
+            bank = TestUtil.findAll(em, Bank.class).get(0);
+        }
+        bankBranch.setBank(bank);
+        // Add required entity
         Citizen citizen;
         if (TestUtil.findAll(em, Citizen.class).isEmpty()) {
             citizen = CitizenResourceIT.createEntity(em);
@@ -105,6 +116,16 @@ class BankBranchResourceIT {
      */
     public static BankBranch createUpdatedEntity(EntityManager em) {
         BankBranch bankBranch = new BankBranch().name(UPDATED_NAME).ifsc(UPDATED_IFSC).address(UPDATED_ADDRESS);
+        // Add required entity
+        Bank bank;
+        if (TestUtil.findAll(em, Bank.class).isEmpty()) {
+            bank = BankResourceIT.createUpdatedEntity(em);
+            em.persist(bank);
+            em.flush();
+        } else {
+            bank = TestUtil.findAll(em, Bank.class).get(0);
+        }
+        bankBranch.setBank(bank);
         // Add required entity
         Citizen citizen;
         if (TestUtil.findAll(em, Citizen.class).isEmpty()) {

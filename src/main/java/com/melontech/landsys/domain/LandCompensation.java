@@ -89,7 +89,7 @@ public class LandCompensation implements Serializable {
     private ProjectLand projectLand;
 
     @OneToMany(mappedBy = "landCompensation")
-    @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentFileRecon" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentFile", "paymentFileRecon" }, allowSetters = true)
     private Set<PaymentAdvice> paymentAdvices = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

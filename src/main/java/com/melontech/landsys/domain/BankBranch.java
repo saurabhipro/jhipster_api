@@ -34,7 +34,8 @@ public class BankBranch implements Serializable {
     @Column(name = "address", nullable = false)
     private String address;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties(value = { "bankNames" }, allowSetters = true)
     private Bank bank;
 

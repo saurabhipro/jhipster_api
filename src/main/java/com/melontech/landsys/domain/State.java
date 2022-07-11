@@ -24,7 +24,8 @@ public class State implements Serializable {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties(value = { "subDistricts", "states" }, allowSetters = true)
     private District district;
 

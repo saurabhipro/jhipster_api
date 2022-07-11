@@ -81,7 +81,8 @@ public class Citizen implements Serializable {
     @Column(name = "acc_no_image_content_type")
     private String accNoImageContentType;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties(value = { "bank", "citizens" }, allowSetters = true)
     private BankBranch bankBranch;
 

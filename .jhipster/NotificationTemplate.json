@@ -1,6 +1,6 @@
 {
   "applications": "*",
-  "changelogDate": "20220711175449",
+  "changelogDate": "20220711191523",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "landsys_notification_template",

@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.melontech.landsys.IntegrationTest;
 import com.melontech.landsys.domain.Land;
+import com.melontech.landsys.domain.SubDistrict;
 import com.melontech.landsys.domain.Village;
 import com.melontech.landsys.repository.VillageRepository;
 import com.melontech.landsys.service.VillageService;
@@ -79,6 +80,16 @@ class VillageResourceIT {
     public static Village createEntity(EntityManager em) {
         Village village = new Village().name(DEFAULT_NAME);
         // Add required entity
+        SubDistrict subDistrict;
+        if (TestUtil.findAll(em, SubDistrict.class).isEmpty()) {
+            subDistrict = SubDistrictResourceIT.createEntity(em);
+            em.persist(subDistrict);
+            em.flush();
+        } else {
+            subDistrict = TestUtil.findAll(em, SubDistrict.class).get(0);
+        }
+        village.setSubDistrict(subDistrict);
+        // Add required entity
         Land land;
         if (TestUtil.findAll(em, Land.class).isEmpty()) {
             land = LandResourceIT.createEntity(em);
@@ -99,6 +110,16 @@ class VillageResourceIT {
      */
     public static Village createUpdatedEntity(EntityManager em) {
         Village village = new Village().name(UPDATED_NAME);
+        // Add required entity
+        SubDistrict subDistrict;
+        if (TestUtil.findAll(em, SubDistrict.class).isEmpty()) {
+            subDistrict = SubDistrictResourceIT.createUpdatedEntity(em);
+            em.persist(subDistrict);
+            em.flush();
+        } else {
+            subDistrict = TestUtil.findAll(em, SubDistrict.class).get(0);
+        }
+        village.setSubDistrict(subDistrict);
         // Add required entity
         Land land;
         if (TestUtil.findAll(em, Land.class).isEmpty()) {

@@ -79,6 +79,11 @@ public class PaymentAdvice implements Serializable {
     @JsonIgnoreProperties(value = { "khatedar", "survey", "projectLand", "paymentAdvices" }, allowSetters = true)
     private LandCompensation landCompensation;
 
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "paymentAdvices" }, allowSetters = true)
+    private PaymentFile paymentFile;
+
     @JsonIgnoreProperties(value = { "paymentAdvice" }, allowSetters = true)
     @OneToOne(mappedBy = "paymentAdvice")
     private PaymentFileRecon paymentFileRecon;
@@ -264,6 +269,19 @@ public class PaymentAdvice implements Serializable {
 
     public PaymentAdvice landCompensation(LandCompensation landCompensation) {
         this.setLandCompensation(landCompensation);
+        return this;
+    }
+
+    public PaymentFile getPaymentFile() {
+        return this.paymentFile;
+    }
+
+    public void setPaymentFile(PaymentFile paymentFile) {
+        this.paymentFile = paymentFile;
+    }
+
+    public PaymentAdvice paymentFile(PaymentFile paymentFile) {
+        this.setPaymentFile(paymentFile);
         return this;
     }
 

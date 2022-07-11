@@ -143,6 +143,16 @@ class CitizenResourceIT {
             .accNoImage(DEFAULT_ACC_NO_IMAGE)
             .accNoImageContentType(DEFAULT_ACC_NO_IMAGE_CONTENT_TYPE);
         // Add required entity
+        BankBranch bankBranch;
+        if (TestUtil.findAll(em, BankBranch.class).isEmpty()) {
+            bankBranch = BankBranchResourceIT.createEntity(em);
+            em.persist(bankBranch);
+            em.flush();
+        } else {
+            bankBranch = TestUtil.findAll(em, BankBranch.class).get(0);
+        }
+        citizen.setBankBranch(bankBranch);
+        // Add required entity
         Khatedar khatedar;
         if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
             khatedar = KhatedarResourceIT.createEntity(em);
@@ -180,6 +190,16 @@ class CitizenResourceIT {
             .accountNo(UPDATED_ACCOUNT_NO)
             .accNoImage(UPDATED_ACC_NO_IMAGE)
             .accNoImageContentType(UPDATED_ACC_NO_IMAGE_CONTENT_TYPE);
+        // Add required entity
+        BankBranch bankBranch;
+        if (TestUtil.findAll(em, BankBranch.class).isEmpty()) {
+            bankBranch = BankBranchResourceIT.createUpdatedEntity(em);
+            em.persist(bankBranch);
+            em.flush();
+        } else {
+            bankBranch = TestUtil.findAll(em, BankBranch.class).get(0);
+        }
+        citizen.setBankBranch(bankBranch);
         // Add required entity
         Khatedar khatedar;
         if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
