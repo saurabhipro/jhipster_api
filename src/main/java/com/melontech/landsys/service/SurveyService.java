@@ -1,6 +1,7 @@
 package com.melontech.landsys.service;
 
 import com.melontech.landsys.service.dto.SurveyDTO;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +41,12 @@ public interface SurveyService {
      * @return the list of entities.
      */
     Page<SurveyDTO> findAll(Pageable pageable);
+    /**
+     * Get all the SurveyDTO where LandCompensation is {@code null}.
+     *
+     * @return the {@link List} of entities.
+     */
+    List<SurveyDTO> findAllWhereLandCompensationIsNull();
 
     /**
      * Get the "id" survey.

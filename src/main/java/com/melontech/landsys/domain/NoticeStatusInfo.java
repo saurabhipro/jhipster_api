@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 /**
  * A NoticeStatusInfo.
@@ -28,12 +27,10 @@ public class NoticeStatusInfo implements Serializable {
     private NoticeStatus status;
 
     @OneToMany(mappedBy = "noticeStatusInfo")
-    @JsonIgnoreProperties(value = { "citizen", "projectLand", "noticeStatusInfo", "survey", "landCompensations" }, allowSetters = true)
-    private Set<Khatedar> khatedars = new HashSet<>();
-
-    @OneToMany(mappedBy = "noticeStatusInfo")
     @JsonIgnoreProperties(
-        value = { "project", "land", "noticeStatusInfo", "khatedars", "surveys", "landCompensations", "paymentAdvices" },
+        value = {
+            "land", "project", "citizen", "noticeStatusInfo", "survey", "landCompensation", "paymentAdvices", "paymentAdviceDetails",
+        },
         allowSetters = true
     )
     private Set<ProjectLand> projectLands = new HashSet<>();
@@ -64,37 +61,6 @@ public class NoticeStatusInfo implements Serializable {
 
     public void setStatus(NoticeStatus status) {
         this.status = status;
-    }
-
-    public Set<Khatedar> getKhatedars() {
-        return this.khatedars;
-    }
-
-    public void setKhatedars(Set<Khatedar> khatedars) {
-        if (this.khatedars != null) {
-            this.khatedars.forEach(i -> i.setNoticeStatusInfo(null));
-        }
-        if (khatedars != null) {
-            khatedars.forEach(i -> i.setNoticeStatusInfo(this));
-        }
-        this.khatedars = khatedars;
-    }
-
-    public NoticeStatusInfo khatedars(Set<Khatedar> khatedars) {
-        this.setKhatedars(khatedars);
-        return this;
-    }
-
-    public NoticeStatusInfo addKhatedar(Khatedar khatedar) {
-        this.khatedars.add(khatedar);
-        khatedar.setNoticeStatusInfo(this);
-        return this;
-    }
-
-    public NoticeStatusInfo removeKhatedar(Khatedar khatedar) {
-        this.khatedars.remove(khatedar);
-        khatedar.setNoticeStatusInfo(null);
-        return this;
     }
 
     public Set<ProjectLand> getProjectLands() {

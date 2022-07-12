@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.melontech.landsys.IntegrationTest;
-import com.melontech.landsys.domain.Khatedar;
 import com.melontech.landsys.domain.NoticeStatusInfo;
 import com.melontech.landsys.domain.ProjectLand;
 import com.melontech.landsys.domain.enumeration.NoticeStatus;
@@ -66,26 +65,6 @@ class NoticeStatusInfoResourceIT {
      */
     public static NoticeStatusInfo createEntity(EntityManager em) {
         NoticeStatusInfo noticeStatusInfo = new NoticeStatusInfo().status(DEFAULT_STATUS);
-        // Add required entity
-        Khatedar khatedar;
-        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
-            khatedar = KhatedarResourceIT.createEntity(em);
-            em.persist(khatedar);
-            em.flush();
-        } else {
-            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
-        }
-        noticeStatusInfo.getKhatedars().add(khatedar);
-        // Add required entity
-        ProjectLand projectLand;
-        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
-            projectLand = ProjectLandResourceIT.createEntity(em);
-            em.persist(projectLand);
-            em.flush();
-        } else {
-            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
-        }
-        noticeStatusInfo.getProjectLands().add(projectLand);
         return noticeStatusInfo;
     }
 
@@ -97,26 +76,6 @@ class NoticeStatusInfoResourceIT {
      */
     public static NoticeStatusInfo createUpdatedEntity(EntityManager em) {
         NoticeStatusInfo noticeStatusInfo = new NoticeStatusInfo().status(UPDATED_STATUS);
-        // Add required entity
-        Khatedar khatedar;
-        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
-            khatedar = KhatedarResourceIT.createUpdatedEntity(em);
-            em.persist(khatedar);
-            em.flush();
-        } else {
-            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
-        }
-        noticeStatusInfo.getKhatedars().add(khatedar);
-        // Add required entity
-        ProjectLand projectLand;
-        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
-            projectLand = ProjectLandResourceIT.createUpdatedEntity(em);
-            em.persist(projectLand);
-            em.flush();
-        } else {
-            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
-        }
-        noticeStatusInfo.getProjectLands().add(projectLand);
         return noticeStatusInfo;
     }
 
@@ -263,32 +222,6 @@ class NoticeStatusInfoResourceIT {
 
         // Get all the noticeStatusInfoList where status is null
         defaultNoticeStatusInfoShouldNotBeFound("status.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllNoticeStatusInfosByKhatedarIsEqualToSomething() throws Exception {
-        // Initialize the database
-        noticeStatusInfoRepository.saveAndFlush(noticeStatusInfo);
-        Khatedar khatedar;
-        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
-            khatedar = KhatedarResourceIT.createEntity(em);
-            em.persist(khatedar);
-            em.flush();
-        } else {
-            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
-        }
-        em.persist(khatedar);
-        em.flush();
-        noticeStatusInfo.addKhatedar(khatedar);
-        noticeStatusInfoRepository.saveAndFlush(noticeStatusInfo);
-        Long khatedarId = khatedar.getId();
-
-        // Get all the noticeStatusInfoList where khatedar equals to khatedarId
-        defaultNoticeStatusInfoShouldBeFound("khatedarId.equals=" + khatedarId);
-
-        // Get all the noticeStatusInfoList where khatedar equals to (khatedarId + 1)
-        defaultNoticeStatusInfoShouldNotBeFound("khatedarId.equals=" + (khatedarId + 1));
     }
 
     @Test

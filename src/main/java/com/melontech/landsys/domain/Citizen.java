@@ -2,6 +2,7 @@ package com.melontech.landsys.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -36,6 +37,12 @@ public class Citizen implements Serializable {
     @NotNull
     @Column(name = "address", nullable = false)
     private String address;
+
+    @Column(name = "mobile_no")
+    private String mobileNo;
+
+    @Column(name = "dob")
+    private LocalDate dob;
 
     @Column(name = "account_number")
     private String accountNumber;
@@ -81,14 +88,35 @@ public class Citizen implements Serializable {
     @Column(name = "acc_no_image_content_type")
     private String accNoImageContentType;
 
+    @OneToMany(mappedBy = "citizen")
+    @JsonIgnoreProperties(
+        value = { "paymentAdvices", "village", "unit", "landType", "state", "citizen", "project", "projectLands" },
+        allowSetters = true
+    )
+    private Set<Land> lands = new HashSet<>();
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = { "bank", "citizens" }, allowSetters = true)
     private BankBranch bankBranch;
 
     @OneToMany(mappedBy = "citizen")
-    @JsonIgnoreProperties(value = { "citizen", "projectLand", "noticeStatusInfo", "survey", "landCompensations" }, allowSetters = true)
-    private Set<Khatedar> khatedars = new HashSet<>();
+    @JsonIgnoreProperties(
+        value = {
+            "land", "project", "citizen", "noticeStatusInfo", "survey", "landCompensation", "paymentAdvices", "paymentAdviceDetails",
+        },
+        allowSetters = true
+    )
+    private Set<ProjectLand> projectLands = new HashSet<>();
+
+    @OneToMany(mappedBy = "citizen")
+    @JsonIgnoreProperties(
+        value = {
+            "landCompensation", "projectLand", "survey", "citizen", "paymentFile", "paymentFileRecon", "land", "paymentAdviceDetails",
+        },
+        allowSetters = true
+    )
+    private Set<PaymentAdvice> paymentAdvices = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -155,6 +183,32 @@ public class Citizen implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getMobileNo() {
+        return this.mobileNo;
+    }
+
+    public Citizen mobileNo(String mobileNo) {
+        this.setMobileNo(mobileNo);
+        return this;
+    }
+
+    public void setMobileNo(String mobileNo) {
+        this.mobileNo = mobileNo;
+    }
+
+    public LocalDate getDob() {
+        return this.dob;
+    }
+
+    public Citizen dob(LocalDate dob) {
+        this.setDob(dob);
+        return this;
+    }
+
+    public void setDob(LocalDate dob) {
+        this.dob = dob;
     }
 
     public String getAccountNumber() {
@@ -326,6 +380,37 @@ public class Citizen implements Serializable {
         this.accNoImageContentType = accNoImageContentType;
     }
 
+    public Set<Land> getLands() {
+        return this.lands;
+    }
+
+    public void setLands(Set<Land> lands) {
+        if (this.lands != null) {
+            this.lands.forEach(i -> i.setCitizen(null));
+        }
+        if (lands != null) {
+            lands.forEach(i -> i.setCitizen(this));
+        }
+        this.lands = lands;
+    }
+
+    public Citizen lands(Set<Land> lands) {
+        this.setLands(lands);
+        return this;
+    }
+
+    public Citizen addLand(Land land) {
+        this.lands.add(land);
+        land.setCitizen(this);
+        return this;
+    }
+
+    public Citizen removeLand(Land land) {
+        this.lands.remove(land);
+        land.setCitizen(null);
+        return this;
+    }
+
     public BankBranch getBankBranch() {
         return this.bankBranch;
     }
@@ -339,34 +424,65 @@ public class Citizen implements Serializable {
         return this;
     }
 
-    public Set<Khatedar> getKhatedars() {
-        return this.khatedars;
+    public Set<ProjectLand> getProjectLands() {
+        return this.projectLands;
     }
 
-    public void setKhatedars(Set<Khatedar> khatedars) {
-        if (this.khatedars != null) {
-            this.khatedars.forEach(i -> i.setCitizen(null));
+    public void setProjectLands(Set<ProjectLand> projectLands) {
+        if (this.projectLands != null) {
+            this.projectLands.forEach(i -> i.setCitizen(null));
         }
-        if (khatedars != null) {
-            khatedars.forEach(i -> i.setCitizen(this));
+        if (projectLands != null) {
+            projectLands.forEach(i -> i.setCitizen(this));
         }
-        this.khatedars = khatedars;
+        this.projectLands = projectLands;
     }
 
-    public Citizen khatedars(Set<Khatedar> khatedars) {
-        this.setKhatedars(khatedars);
+    public Citizen projectLands(Set<ProjectLand> projectLands) {
+        this.setProjectLands(projectLands);
         return this;
     }
 
-    public Citizen addKhatedar(Khatedar khatedar) {
-        this.khatedars.add(khatedar);
-        khatedar.setCitizen(this);
+    public Citizen addProjectLand(ProjectLand projectLand) {
+        this.projectLands.add(projectLand);
+        projectLand.setCitizen(this);
         return this;
     }
 
-    public Citizen removeKhatedar(Khatedar khatedar) {
-        this.khatedars.remove(khatedar);
-        khatedar.setCitizen(null);
+    public Citizen removeProjectLand(ProjectLand projectLand) {
+        this.projectLands.remove(projectLand);
+        projectLand.setCitizen(null);
+        return this;
+    }
+
+    public Set<PaymentAdvice> getPaymentAdvices() {
+        return this.paymentAdvices;
+    }
+
+    public void setPaymentAdvices(Set<PaymentAdvice> paymentAdvices) {
+        if (this.paymentAdvices != null) {
+            this.paymentAdvices.forEach(i -> i.setCitizen(null));
+        }
+        if (paymentAdvices != null) {
+            paymentAdvices.forEach(i -> i.setCitizen(this));
+        }
+        this.paymentAdvices = paymentAdvices;
+    }
+
+    public Citizen paymentAdvices(Set<PaymentAdvice> paymentAdvices) {
+        this.setPaymentAdvices(paymentAdvices);
+        return this;
+    }
+
+    public Citizen addPaymentAdvice(PaymentAdvice paymentAdvice) {
+        this.paymentAdvices.add(paymentAdvice);
+        paymentAdvice.setCitizen(this);
+        return this;
+    }
+
+    public Citizen removePaymentAdvice(PaymentAdvice paymentAdvice) {
+        this.paymentAdvices.remove(paymentAdvice);
+        paymentAdvice.setCitizen(null);
         return this;
     }
 
@@ -398,6 +514,8 @@ public class Citizen implements Serializable {
             ", photoContentType='" + getPhotoContentType() + "'" +
             ", name='" + getName() + "'" +
             ", address='" + getAddress() + "'" +
+            ", mobileNo='" + getMobileNo() + "'" +
+            ", dob='" + getDob() + "'" +
             ", accountNumber='" + getAccountNumber() + "'" +
             ", fatherName='" + getFatherName() + "'" +
             ", spouseName='" + getSpouseName() + "'" +

@@ -1,9 +1,11 @@
 package com.melontech.landsys.service.mapper;
 
+import com.melontech.landsys.domain.Citizen;
 import com.melontech.landsys.domain.Land;
 import com.melontech.landsys.domain.NoticeStatusInfo;
 import com.melontech.landsys.domain.Project;
 import com.melontech.landsys.domain.ProjectLand;
+import com.melontech.landsys.service.dto.CitizenDTO;
 import com.melontech.landsys.service.dto.LandDTO;
 import com.melontech.landsys.service.dto.NoticeStatusInfoDTO;
 import com.melontech.landsys.service.dto.ProjectDTO;
@@ -15,10 +17,17 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface ProjectLandMapper extends EntityMapper<ProjectLandDTO, ProjectLand> {
-    @Mapping(target = "project", source = "project", qualifiedByName = "projectName")
     @Mapping(target = "land", source = "land", qualifiedByName = "landKhasraNumber")
+    @Mapping(target = "project", source = "project", qualifiedByName = "projectName")
+    @Mapping(target = "citizen", source = "citizen", qualifiedByName = "citizenName")
     @Mapping(target = "noticeStatusInfo", source = "noticeStatusInfo", qualifiedByName = "noticeStatusInfoId")
     ProjectLandDTO toDto(ProjectLand s);
+
+    @Named("landKhasraNumber")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "khasraNumber", source = "khasraNumber")
+    LandDTO toDtoLandKhasraNumber(Land land);
 
     @Named("projectName")
     @BeanMapping(ignoreByDefault = true)
@@ -26,11 +35,11 @@ public interface ProjectLandMapper extends EntityMapper<ProjectLandDTO, ProjectL
     @Mapping(target = "name", source = "name")
     ProjectDTO toDtoProjectName(Project project);
 
-    @Named("landKhasraNumber")
+    @Named("citizenName")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "khasraNumber", source = "khasraNumber")
-    LandDTO toDtoLandKhasraNumber(Land land);
+    @Mapping(target = "name", source = "name")
+    CitizenDTO toDtoCitizenName(Citizen citizen);
 
     @Named("noticeStatusInfoId")
     @BeanMapping(ignoreByDefault = true)

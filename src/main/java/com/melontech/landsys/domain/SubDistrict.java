@@ -28,7 +28,7 @@ public class SubDistrict implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "subDistricts", "states" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "state", "subDistricts" }, allowSetters = true)
     private District district;
 
     @OneToMany(mappedBy = "subDistrict")

@@ -144,12 +144,12 @@ public class LandCompensationQueryService extends QueryService<LandCompensation>
             if (criteria.getTransactionId() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getTransactionId(), LandCompensation_.transactionId));
             }
-            if (criteria.getKhatedarId() != null) {
+            if (criteria.getProjectLandId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
-                            criteria.getKhatedarId(),
-                            root -> root.join(LandCompensation_.khatedar, JoinType.LEFT).get(Khatedar_.id)
+                            criteria.getProjectLandId(),
+                            root -> root.join(LandCompensation_.projectLand, JoinType.LEFT).get(ProjectLand_.id)
                         )
                     );
             }
@@ -159,15 +159,6 @@ public class LandCompensationQueryService extends QueryService<LandCompensation>
                         buildSpecification(
                             criteria.getSurveyId(),
                             root -> root.join(LandCompensation_.survey, JoinType.LEFT).get(Survey_.id)
-                        )
-                    );
-            }
-            if (criteria.getProjectLandId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getProjectLandId(),
-                            root -> root.join(LandCompensation_.projectLand, JoinType.LEFT).get(ProjectLand_.id)
                         )
                     );
             }

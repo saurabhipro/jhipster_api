@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.melontech.landsys.IntegrationTest;
 import com.melontech.landsys.domain.District;
 import com.melontech.landsys.domain.SubDistrict;
-import com.melontech.landsys.domain.Village;
 import com.melontech.landsys.repository.SubDistrictRepository;
 import com.melontech.landsys.service.SubDistrictService;
 import com.melontech.landsys.service.dto.SubDistrictDTO;
@@ -89,16 +88,6 @@ class SubDistrictResourceIT {
             district = TestUtil.findAll(em, District.class).get(0);
         }
         subDistrict.setDistrict(district);
-        // Add required entity
-        Village village;
-        if (TestUtil.findAll(em, Village.class).isEmpty()) {
-            village = VillageResourceIT.createEntity(em);
-            em.persist(village);
-            em.flush();
-        } else {
-            village = TestUtil.findAll(em, Village.class).get(0);
-        }
-        subDistrict.getVillages().add(village);
         return subDistrict;
     }
 
@@ -120,16 +109,6 @@ class SubDistrictResourceIT {
             district = TestUtil.findAll(em, District.class).get(0);
         }
         subDistrict.setDistrict(district);
-        // Add required entity
-        Village village;
-        if (TestUtil.findAll(em, Village.class).isEmpty()) {
-            village = VillageResourceIT.createUpdatedEntity(em);
-            em.persist(village);
-            em.flush();
-        } else {
-            village = TestUtil.findAll(em, Village.class).get(0);
-        }
-        subDistrict.getVillages().add(village);
         return subDistrict;
     }
 

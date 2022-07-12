@@ -96,6 +96,12 @@ public class CitizenQueryService extends QueryService<Citizen> {
             if (criteria.getAddress() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getAddress(), Citizen_.address));
             }
+            if (criteria.getMobileNo() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getMobileNo(), Citizen_.mobileNo));
+            }
+            if (criteria.getDob() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDob(), Citizen_.dob));
+            }
             if (criteria.getAccountNumber() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getAccountNumber(), Citizen_.accountNumber));
             }
@@ -117,6 +123,12 @@ public class CitizenQueryService extends QueryService<Citizen> {
             if (criteria.getAccountNo() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getAccountNo(), Citizen_.accountNo));
             }
+            if (criteria.getLandId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getLandId(), root -> root.join(Citizen_.lands, JoinType.LEFT).get(Land_.id))
+                    );
+            }
             if (criteria.getBankBranchId() != null) {
                 specification =
                     specification.and(
@@ -126,10 +138,22 @@ public class CitizenQueryService extends QueryService<Citizen> {
                         )
                     );
             }
-            if (criteria.getKhatedarId() != null) {
+            if (criteria.getProjectLandId() != null) {
                 specification =
                     specification.and(
-                        buildSpecification(criteria.getKhatedarId(), root -> root.join(Citizen_.khatedars, JoinType.LEFT).get(Khatedar_.id))
+                        buildSpecification(
+                            criteria.getProjectLandId(),
+                            root -> root.join(Citizen_.projectLands, JoinType.LEFT).get(ProjectLand_.id)
+                        )
+                    );
+            }
+            if (criteria.getPaymentAdviceId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPaymentAdviceId(),
+                            root -> root.join(Citizen_.paymentAdvices, JoinType.LEFT).get(PaymentAdvice_.id)
+                        )
                     );
             }
         }

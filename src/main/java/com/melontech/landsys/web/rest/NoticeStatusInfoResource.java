@@ -11,8 +11,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,7 +62,7 @@ public class NoticeStatusInfoResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/notice-status-infos")
-    public ResponseEntity<NoticeStatusInfoDTO> createNoticeStatusInfo(@Valid @RequestBody NoticeStatusInfoDTO noticeStatusInfoDTO)
+    public ResponseEntity<NoticeStatusInfoDTO> createNoticeStatusInfo(@RequestBody NoticeStatusInfoDTO noticeStatusInfoDTO)
         throws URISyntaxException {
         log.debug("REST request to save NoticeStatusInfo : {}", noticeStatusInfoDTO);
         if (noticeStatusInfoDTO.getId() != null) {
@@ -90,7 +88,7 @@ public class NoticeStatusInfoResource {
     @PutMapping("/notice-status-infos/{id}")
     public ResponseEntity<NoticeStatusInfoDTO> updateNoticeStatusInfo(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody NoticeStatusInfoDTO noticeStatusInfoDTO
+        @RequestBody NoticeStatusInfoDTO noticeStatusInfoDTO
     ) throws URISyntaxException {
         log.debug("REST request to update NoticeStatusInfo : {}, {}", id, noticeStatusInfoDTO);
         if (noticeStatusInfoDTO.getId() == null) {
@@ -125,7 +123,7 @@ public class NoticeStatusInfoResource {
     @PatchMapping(value = "/notice-status-infos/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<NoticeStatusInfoDTO> partialUpdateNoticeStatusInfo(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody NoticeStatusInfoDTO noticeStatusInfoDTO
+        @RequestBody NoticeStatusInfoDTO noticeStatusInfoDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update NoticeStatusInfo partially : {}, {}", id, noticeStatusInfoDTO);
         if (noticeStatusInfoDTO.getId() == null) {

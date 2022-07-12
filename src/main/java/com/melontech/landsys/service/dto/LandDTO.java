@@ -16,6 +16,8 @@ public class LandDTO implements Serializable {
     @NotNull
     private String khasraNumber;
 
+    private String kahtauniKhata;
+
     private Double area;
 
     private Double landMarketValue;
@@ -30,13 +32,17 @@ public class LandDTO implements Serializable {
 
     private Double totalLandValue;
 
-    private StateDTO state;
-
     private VillageDTO village;
 
     private UnitDTO unit;
 
     private LandTypeDTO landType;
+
+    private StateDTO state;
+
+    private CitizenDTO citizen;
+
+    private ProjectDTO project;
 
     public Long getId() {
         return id;
@@ -60,6 +66,14 @@ public class LandDTO implements Serializable {
 
     public void setKhasraNumber(String khasraNumber) {
         this.khasraNumber = khasraNumber;
+    }
+
+    public String getKahtauniKhata() {
+        return kahtauniKhata;
+    }
+
+    public void setKahtauniKhata(String kahtauniKhata) {
+        this.kahtauniKhata = kahtauniKhata;
     }
 
     public Double getArea() {
@@ -118,14 +132,6 @@ public class LandDTO implements Serializable {
         this.totalLandValue = totalLandValue;
     }
 
-    public StateDTO getState() {
-        return state;
-    }
-
-    public void setState(StateDTO state) {
-        this.state = state;
-    }
-
     public VillageDTO getVillage() {
         return village;
     }
@@ -148,6 +154,30 @@ public class LandDTO implements Serializable {
 
     public void setLandType(LandTypeDTO landType) {
         this.landType = landType;
+    }
+
+    public StateDTO getState() {
+        return state;
+    }
+
+    public void setState(StateDTO state) {
+        this.state = state;
+    }
+
+    public CitizenDTO getCitizen() {
+        return citizen;
+    }
+
+    public void setCitizen(CitizenDTO citizen) {
+        this.citizen = citizen;
+    }
+
+    public ProjectDTO getProject() {
+        return project;
+    }
+
+    public void setProject(ProjectDTO project) {
+        this.project = project;
     }
 
     @Override
@@ -178,6 +208,7 @@ public class LandDTO implements Serializable {
             "id=" + getId() +
             ", ulpin='" + getUlpin() + "'" +
             ", khasraNumber='" + getKhasraNumber() + "'" +
+            ", kahtauniKhata='" + getKahtauniKhata() + "'" +
             ", area=" + getArea() +
             ", landMarketValue=" + getLandMarketValue() +
             ", structuralValue=" + getStructuralValue() +
@@ -185,10 +216,12 @@ public class LandDTO implements Serializable {
             ", forestValue=" + getForestValue() +
             ", distanceFromCity='" + getDistanceFromCity() + "'" +
             ", totalLandValue=" + getTotalLandValue() +
-            ", state=" + getState() +
             ", village=" + getVillage() +
             ", unit=" + getUnit() +
             ", landType=" + getLandType() +
+            ", state=" + getState() +
+            ", citizen=" + getCitizen() +
+            ", project=" + getProject() +
             "}";
     }
 }

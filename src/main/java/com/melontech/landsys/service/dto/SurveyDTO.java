@@ -40,8 +40,6 @@ public class SurveyDTO implements Serializable {
 
     private SurveyStatus status;
 
-    private KhatedarDTO khatedar;
-
     private ProjectLandDTO projectLand;
 
     public Long getId() {
@@ -140,14 +138,6 @@ public class SurveyDTO implements Serializable {
         this.status = status;
     }
 
-    public KhatedarDTO getKhatedar() {
-        return khatedar;
-    }
-
-    public void setKhatedar(KhatedarDTO khatedar) {
-        this.khatedar = khatedar;
-    }
-
     public ProjectLandDTO getProjectLand() {
         return projectLand;
     }
@@ -193,7 +183,6 @@ public class SurveyDTO implements Serializable {
             ", distanceFromCity=" + getDistanceFromCity() +
             ", remarks='" + getRemarks() + "'" +
             ", status='" + getStatus() + "'" +
-            ", khatedar=" + getKhatedar() +
             ", projectLand=" + getProjectLand() +
             "}";
     }

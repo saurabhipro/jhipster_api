@@ -6,8 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.melontech.landsys.IntegrationTest;
-import com.melontech.landsys.domain.District;
-import com.melontech.landsys.domain.Land;
 import com.melontech.landsys.domain.State;
 import com.melontech.landsys.repository.StateRepository;
 import com.melontech.landsys.service.dto.StateDTO;
@@ -64,26 +62,6 @@ class StateResourceIT {
      */
     public static State createEntity(EntityManager em) {
         State state = new State().name(DEFAULT_NAME);
-        // Add required entity
-        District district;
-        if (TestUtil.findAll(em, District.class).isEmpty()) {
-            district = DistrictResourceIT.createEntity(em);
-            em.persist(district);
-            em.flush();
-        } else {
-            district = TestUtil.findAll(em, District.class).get(0);
-        }
-        state.setDistrict(district);
-        // Add required entity
-        Land land;
-        if (TestUtil.findAll(em, Land.class).isEmpty()) {
-            land = LandResourceIT.createEntity(em);
-            em.persist(land);
-            em.flush();
-        } else {
-            land = TestUtil.findAll(em, Land.class).get(0);
-        }
-        state.setLand(land);
         return state;
     }
 
@@ -95,26 +73,6 @@ class StateResourceIT {
      */
     public static State createUpdatedEntity(EntityManager em) {
         State state = new State().name(UPDATED_NAME);
-        // Add required entity
-        District district;
-        if (TestUtil.findAll(em, District.class).isEmpty()) {
-            district = DistrictResourceIT.createUpdatedEntity(em);
-            em.persist(district);
-            em.flush();
-        } else {
-            district = TestUtil.findAll(em, District.class).get(0);
-        }
-        state.setDistrict(district);
-        // Add required entity
-        Land land;
-        if (TestUtil.findAll(em, Land.class).isEmpty()) {
-            land = LandResourceIT.createUpdatedEntity(em);
-            em.persist(land);
-            em.flush();
-        } else {
-            land = TestUtil.findAll(em, Land.class).get(0);
-        }
-        state.setLand(land);
         return state;
     }
 

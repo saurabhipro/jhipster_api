@@ -50,7 +50,16 @@ public class Project implements Serializable {
 
     @OneToMany(mappedBy = "project")
     @JsonIgnoreProperties(
-        value = { "project", "land", "noticeStatusInfo", "khatedars", "surveys", "landCompensations", "paymentAdvices" },
+        value = { "paymentAdvices", "village", "unit", "landType", "state", "citizen", "project", "projectLands" },
+        allowSetters = true
+    )
+    private Set<Land> lands = new HashSet<>();
+
+    @OneToMany(mappedBy = "project")
+    @JsonIgnoreProperties(
+        value = {
+            "land", "project", "citizen", "noticeStatusInfo", "survey", "landCompensation", "paymentAdvices", "paymentAdviceDetails",
+        },
         allowSetters = true
     )
     private Set<ProjectLand> projectLands = new HashSet<>();
@@ -159,6 +168,37 @@ public class Project implements Serializable {
 
     public void setApprover3(String approver3) {
         this.approver3 = approver3;
+    }
+
+    public Set<Land> getLands() {
+        return this.lands;
+    }
+
+    public void setLands(Set<Land> lands) {
+        if (this.lands != null) {
+            this.lands.forEach(i -> i.setProject(null));
+        }
+        if (lands != null) {
+            lands.forEach(i -> i.setProject(this));
+        }
+        this.lands = lands;
+    }
+
+    public Project lands(Set<Land> lands) {
+        this.setLands(lands);
+        return this;
+    }
+
+    public Project addLand(Land land) {
+        this.lands.add(land);
+        land.setProject(this);
+        return this;
+    }
+
+    public Project removeLand(Land land) {
+        this.lands.remove(land);
+        land.setProject(null);
+        return this;
     }
 
     public Set<ProjectLand> getProjectLands() {

@@ -6,8 +6,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.melontech.landsys.IntegrationTest;
-import com.melontech.landsys.domain.Khatedar;
 import com.melontech.landsys.domain.LandCompensation;
+import com.melontech.landsys.domain.PaymentAdvice;
 import com.melontech.landsys.domain.ProjectLand;
 import com.melontech.landsys.domain.Survey;
 import com.melontech.landsys.domain.enumeration.HissaType;
@@ -135,7 +135,7 @@ class SurveyResourceIT {
         } else {
             landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
         }
-        survey.getLandCompensations().add(landCompensation);
+        survey.setLandCompensation(landCompensation);
         return survey;
     }
 
@@ -177,7 +177,7 @@ class SurveyResourceIT {
         } else {
             landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
         }
-        survey.getLandCompensations().add(landCompensation);
+        survey.setLandCompensation(landCompensation);
         return survey;
     }
 
@@ -1380,46 +1380,9 @@ class SurveyResourceIT {
 
     @Test
     @Transactional
-    void getAllSurveysByKhatedarIsEqualToSomething() throws Exception {
-        // Initialize the database
-        surveyRepository.saveAndFlush(survey);
-        Khatedar khatedar;
-        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
-            khatedar = KhatedarResourceIT.createEntity(em);
-            em.persist(khatedar);
-            em.flush();
-        } else {
-            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
-        }
-        em.persist(khatedar);
-        em.flush();
-        survey.setKhatedar(khatedar);
-        surveyRepository.saveAndFlush(survey);
-        Long khatedarId = khatedar.getId();
-
-        // Get all the surveyList where khatedar equals to khatedarId
-        defaultSurveyShouldBeFound("khatedarId.equals=" + khatedarId);
-
-        // Get all the surveyList where khatedar equals to (khatedarId + 1)
-        defaultSurveyShouldNotBeFound("khatedarId.equals=" + (khatedarId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllSurveysByProjectLandIsEqualToSomething() throws Exception {
-        // Initialize the database
-        surveyRepository.saveAndFlush(survey);
-        ProjectLand projectLand;
-        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
-            projectLand = ProjectLandResourceIT.createEntity(em);
-            em.persist(projectLand);
-            em.flush();
-        } else {
-            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
-        }
-        em.persist(projectLand);
-        em.flush();
-        survey.setProjectLand(projectLand);
+        // Get already existing entity
+        ProjectLand projectLand = survey.getProjectLand();
         surveyRepository.saveAndFlush(survey);
         Long projectLandId = projectLand.getId();
 
@@ -1433,19 +1396,8 @@ class SurveyResourceIT {
     @Test
     @Transactional
     void getAllSurveysByLandCompensationIsEqualToSomething() throws Exception {
-        // Initialize the database
-        surveyRepository.saveAndFlush(survey);
-        LandCompensation landCompensation;
-        if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
-            landCompensation = LandCompensationResourceIT.createEntity(em);
-            em.persist(landCompensation);
-            em.flush();
-        } else {
-            landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
-        }
-        em.persist(landCompensation);
-        em.flush();
-        survey.addLandCompensation(landCompensation);
+        // Get already existing entity
+        LandCompensation landCompensation = survey.getLandCompensation();
         surveyRepository.saveAndFlush(survey);
         Long landCompensationId = landCompensation.getId();
 
@@ -1454,6 +1406,32 @@ class SurveyResourceIT {
 
         // Get all the surveyList where landCompensation equals to (landCompensationId + 1)
         defaultSurveyShouldNotBeFound("landCompensationId.equals=" + (landCompensationId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllSurveysByPaymentAdviceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        surveyRepository.saveAndFlush(survey);
+        PaymentAdvice paymentAdvice;
+        if (TestUtil.findAll(em, PaymentAdvice.class).isEmpty()) {
+            paymentAdvice = PaymentAdviceResourceIT.createEntity(em);
+            em.persist(paymentAdvice);
+            em.flush();
+        } else {
+            paymentAdvice = TestUtil.findAll(em, PaymentAdvice.class).get(0);
+        }
+        em.persist(paymentAdvice);
+        em.flush();
+        survey.addPaymentAdvice(paymentAdvice);
+        surveyRepository.saveAndFlush(survey);
+        Long paymentAdviceId = paymentAdvice.getId();
+
+        // Get all the surveyList where paymentAdvice equals to paymentAdviceId
+        defaultSurveyShouldBeFound("paymentAdviceId.equals=" + paymentAdviceId);
+
+        // Get all the surveyList where paymentAdvice equals to (paymentAdviceId + 1)
+        defaultSurveyShouldNotBeFound("paymentAdviceId.equals=" + (paymentAdviceId + 1));
     }
 
     /**

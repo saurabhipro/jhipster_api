@@ -86,11 +86,11 @@ public class SurveyCriteria implements Serializable, Criteria {
 
     private SurveyStatusFilter status;
 
-    private LongFilter khatedarId;
-
     private LongFilter projectLandId;
 
     private LongFilter landCompensationId;
+
+    private LongFilter paymentAdviceId;
 
     private Boolean distinct;
 
@@ -109,9 +109,9 @@ public class SurveyCriteria implements Serializable, Criteria {
         this.distanceFromCity = other.distanceFromCity == null ? null : other.distanceFromCity.copy();
         this.remarks = other.remarks == null ? null : other.remarks.copy();
         this.status = other.status == null ? null : other.status.copy();
-        this.khatedarId = other.khatedarId == null ? null : other.khatedarId.copy();
         this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
         this.landCompensationId = other.landCompensationId == null ? null : other.landCompensationId.copy();
+        this.paymentAdviceId = other.paymentAdviceId == null ? null : other.paymentAdviceId.copy();
         this.distinct = other.distinct;
     }
 
@@ -300,21 +300,6 @@ public class SurveyCriteria implements Serializable, Criteria {
         this.status = status;
     }
 
-    public LongFilter getKhatedarId() {
-        return khatedarId;
-    }
-
-    public LongFilter khatedarId() {
-        if (khatedarId == null) {
-            khatedarId = new LongFilter();
-        }
-        return khatedarId;
-    }
-
-    public void setKhatedarId(LongFilter khatedarId) {
-        this.khatedarId = khatedarId;
-    }
-
     public LongFilter getProjectLandId() {
         return projectLandId;
     }
@@ -343,6 +328,21 @@ public class SurveyCriteria implements Serializable, Criteria {
 
     public void setLandCompensationId(LongFilter landCompensationId) {
         this.landCompensationId = landCompensationId;
+    }
+
+    public LongFilter getPaymentAdviceId() {
+        return paymentAdviceId;
+    }
+
+    public LongFilter paymentAdviceId() {
+        if (paymentAdviceId == null) {
+            paymentAdviceId = new LongFilter();
+        }
+        return paymentAdviceId;
+    }
+
+    public void setPaymentAdviceId(LongFilter paymentAdviceId) {
+        this.paymentAdviceId = paymentAdviceId;
     }
 
     public Boolean getDistinct() {
@@ -375,9 +375,9 @@ public class SurveyCriteria implements Serializable, Criteria {
             Objects.equals(distanceFromCity, that.distanceFromCity) &&
             Objects.equals(remarks, that.remarks) &&
             Objects.equals(status, that.status) &&
-            Objects.equals(khatedarId, that.khatedarId) &&
             Objects.equals(projectLandId, that.projectLandId) &&
             Objects.equals(landCompensationId, that.landCompensationId) &&
+            Objects.equals(paymentAdviceId, that.paymentAdviceId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -397,9 +397,9 @@ public class SurveyCriteria implements Serializable, Criteria {
             distanceFromCity,
             remarks,
             status,
-            khatedarId,
             projectLandId,
             landCompensationId,
+            paymentAdviceId,
             distinct
         );
     }
@@ -420,9 +420,9 @@ public class SurveyCriteria implements Serializable, Criteria {
             (distanceFromCity != null ? "distanceFromCity=" + distanceFromCity + ", " : "") +
             (remarks != null ? "remarks=" + remarks + ", " : "") +
             (status != null ? "status=" + status + ", " : "") +
-            (khatedarId != null ? "khatedarId=" + khatedarId + ", " : "") +
             (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
             (landCompensationId != null ? "landCompensationId=" + landCompensationId + ", " : "") +
+            (paymentAdviceId != null ? "paymentAdviceId=" + paymentAdviceId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

@@ -94,6 +94,10 @@ public class PaymentAdviceQueryService extends QueryService<PaymentAdvice> {
                 specification =
                     specification.and(buildStringSpecification(criteria.getAccountHolderName(), PaymentAdvice_.accountHolderName));
             }
+            if (criteria.getAccountHolderBankName() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getAccountHolderBankName(), PaymentAdvice_.accountHolderBankName));
+            }
             if (criteria.getPaymentAmount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getPaymentAmount(), PaymentAdvice_.paymentAmount));
             }
@@ -124,6 +128,15 @@ public class PaymentAdviceQueryService extends QueryService<PaymentAdvice> {
             if (criteria.getHissaType() != null) {
                 specification = specification.and(buildSpecification(criteria.getHissaType(), PaymentAdvice_.hissaType));
             }
+            if (criteria.getLandCompensationId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLandCompensationId(),
+                            root -> root.join(PaymentAdvice_.landCompensation, JoinType.LEFT).get(LandCompensation_.id)
+                        )
+                    );
+            }
             if (criteria.getProjectLandId() != null) {
                 specification =
                     specification.and(
@@ -133,12 +146,18 @@ public class PaymentAdviceQueryService extends QueryService<PaymentAdvice> {
                         )
                     );
             }
-            if (criteria.getLandCompensationId() != null) {
+            if (criteria.getSurveyId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getSurveyId(), root -> root.join(PaymentAdvice_.survey, JoinType.LEFT).get(Survey_.id))
+                    );
+            }
+            if (criteria.getCitizenId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
-                            criteria.getLandCompensationId(),
-                            root -> root.join(PaymentAdvice_.landCompensation, JoinType.LEFT).get(LandCompensation_.id)
+                            criteria.getCitizenId(),
+                            root -> root.join(PaymentAdvice_.citizen, JoinType.LEFT).get(Citizen_.id)
                         )
                     );
             }
@@ -157,6 +176,21 @@ public class PaymentAdviceQueryService extends QueryService<PaymentAdvice> {
                         buildSpecification(
                             criteria.getPaymentFileReconId(),
                             root -> root.join(PaymentAdvice_.paymentFileRecon, JoinType.LEFT).get(PaymentFileRecon_.id)
+                        )
+                    );
+            }
+            if (criteria.getLandId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getLandId(), root -> root.join(PaymentAdvice_.land, JoinType.LEFT).get(Land_.id))
+                    );
+            }
+            if (criteria.getPaymentAdviceDetailsId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPaymentAdviceDetailsId(),
+                            root -> root.join(PaymentAdvice_.paymentAdviceDetails, JoinType.LEFT).get(PaymentAdviceDetails_.id)
                         )
                     );
             }

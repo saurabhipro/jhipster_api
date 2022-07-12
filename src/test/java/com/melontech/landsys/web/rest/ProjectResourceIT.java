@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.melontech.landsys.IntegrationTest;
+import com.melontech.landsys.domain.Land;
 import com.melontech.landsys.domain.Project;
 import com.melontech.landsys.domain.ProjectLand;
 import com.melontech.landsys.repository.ProjectRepository;
@@ -94,16 +95,6 @@ class ProjectResourceIT {
             .approver1(DEFAULT_APPROVER_1)
             .approver2(DEFAULT_APPROVER_2)
             .approver3(DEFAULT_APPROVER_3);
-        // Add required entity
-        ProjectLand projectLand;
-        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
-            projectLand = ProjectLandResourceIT.createEntity(em);
-            em.persist(projectLand);
-            em.flush();
-        } else {
-            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
-        }
-        project.getProjectLands().add(projectLand);
         return project;
     }
 
@@ -122,16 +113,6 @@ class ProjectResourceIT {
             .approver1(UPDATED_APPROVER_1)
             .approver2(UPDATED_APPROVER_2)
             .approver3(UPDATED_APPROVER_3);
-        // Add required entity
-        ProjectLand projectLand;
-        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
-            projectLand = ProjectLandResourceIT.createUpdatedEntity(em);
-            em.persist(projectLand);
-            em.flush();
-        } else {
-            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
-        }
-        project.getProjectLands().add(projectLand);
         return project;
     }
 
@@ -936,6 +917,32 @@ class ProjectResourceIT {
 
         // Get all the projectList where approver3 does not contain UPDATED_APPROVER_3
         defaultProjectShouldBeFound("approver3.doesNotContain=" + UPDATED_APPROVER_3);
+    }
+
+    @Test
+    @Transactional
+    void getAllProjectsByLandIsEqualToSomething() throws Exception {
+        // Initialize the database
+        projectRepository.saveAndFlush(project);
+        Land land;
+        if (TestUtil.findAll(em, Land.class).isEmpty()) {
+            land = LandResourceIT.createEntity(em);
+            em.persist(land);
+            em.flush();
+        } else {
+            land = TestUtil.findAll(em, Land.class).get(0);
+        }
+        em.persist(land);
+        em.flush();
+        project.addLand(land);
+        projectRepository.saveAndFlush(project);
+        Long landId = land.getId();
+
+        // Get all the projectList where land equals to landId
+        defaultProjectShouldBeFound("landId.equals=" + landId);
+
+        // Get all the projectList where land equals to (landId + 1)
+        defaultProjectShouldNotBeFound("landId.equals=" + (landId + 1));
     }
 
     @Test

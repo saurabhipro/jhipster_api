@@ -1,6 +1,7 @@
 package com.melontech.landsys.service.dto;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Objects;
 import javax.persistence.Lob;
 import javax.validation.constraints.*;
@@ -22,6 +23,10 @@ public class CitizenDTO implements Serializable {
 
     @NotNull
     private String address;
+
+    private String mobileNo;
+
+    private LocalDate dob;
 
     private String accountNumber;
 
@@ -93,6 +98,22 @@ public class CitizenDTO implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getMobileNo() {
+        return mobileNo;
+    }
+
+    public void setMobileNo(String mobileNo) {
+        this.mobileNo = mobileNo;
+    }
+
+    public LocalDate getDob() {
+        return dob;
+    }
+
+    public void setDob(LocalDate dob) {
+        this.dob = dob;
     }
 
     public String getAccountNumber() {
@@ -236,6 +257,8 @@ public class CitizenDTO implements Serializable {
             ", photo='" + getPhoto() + "'" +
             ", name='" + getName() + "'" +
             ", address='" + getAddress() + "'" +
+            ", mobileNo='" + getMobileNo() + "'" +
+            ", dob='" + getDob() + "'" +
             ", accountNumber='" + getAccountNumber() + "'" +
             ", fatherName='" + getFatherName() + "'" +
             ", spouseName='" + getSpouseName() + "'" +

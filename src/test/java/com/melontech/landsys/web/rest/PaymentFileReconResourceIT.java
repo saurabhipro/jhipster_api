@@ -90,6 +90,16 @@ class PaymentFileReconResourceIT {
             .utrNumber(DEFAULT_UTR_NUMBER)
             .referenceNumber(DEFAULT_REFERENCE_NUMBER)
             .paymentStatus(DEFAULT_PAYMENT_STATUS);
+        // Add required entity
+        PaymentAdvice paymentAdvice;
+        if (TestUtil.findAll(em, PaymentAdvice.class).isEmpty()) {
+            paymentAdvice = PaymentAdviceResourceIT.createEntity(em);
+            em.persist(paymentAdvice);
+            em.flush();
+        } else {
+            paymentAdvice = TestUtil.findAll(em, PaymentAdvice.class).get(0);
+        }
+        paymentFileRecon.setPaymentAdvice(paymentAdvice);
         return paymentFileRecon;
     }
 
@@ -107,6 +117,16 @@ class PaymentFileReconResourceIT {
             .utrNumber(UPDATED_UTR_NUMBER)
             .referenceNumber(UPDATED_REFERENCE_NUMBER)
             .paymentStatus(UPDATED_PAYMENT_STATUS);
+        // Add required entity
+        PaymentAdvice paymentAdvice;
+        if (TestUtil.findAll(em, PaymentAdvice.class).isEmpty()) {
+            paymentAdvice = PaymentAdviceResourceIT.createUpdatedEntity(em);
+            em.persist(paymentAdvice);
+            em.flush();
+        } else {
+            paymentAdvice = TestUtil.findAll(em, PaymentAdvice.class).get(0);
+        }
+        paymentFileRecon.setPaymentAdvice(paymentAdvice);
         return paymentFileRecon;
     }
 
@@ -795,19 +815,8 @@ class PaymentFileReconResourceIT {
     @Test
     @Transactional
     void getAllPaymentFileReconsByPaymentAdviceIsEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentFileReconRepository.saveAndFlush(paymentFileRecon);
-        PaymentAdvice paymentAdvice;
-        if (TestUtil.findAll(em, PaymentAdvice.class).isEmpty()) {
-            paymentAdvice = PaymentAdviceResourceIT.createEntity(em);
-            em.persist(paymentAdvice);
-            em.flush();
-        } else {
-            paymentAdvice = TestUtil.findAll(em, PaymentAdvice.class).get(0);
-        }
-        em.persist(paymentAdvice);
-        em.flush();
-        paymentFileRecon.setPaymentAdvice(paymentAdvice);
+        // Get already existing entity
+        PaymentAdvice paymentAdvice = paymentFileRecon.getPaymentAdvice();
         paymentFileReconRepository.saveAndFlush(paymentFileRecon);
         Long paymentAdviceId = paymentAdvice.getId();
 

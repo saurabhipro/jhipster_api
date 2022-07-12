@@ -96,15 +96,6 @@ public class NoticeStatusInfoQueryService extends QueryService<NoticeStatusInfo>
             if (criteria.getStatus() != null) {
                 specification = specification.and(buildSpecification(criteria.getStatus(), NoticeStatusInfo_.status));
             }
-            if (criteria.getKhatedarId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getKhatedarId(),
-                            root -> root.join(NoticeStatusInfo_.khatedars, JoinType.LEFT).get(Khatedar_.id)
-                        )
-                    );
-            }
             if (criteria.getProjectLandId() != null) {
                 specification =
                     specification.and(

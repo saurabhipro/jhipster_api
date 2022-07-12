@@ -36,11 +36,11 @@ public class BankBranch implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "bankNames" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "bankBranches" }, allowSetters = true)
     private Bank bank;
 
     @OneToMany(mappedBy = "bankBranch")
-    @JsonIgnoreProperties(value = { "bankBranch", "khatedars" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "lands", "bankBranch", "projectLands", "paymentAdvices" }, allowSetters = true)
     private Set<Citizen> citizens = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

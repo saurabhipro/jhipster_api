@@ -5,6 +5,8 @@ import com.melontech.landsys.domain.enumeration.HissaType;
 import com.melontech.landsys.domain.enumeration.PaymentAdviceType;
 import com.melontech.landsys.domain.enumeration.PaymentStatus;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
@@ -26,6 +28,10 @@ public class PaymentAdvice implements Serializable {
     @NotNull
     @Column(name = "account_holder_name", nullable = false)
     private String accountHolderName;
+
+    @NotNull
+    @Column(name = "account_holder_bank_name", nullable = false)
+    private String accountHolderBankName;
 
     @NotNull
     @Column(name = "payment_amount", nullable = false)
@@ -68,25 +74,47 @@ public class PaymentAdvice implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties(value = { "projectLand", "survey", "paymentAdvices" }, allowSetters = true)
+    private LandCompensation landCompensation;
+
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties(
-        value = { "project", "land", "noticeStatusInfo", "khatedars", "surveys", "landCompensations", "paymentAdvices" },
+        value = {
+            "land", "project", "citizen", "noticeStatusInfo", "survey", "landCompensation", "paymentAdvices", "paymentAdviceDetails",
+        },
         allowSetters = true
     )
     private ProjectLand projectLand;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "khatedar", "survey", "projectLand", "paymentAdvices" }, allowSetters = true)
-    private LandCompensation landCompensation;
+    @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentAdvices" }, allowSetters = true)
+    private Survey survey;
 
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties(value = { "lands", "bankBranch", "projectLands", "paymentAdvices" }, allowSetters = true)
+    private Citizen citizen;
+
+    @ManyToOne
     @JsonIgnoreProperties(value = { "paymentAdvices" }, allowSetters = true)
     private PaymentFile paymentFile;
 
     @JsonIgnoreProperties(value = { "paymentAdvice" }, allowSetters = true)
     @OneToOne(mappedBy = "paymentAdvice")
     private PaymentFileRecon paymentFileRecon;
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = { "paymentAdvices", "village", "unit", "landType", "state", "citizen", "project", "projectLands" },
+        allowSetters = true
+    )
+    private Land land;
+
+    @OneToMany(mappedBy = "paymentAdvice")
+    @JsonIgnoreProperties(value = { "paymentAdvice", "projectLand" }, allowSetters = true)
+    private Set<PaymentAdviceDetails> paymentAdviceDetails = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -114,6 +142,19 @@ public class PaymentAdvice implements Serializable {
 
     public void setAccountHolderName(String accountHolderName) {
         this.accountHolderName = accountHolderName;
+    }
+
+    public String getAccountHolderBankName() {
+        return this.accountHolderBankName;
+    }
+
+    public PaymentAdvice accountHolderBankName(String accountHolderBankName) {
+        this.setAccountHolderBankName(accountHolderBankName);
+        return this;
+    }
+
+    public void setAccountHolderBankName(String accountHolderBankName) {
+        this.accountHolderBankName = accountHolderBankName;
     }
 
     public Double getPaymentAmount() {
@@ -246,6 +287,19 @@ public class PaymentAdvice implements Serializable {
         this.hissaType = hissaType;
     }
 
+    public LandCompensation getLandCompensation() {
+        return this.landCompensation;
+    }
+
+    public void setLandCompensation(LandCompensation landCompensation) {
+        this.landCompensation = landCompensation;
+    }
+
+    public PaymentAdvice landCompensation(LandCompensation landCompensation) {
+        this.setLandCompensation(landCompensation);
+        return this;
+    }
+
     public ProjectLand getProjectLand() {
         return this.projectLand;
     }
@@ -259,16 +313,29 @@ public class PaymentAdvice implements Serializable {
         return this;
     }
 
-    public LandCompensation getLandCompensation() {
-        return this.landCompensation;
+    public Survey getSurvey() {
+        return this.survey;
     }
 
-    public void setLandCompensation(LandCompensation landCompensation) {
-        this.landCompensation = landCompensation;
+    public void setSurvey(Survey survey) {
+        this.survey = survey;
     }
 
-    public PaymentAdvice landCompensation(LandCompensation landCompensation) {
-        this.setLandCompensation(landCompensation);
+    public PaymentAdvice survey(Survey survey) {
+        this.setSurvey(survey);
+        return this;
+    }
+
+    public Citizen getCitizen() {
+        return this.citizen;
+    }
+
+    public void setCitizen(Citizen citizen) {
+        this.citizen = citizen;
+    }
+
+    public PaymentAdvice citizen(Citizen citizen) {
+        this.setCitizen(citizen);
         return this;
     }
 
@@ -304,6 +371,50 @@ public class PaymentAdvice implements Serializable {
         return this;
     }
 
+    public Land getLand() {
+        return this.land;
+    }
+
+    public void setLand(Land land) {
+        this.land = land;
+    }
+
+    public PaymentAdvice land(Land land) {
+        this.setLand(land);
+        return this;
+    }
+
+    public Set<PaymentAdviceDetails> getPaymentAdviceDetails() {
+        return this.paymentAdviceDetails;
+    }
+
+    public void setPaymentAdviceDetails(Set<PaymentAdviceDetails> paymentAdviceDetails) {
+        if (this.paymentAdviceDetails != null) {
+            this.paymentAdviceDetails.forEach(i -> i.setPaymentAdvice(null));
+        }
+        if (paymentAdviceDetails != null) {
+            paymentAdviceDetails.forEach(i -> i.setPaymentAdvice(this));
+        }
+        this.paymentAdviceDetails = paymentAdviceDetails;
+    }
+
+    public PaymentAdvice paymentAdviceDetails(Set<PaymentAdviceDetails> paymentAdviceDetails) {
+        this.setPaymentAdviceDetails(paymentAdviceDetails);
+        return this;
+    }
+
+    public PaymentAdvice addPaymentAdviceDetails(PaymentAdviceDetails paymentAdviceDetails) {
+        this.paymentAdviceDetails.add(paymentAdviceDetails);
+        paymentAdviceDetails.setPaymentAdvice(this);
+        return this;
+    }
+
+    public PaymentAdvice removePaymentAdviceDetails(PaymentAdviceDetails paymentAdviceDetails) {
+        this.paymentAdviceDetails.remove(paymentAdviceDetails);
+        paymentAdviceDetails.setPaymentAdvice(null);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -329,6 +440,7 @@ public class PaymentAdvice implements Serializable {
         return "PaymentAdvice{" +
             "id=" + getId() +
             ", accountHolderName='" + getAccountHolderName() + "'" +
+            ", accountHolderBankName='" + getAccountHolderBankName() + "'" +
             ", paymentAmount=" + getPaymentAmount() +
             ", bankName='" + getBankName() + "'" +
             ", accountNumber='" + getAccountNumber() + "'" +

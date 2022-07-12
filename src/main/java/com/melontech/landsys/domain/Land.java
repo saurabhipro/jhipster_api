@@ -29,6 +29,9 @@ public class Land implements Serializable {
     @Column(name = "khasra_number", nullable = false)
     private String khasraNumber;
 
+    @Column(name = "kahtauni_khata")
+    private String kahtauniKhata;
+
     @Column(name = "area")
     private Double area;
 
@@ -50,10 +53,14 @@ public class Land implements Serializable {
     @Column(name = "total_land_value")
     private Double totalLandValue;
 
-    @JsonIgnoreProperties(value = { "district", "land" }, allowSetters = true)
-    @OneToOne
-    @JoinColumn(unique = true)
-    private State state;
+    @OneToMany(mappedBy = "land")
+    @JsonIgnoreProperties(
+        value = {
+            "landCompensation", "projectLand", "survey", "citizen", "paymentFile", "paymentFileRecon", "land", "paymentAdviceDetails",
+        },
+        allowSetters = true
+    )
+    private Set<PaymentAdvice> paymentAdvices = new HashSet<>();
 
     @ManyToOne(optional = false)
     @NotNull
@@ -70,9 +77,24 @@ public class Land implements Serializable {
     @JsonIgnoreProperties(value = { "lands" }, allowSetters = true)
     private LandType landType;
 
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "districts", "lands" }, allowSetters = true)
+    private State state;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "lands", "bankBranch", "projectLands", "paymentAdvices" }, allowSetters = true)
+    private Citizen citizen;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "lands", "projectLands" }, allowSetters = true)
+    private Project project;
+
     @OneToMany(mappedBy = "land")
     @JsonIgnoreProperties(
-        value = { "project", "land", "noticeStatusInfo", "khatedars", "surveys", "landCompensations", "paymentAdvices" },
+        value = {
+            "land", "project", "citizen", "noticeStatusInfo", "survey", "landCompensation", "paymentAdvices", "paymentAdviceDetails",
+        },
         allowSetters = true
     )
     private Set<ProjectLand> projectLands = new HashSet<>();
@@ -116,6 +138,19 @@ public class Land implements Serializable {
 
     public void setKhasraNumber(String khasraNumber) {
         this.khasraNumber = khasraNumber;
+    }
+
+    public String getKahtauniKhata() {
+        return this.kahtauniKhata;
+    }
+
+    public Land kahtauniKhata(String kahtauniKhata) {
+        this.setKahtauniKhata(kahtauniKhata);
+        return this;
+    }
+
+    public void setKahtauniKhata(String kahtauniKhata) {
+        this.kahtauniKhata = kahtauniKhata;
     }
 
     public Double getArea() {
@@ -209,16 +244,34 @@ public class Land implements Serializable {
         this.totalLandValue = totalLandValue;
     }
 
-    public State getState() {
-        return this.state;
+    public Set<PaymentAdvice> getPaymentAdvices() {
+        return this.paymentAdvices;
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public void setPaymentAdvices(Set<PaymentAdvice> paymentAdvices) {
+        if (this.paymentAdvices != null) {
+            this.paymentAdvices.forEach(i -> i.setLand(null));
+        }
+        if (paymentAdvices != null) {
+            paymentAdvices.forEach(i -> i.setLand(this));
+        }
+        this.paymentAdvices = paymentAdvices;
     }
 
-    public Land state(State state) {
-        this.setState(state);
+    public Land paymentAdvices(Set<PaymentAdvice> paymentAdvices) {
+        this.setPaymentAdvices(paymentAdvices);
+        return this;
+    }
+
+    public Land addPaymentAdvice(PaymentAdvice paymentAdvice) {
+        this.paymentAdvices.add(paymentAdvice);
+        paymentAdvice.setLand(this);
+        return this;
+    }
+
+    public Land removePaymentAdvice(PaymentAdvice paymentAdvice) {
+        this.paymentAdvices.remove(paymentAdvice);
+        paymentAdvice.setLand(null);
         return this;
     }
 
@@ -258,6 +311,45 @@ public class Land implements Serializable {
 
     public Land landType(LandType landType) {
         this.setLandType(landType);
+        return this;
+    }
+
+    public State getState() {
+        return this.state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public Land state(State state) {
+        this.setState(state);
+        return this;
+    }
+
+    public Citizen getCitizen() {
+        return this.citizen;
+    }
+
+    public void setCitizen(Citizen citizen) {
+        this.citizen = citizen;
+    }
+
+    public Land citizen(Citizen citizen) {
+        this.setCitizen(citizen);
+        return this;
+    }
+
+    public Project getProject() {
+        return this.project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public Land project(Project project) {
+        this.setProject(project);
         return this;
     }
 
@@ -318,6 +410,7 @@ public class Land implements Serializable {
             "id=" + getId() +
             ", ulpin='" + getUlpin() + "'" +
             ", khasraNumber='" + getKhasraNumber() + "'" +
+            ", kahtauniKhata='" + getKahtauniKhata() + "'" +
             ", area=" + getArea() +
             ", landMarketValue=" + getLandMarketValue() +
             ", structuralValue=" + getStructuralValue() +

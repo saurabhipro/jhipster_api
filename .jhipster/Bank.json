@@ -1,6 +1,6 @@
 {
   "applications": "*",
-  "changelogDate": "20220711191525",
+  "changelogDate": "20220712174418",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "landsys_bank",
@@ -25,9 +25,8 @@
     {
       "otherEntityName": "bankBranch",
       "otherEntityRelationshipName": "bank",
-      "relationshipName": "bankName",
-      "relationshipType": "one-to-many",
-      "relationshipValidateRules": "required"
+      "relationshipName": "bankBranch",
+      "relationshipType": "one-to-many"
     }
   ],
   "service": "serviceImpl"

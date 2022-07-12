@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.melontech.landsys.IntegrationTest;
-import com.melontech.landsys.domain.Land;
 import com.melontech.landsys.domain.Unit;
 import com.melontech.landsys.repository.UnitRepository;
 import com.melontech.landsys.service.dto.UnitDTO;
@@ -66,16 +65,6 @@ class UnitResourceIT {
      */
     public static Unit createEntity(EntityManager em) {
         Unit unit = new Unit().name(DEFAULT_NAME).conversionFactor(DEFAULT_CONVERSION_FACTOR);
-        // Add required entity
-        Land land;
-        if (TestUtil.findAll(em, Land.class).isEmpty()) {
-            land = LandResourceIT.createEntity(em);
-            em.persist(land);
-            em.flush();
-        } else {
-            land = TestUtil.findAll(em, Land.class).get(0);
-        }
-        unit.getLands().add(land);
         return unit;
     }
 
@@ -87,16 +76,6 @@ class UnitResourceIT {
      */
     public static Unit createUpdatedEntity(EntityManager em) {
         Unit unit = new Unit().name(UPDATED_NAME).conversionFactor(UPDATED_CONVERSION_FACTOR);
-        // Add required entity
-        Land land;
-        if (TestUtil.findAll(em, Land.class).isEmpty()) {
-            land = LandResourceIT.createUpdatedEntity(em);
-            em.persist(land);
-            em.flush();
-        } else {
-            land = TestUtil.findAll(em, Land.class).get(0);
-        }
-        unit.getLands().add(land);
         return unit;
     }
 

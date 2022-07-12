@@ -32,7 +32,7 @@ public class Bank implements Serializable {
 
     @OneToMany(mappedBy = "bank")
     @JsonIgnoreProperties(value = { "bank", "citizens" }, allowSetters = true)
-    private Set<BankBranch> bankNames = new HashSet<>();
+    private Set<BankBranch> bankBranches = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -75,33 +75,33 @@ public class Bank implements Serializable {
         this.code = code;
     }
 
-    public Set<BankBranch> getBankNames() {
-        return this.bankNames;
+    public Set<BankBranch> getBankBranches() {
+        return this.bankBranches;
     }
 
-    public void setBankNames(Set<BankBranch> bankBranches) {
-        if (this.bankNames != null) {
-            this.bankNames.forEach(i -> i.setBank(null));
+    public void setBankBranches(Set<BankBranch> bankBranches) {
+        if (this.bankBranches != null) {
+            this.bankBranches.forEach(i -> i.setBank(null));
         }
         if (bankBranches != null) {
             bankBranches.forEach(i -> i.setBank(this));
         }
-        this.bankNames = bankBranches;
+        this.bankBranches = bankBranches;
     }
 
-    public Bank bankNames(Set<BankBranch> bankBranches) {
-        this.setBankNames(bankBranches);
+    public Bank bankBranches(Set<BankBranch> bankBranches) {
+        this.setBankBranches(bankBranches);
         return this;
     }
 
-    public Bank addBankName(BankBranch bankBranch) {
-        this.bankNames.add(bankBranch);
+    public Bank addBankBranch(BankBranch bankBranch) {
+        this.bankBranches.add(bankBranch);
         bankBranch.setBank(this);
         return this;
     }
 
-    public Bank removeBankName(BankBranch bankBranch) {
-        this.bankNames.remove(bankBranch);
+    public Bank removeBankBranch(BankBranch bankBranch) {
+        this.bankBranches.remove(bankBranch);
         bankBranch.setBank(null);
         return this;
     }

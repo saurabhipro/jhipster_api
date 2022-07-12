@@ -5,7 +5,11 @@ import com.melontech.landsys.repository.ProjectLandRepository;
 import com.melontech.landsys.service.ProjectLandService;
 import com.melontech.landsys.service.dto.ProjectLandDTO;
 import com.melontech.landsys.service.mapper.ProjectLandMapper;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -71,6 +75,34 @@ public class ProjectLandServiceImpl implements ProjectLandService {
 
     public Page<ProjectLandDTO> findAllWithEagerRelationships(Pageable pageable) {
         return projectLandRepository.findAllWithEagerRelationships(pageable).map(projectLandMapper::toDto);
+    }
+
+    /**
+     *  Get all the projectLands where Survey is {@code null}.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<ProjectLandDTO> findAllWhereSurveyIsNull() {
+        log.debug("Request to get all projectLands where Survey is null");
+        return StreamSupport
+            .stream(projectLandRepository.findAll().spliterator(), false)
+            .filter(projectLand -> projectLand.getSurvey() == null)
+            .map(projectLandMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    /**
+     *  Get all the projectLands where LandCompensation is {@code null}.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<ProjectLandDTO> findAllWhereLandCompensationIsNull() {
+        log.debug("Request to get all projectLands where LandCompensation is null");
+        return StreamSupport
+            .stream(projectLandRepository.findAll().spliterator(), false)
+            .filter(projectLand -> projectLand.getLandCompensation() == null)
+            .map(projectLandMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override

@@ -31,7 +31,10 @@ public class LandType implements Serializable {
     private String description;
 
     @OneToMany(mappedBy = "landType")
-    @JsonIgnoreProperties(value = { "state", "village", "unit", "landType", "projectLands" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "paymentAdvices", "village", "unit", "landType", "state", "citizen", "project", "projectLands" },
+        allowSetters = true
+    )
     private Set<Land> lands = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

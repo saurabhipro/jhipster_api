@@ -1,7 +1,6 @@
 package com.melontech.landsys.service;
 
 import com.melontech.landsys.service.dto.StateDTO;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,12 +40,6 @@ public interface StateService {
      * @return the list of entities.
      */
     Page<StateDTO> findAll(Pageable pageable);
-    /**
-     * Get all the StateDTO where Land is {@code null}.
-     *
-     * @return the {@link List} of entities.
-     */
-    List<StateDTO> findAllWhereLandIsNull();
 
     /**
      * Get the "id" state.

@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.melontech.landsys.IntegrationTest;
 import com.melontech.landsys.domain.Bank;
 import com.melontech.landsys.domain.BankBranch;
-import com.melontech.landsys.domain.Citizen;
 import com.melontech.landsys.repository.BankBranchRepository;
 import com.melontech.landsys.service.BankBranchService;
 import com.melontech.landsys.service.dto.BankBranchDTO;
@@ -95,16 +94,6 @@ class BankBranchResourceIT {
             bank = TestUtil.findAll(em, Bank.class).get(0);
         }
         bankBranch.setBank(bank);
-        // Add required entity
-        Citizen citizen;
-        if (TestUtil.findAll(em, Citizen.class).isEmpty()) {
-            citizen = CitizenResourceIT.createEntity(em);
-            em.persist(citizen);
-            em.flush();
-        } else {
-            citizen = TestUtil.findAll(em, Citizen.class).get(0);
-        }
-        bankBranch.getCitizens().add(citizen);
         return bankBranch;
     }
 
@@ -126,16 +115,6 @@ class BankBranchResourceIT {
             bank = TestUtil.findAll(em, Bank.class).get(0);
         }
         bankBranch.setBank(bank);
-        // Add required entity
-        Citizen citizen;
-        if (TestUtil.findAll(em, Citizen.class).isEmpty()) {
-            citizen = CitizenResourceIT.createUpdatedEntity(em);
-            em.persist(citizen);
-            em.flush();
-        } else {
-            citizen = TestUtil.findAll(em, Citizen.class).get(0);
-        }
-        bankBranch.getCitizens().add(citizen);
         return bankBranch;
     }
 

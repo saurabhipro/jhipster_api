@@ -2,30 +2,42 @@ package com.melontech.landsys.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.melontech.landsys.IntegrationTest;
+import com.melontech.landsys.domain.Citizen;
+import com.melontech.landsys.domain.Land;
 import com.melontech.landsys.domain.LandCompensation;
 import com.melontech.landsys.domain.PaymentAdvice;
+import com.melontech.landsys.domain.PaymentAdviceDetails;
 import com.melontech.landsys.domain.PaymentFile;
 import com.melontech.landsys.domain.PaymentFileRecon;
 import com.melontech.landsys.domain.ProjectLand;
+import com.melontech.landsys.domain.Survey;
 import com.melontech.landsys.domain.enumeration.HissaType;
 import com.melontech.landsys.domain.enumeration.PaymentAdviceType;
 import com.melontech.landsys.domain.enumeration.PaymentStatus;
 import com.melontech.landsys.repository.PaymentAdviceRepository;
+import com.melontech.landsys.service.PaymentAdviceService;
 import com.melontech.landsys.service.criteria.PaymentAdviceCriteria;
 import com.melontech.landsys.service.dto.PaymentAdviceDTO;
 import com.melontech.landsys.service.mapper.PaymentAdviceMapper;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -35,12 +47,16 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link PaymentAdviceResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class PaymentAdviceResourceIT {
 
     private static final String DEFAULT_ACCOUNT_HOLDER_NAME = "AAAAAAAAAA";
     private static final String UPDATED_ACCOUNT_HOLDER_NAME = "BBBBBBBBBB";
+
+    private static final String DEFAULT_ACCOUNT_HOLDER_BANK_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_ACCOUNT_HOLDER_BANK_NAME = "BBBBBBBBBB";
 
     private static final Double DEFAULT_PAYMENT_AMOUNT = 1D;
     private static final Double UPDATED_PAYMENT_AMOUNT = 2D;
@@ -82,8 +98,14 @@ class PaymentAdviceResourceIT {
     @Autowired
     private PaymentAdviceRepository paymentAdviceRepository;
 
+    @Mock
+    private PaymentAdviceRepository paymentAdviceRepositoryMock;
+
     @Autowired
     private PaymentAdviceMapper paymentAdviceMapper;
+
+    @Mock
+    private PaymentAdviceService paymentAdviceServiceMock;
 
     @Autowired
     private EntityManager em;
@@ -102,6 +124,7 @@ class PaymentAdviceResourceIT {
     public static PaymentAdvice createEntity(EntityManager em) {
         PaymentAdvice paymentAdvice = new PaymentAdvice()
             .accountHolderName(DEFAULT_ACCOUNT_HOLDER_NAME)
+            .accountHolderBankName(DEFAULT_ACCOUNT_HOLDER_BANK_NAME)
             .paymentAmount(DEFAULT_PAYMENT_AMOUNT)
             .bankName(DEFAULT_BANK_NAME)
             .accountNumber(DEFAULT_ACCOUNT_NUMBER)
@@ -113,16 +136,6 @@ class PaymentAdviceResourceIT {
             .paymentStatus(DEFAULT_PAYMENT_STATUS)
             .hissaType(DEFAULT_HISSA_TYPE);
         // Add required entity
-        ProjectLand projectLand;
-        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
-            projectLand = ProjectLandResourceIT.createEntity(em);
-            em.persist(projectLand);
-            em.flush();
-        } else {
-            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
-        }
-        paymentAdvice.setProjectLand(projectLand);
-        // Add required entity
         LandCompensation landCompensation;
         if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
             landCompensation = LandCompensationResourceIT.createEntity(em);
@@ -133,25 +146,35 @@ class PaymentAdviceResourceIT {
         }
         paymentAdvice.setLandCompensation(landCompensation);
         // Add required entity
-        PaymentFile paymentFile;
-        if (TestUtil.findAll(em, PaymentFile.class).isEmpty()) {
-            paymentFile = PaymentFileResourceIT.createEntity(em);
-            em.persist(paymentFile);
+        ProjectLand projectLand;
+        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
+            projectLand = ProjectLandResourceIT.createEntity(em);
+            em.persist(projectLand);
             em.flush();
         } else {
-            paymentFile = TestUtil.findAll(em, PaymentFile.class).get(0);
+            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
         }
-        paymentAdvice.setPaymentFile(paymentFile);
+        paymentAdvice.setProjectLand(projectLand);
         // Add required entity
-        PaymentFileRecon paymentFileRecon;
-        if (TestUtil.findAll(em, PaymentFileRecon.class).isEmpty()) {
-            paymentFileRecon = PaymentFileReconResourceIT.createEntity(em);
-            em.persist(paymentFileRecon);
+        Survey survey;
+        if (TestUtil.findAll(em, Survey.class).isEmpty()) {
+            survey = SurveyResourceIT.createEntity(em);
+            em.persist(survey);
             em.flush();
         } else {
-            paymentFileRecon = TestUtil.findAll(em, PaymentFileRecon.class).get(0);
+            survey = TestUtil.findAll(em, Survey.class).get(0);
         }
-        paymentAdvice.setPaymentFileRecon(paymentFileRecon);
+        paymentAdvice.setSurvey(survey);
+        // Add required entity
+        Citizen citizen;
+        if (TestUtil.findAll(em, Citizen.class).isEmpty()) {
+            citizen = CitizenResourceIT.createEntity(em);
+            em.persist(citizen);
+            em.flush();
+        } else {
+            citizen = TestUtil.findAll(em, Citizen.class).get(0);
+        }
+        paymentAdvice.setCitizen(citizen);
         return paymentAdvice;
     }
 
@@ -164,6 +187,7 @@ class PaymentAdviceResourceIT {
     public static PaymentAdvice createUpdatedEntity(EntityManager em) {
         PaymentAdvice paymentAdvice = new PaymentAdvice()
             .accountHolderName(UPDATED_ACCOUNT_HOLDER_NAME)
+            .accountHolderBankName(UPDATED_ACCOUNT_HOLDER_BANK_NAME)
             .paymentAmount(UPDATED_PAYMENT_AMOUNT)
             .bankName(UPDATED_BANK_NAME)
             .accountNumber(UPDATED_ACCOUNT_NUMBER)
@@ -175,16 +199,6 @@ class PaymentAdviceResourceIT {
             .paymentStatus(UPDATED_PAYMENT_STATUS)
             .hissaType(UPDATED_HISSA_TYPE);
         // Add required entity
-        ProjectLand projectLand;
-        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
-            projectLand = ProjectLandResourceIT.createUpdatedEntity(em);
-            em.persist(projectLand);
-            em.flush();
-        } else {
-            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
-        }
-        paymentAdvice.setProjectLand(projectLand);
-        // Add required entity
         LandCompensation landCompensation;
         if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
             landCompensation = LandCompensationResourceIT.createUpdatedEntity(em);
@@ -195,25 +209,35 @@ class PaymentAdviceResourceIT {
         }
         paymentAdvice.setLandCompensation(landCompensation);
         // Add required entity
-        PaymentFile paymentFile;
-        if (TestUtil.findAll(em, PaymentFile.class).isEmpty()) {
-            paymentFile = PaymentFileResourceIT.createUpdatedEntity(em);
-            em.persist(paymentFile);
+        ProjectLand projectLand;
+        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
+            projectLand = ProjectLandResourceIT.createUpdatedEntity(em);
+            em.persist(projectLand);
             em.flush();
         } else {
-            paymentFile = TestUtil.findAll(em, PaymentFile.class).get(0);
+            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
         }
-        paymentAdvice.setPaymentFile(paymentFile);
+        paymentAdvice.setProjectLand(projectLand);
         // Add required entity
-        PaymentFileRecon paymentFileRecon;
-        if (TestUtil.findAll(em, PaymentFileRecon.class).isEmpty()) {
-            paymentFileRecon = PaymentFileReconResourceIT.createUpdatedEntity(em);
-            em.persist(paymentFileRecon);
+        Survey survey;
+        if (TestUtil.findAll(em, Survey.class).isEmpty()) {
+            survey = SurveyResourceIT.createUpdatedEntity(em);
+            em.persist(survey);
             em.flush();
         } else {
-            paymentFileRecon = TestUtil.findAll(em, PaymentFileRecon.class).get(0);
+            survey = TestUtil.findAll(em, Survey.class).get(0);
         }
-        paymentAdvice.setPaymentFileRecon(paymentFileRecon);
+        paymentAdvice.setSurvey(survey);
+        // Add required entity
+        Citizen citizen;
+        if (TestUtil.findAll(em, Citizen.class).isEmpty()) {
+            citizen = CitizenResourceIT.createUpdatedEntity(em);
+            em.persist(citizen);
+            em.flush();
+        } else {
+            citizen = TestUtil.findAll(em, Citizen.class).get(0);
+        }
+        paymentAdvice.setCitizen(citizen);
         return paymentAdvice;
     }
 
@@ -239,6 +263,7 @@ class PaymentAdviceResourceIT {
         assertThat(paymentAdviceList).hasSize(databaseSizeBeforeCreate + 1);
         PaymentAdvice testPaymentAdvice = paymentAdviceList.get(paymentAdviceList.size() - 1);
         assertThat(testPaymentAdvice.getAccountHolderName()).isEqualTo(DEFAULT_ACCOUNT_HOLDER_NAME);
+        assertThat(testPaymentAdvice.getAccountHolderBankName()).isEqualTo(DEFAULT_ACCOUNT_HOLDER_BANK_NAME);
         assertThat(testPaymentAdvice.getPaymentAmount()).isEqualTo(DEFAULT_PAYMENT_AMOUNT);
         assertThat(testPaymentAdvice.getBankName()).isEqualTo(DEFAULT_BANK_NAME);
         assertThat(testPaymentAdvice.getAccountNumber()).isEqualTo(DEFAULT_ACCOUNT_NUMBER);
@@ -278,6 +303,26 @@ class PaymentAdviceResourceIT {
         int databaseSizeBeforeTest = paymentAdviceRepository.findAll().size();
         // set the field null
         paymentAdvice.setAccountHolderName(null);
+
+        // Create the PaymentAdvice, which fails.
+        PaymentAdviceDTO paymentAdviceDTO = paymentAdviceMapper.toDto(paymentAdvice);
+
+        restPaymentAdviceMockMvc
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(paymentAdviceDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<PaymentAdvice> paymentAdviceList = paymentAdviceRepository.findAll();
+        assertThat(paymentAdviceList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkAccountHolderBankNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = paymentAdviceRepository.findAll().size();
+        // set the field null
+        paymentAdvice.setAccountHolderBankName(null);
 
         // Create the PaymentAdvice, which fails.
         PaymentAdviceDTO paymentAdviceDTO = paymentAdviceMapper.toDto(paymentAdvice);
@@ -425,6 +470,7 @@ class PaymentAdviceResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(paymentAdvice.getId().intValue())))
             .andExpect(jsonPath("$.[*].accountHolderName").value(hasItem(DEFAULT_ACCOUNT_HOLDER_NAME)))
+            .andExpect(jsonPath("$.[*].accountHolderBankName").value(hasItem(DEFAULT_ACCOUNT_HOLDER_BANK_NAME)))
             .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.doubleValue())))
             .andExpect(jsonPath("$.[*].bankName").value(hasItem(DEFAULT_BANK_NAME)))
             .andExpect(jsonPath("$.[*].accountNumber").value(hasItem(DEFAULT_ACCOUNT_NUMBER)))
@@ -435,6 +481,24 @@ class PaymentAdviceResourceIT {
             .andExpect(jsonPath("$.[*].referenceNumber").value(hasItem(DEFAULT_REFERENCE_NUMBER)))
             .andExpect(jsonPath("$.[*].paymentStatus").value(hasItem(DEFAULT_PAYMENT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].hissaType").value(hasItem(DEFAULT_HISSA_TYPE.toString())));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllPaymentAdvicesWithEagerRelationshipsIsEnabled() throws Exception {
+        when(paymentAdviceServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restPaymentAdviceMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(paymentAdviceServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllPaymentAdvicesWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(paymentAdviceServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restPaymentAdviceMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(paymentAdviceServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -450,6 +514,7 @@ class PaymentAdviceResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(paymentAdvice.getId().intValue()))
             .andExpect(jsonPath("$.accountHolderName").value(DEFAULT_ACCOUNT_HOLDER_NAME))
+            .andExpect(jsonPath("$.accountHolderBankName").value(DEFAULT_ACCOUNT_HOLDER_BANK_NAME))
             .andExpect(jsonPath("$.paymentAmount").value(DEFAULT_PAYMENT_AMOUNT.doubleValue()))
             .andExpect(jsonPath("$.bankName").value(DEFAULT_BANK_NAME))
             .andExpect(jsonPath("$.accountNumber").value(DEFAULT_ACCOUNT_NUMBER))
@@ -556,6 +621,86 @@ class PaymentAdviceResourceIT {
 
         // Get all the paymentAdviceList where accountHolderName does not contain UPDATED_ACCOUNT_HOLDER_NAME
         defaultPaymentAdviceShouldBeFound("accountHolderName.doesNotContain=" + UPDATED_ACCOUNT_HOLDER_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentAdvicesByAccountHolderBankNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+
+        // Get all the paymentAdviceList where accountHolderBankName equals to DEFAULT_ACCOUNT_HOLDER_BANK_NAME
+        defaultPaymentAdviceShouldBeFound("accountHolderBankName.equals=" + DEFAULT_ACCOUNT_HOLDER_BANK_NAME);
+
+        // Get all the paymentAdviceList where accountHolderBankName equals to UPDATED_ACCOUNT_HOLDER_BANK_NAME
+        defaultPaymentAdviceShouldNotBeFound("accountHolderBankName.equals=" + UPDATED_ACCOUNT_HOLDER_BANK_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentAdvicesByAccountHolderBankNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+
+        // Get all the paymentAdviceList where accountHolderBankName not equals to DEFAULT_ACCOUNT_HOLDER_BANK_NAME
+        defaultPaymentAdviceShouldNotBeFound("accountHolderBankName.notEquals=" + DEFAULT_ACCOUNT_HOLDER_BANK_NAME);
+
+        // Get all the paymentAdviceList where accountHolderBankName not equals to UPDATED_ACCOUNT_HOLDER_BANK_NAME
+        defaultPaymentAdviceShouldBeFound("accountHolderBankName.notEquals=" + UPDATED_ACCOUNT_HOLDER_BANK_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentAdvicesByAccountHolderBankNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+
+        // Get all the paymentAdviceList where accountHolderBankName in DEFAULT_ACCOUNT_HOLDER_BANK_NAME or UPDATED_ACCOUNT_HOLDER_BANK_NAME
+        defaultPaymentAdviceShouldBeFound(
+            "accountHolderBankName.in=" + DEFAULT_ACCOUNT_HOLDER_BANK_NAME + "," + UPDATED_ACCOUNT_HOLDER_BANK_NAME
+        );
+
+        // Get all the paymentAdviceList where accountHolderBankName equals to UPDATED_ACCOUNT_HOLDER_BANK_NAME
+        defaultPaymentAdviceShouldNotBeFound("accountHolderBankName.in=" + UPDATED_ACCOUNT_HOLDER_BANK_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentAdvicesByAccountHolderBankNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+
+        // Get all the paymentAdviceList where accountHolderBankName is not null
+        defaultPaymentAdviceShouldBeFound("accountHolderBankName.specified=true");
+
+        // Get all the paymentAdviceList where accountHolderBankName is null
+        defaultPaymentAdviceShouldNotBeFound("accountHolderBankName.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentAdvicesByAccountHolderBankNameContainsSomething() throws Exception {
+        // Initialize the database
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+
+        // Get all the paymentAdviceList where accountHolderBankName contains DEFAULT_ACCOUNT_HOLDER_BANK_NAME
+        defaultPaymentAdviceShouldBeFound("accountHolderBankName.contains=" + DEFAULT_ACCOUNT_HOLDER_BANK_NAME);
+
+        // Get all the paymentAdviceList where accountHolderBankName contains UPDATED_ACCOUNT_HOLDER_BANK_NAME
+        defaultPaymentAdviceShouldNotBeFound("accountHolderBankName.contains=" + UPDATED_ACCOUNT_HOLDER_BANK_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentAdvicesByAccountHolderBankNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+
+        // Get all the paymentAdviceList where accountHolderBankName does not contain DEFAULT_ACCOUNT_HOLDER_BANK_NAME
+        defaultPaymentAdviceShouldNotBeFound("accountHolderBankName.doesNotContain=" + DEFAULT_ACCOUNT_HOLDER_BANK_NAME);
+
+        // Get all the paymentAdviceList where accountHolderBankName does not contain UPDATED_ACCOUNT_HOLDER_BANK_NAME
+        defaultPaymentAdviceShouldBeFound("accountHolderBankName.doesNotContain=" + UPDATED_ACCOUNT_HOLDER_BANK_NAME);
     }
 
     @Test
@@ -1288,6 +1433,32 @@ class PaymentAdviceResourceIT {
 
     @Test
     @Transactional
+    void getAllPaymentAdvicesByLandCompensationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+        LandCompensation landCompensation;
+        if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
+            landCompensation = LandCompensationResourceIT.createEntity(em);
+            em.persist(landCompensation);
+            em.flush();
+        } else {
+            landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
+        }
+        em.persist(landCompensation);
+        em.flush();
+        paymentAdvice.setLandCompensation(landCompensation);
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+        Long landCompensationId = landCompensation.getId();
+
+        // Get all the paymentAdviceList where landCompensation equals to landCompensationId
+        defaultPaymentAdviceShouldBeFound("landCompensationId.equals=" + landCompensationId);
+
+        // Get all the paymentAdviceList where landCompensation equals to (landCompensationId + 1)
+        defaultPaymentAdviceShouldNotBeFound("landCompensationId.equals=" + (landCompensationId + 1));
+    }
+
+    @Test
+    @Transactional
     void getAllPaymentAdvicesByProjectLandIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentAdviceRepository.saveAndFlush(paymentAdvice);
@@ -1314,28 +1485,54 @@ class PaymentAdviceResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentAdvicesByLandCompensationIsEqualToSomething() throws Exception {
+    void getAllPaymentAdvicesBySurveyIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentAdviceRepository.saveAndFlush(paymentAdvice);
-        LandCompensation landCompensation;
-        if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
-            landCompensation = LandCompensationResourceIT.createEntity(em);
-            em.persist(landCompensation);
+        Survey survey;
+        if (TestUtil.findAll(em, Survey.class).isEmpty()) {
+            survey = SurveyResourceIT.createEntity(em);
+            em.persist(survey);
             em.flush();
         } else {
-            landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
+            survey = TestUtil.findAll(em, Survey.class).get(0);
         }
-        em.persist(landCompensation);
+        em.persist(survey);
         em.flush();
-        paymentAdvice.setLandCompensation(landCompensation);
+        paymentAdvice.setSurvey(survey);
         paymentAdviceRepository.saveAndFlush(paymentAdvice);
-        Long landCompensationId = landCompensation.getId();
+        Long surveyId = survey.getId();
 
-        // Get all the paymentAdviceList where landCompensation equals to landCompensationId
-        defaultPaymentAdviceShouldBeFound("landCompensationId.equals=" + landCompensationId);
+        // Get all the paymentAdviceList where survey equals to surveyId
+        defaultPaymentAdviceShouldBeFound("surveyId.equals=" + surveyId);
 
-        // Get all the paymentAdviceList where landCompensation equals to (landCompensationId + 1)
-        defaultPaymentAdviceShouldNotBeFound("landCompensationId.equals=" + (landCompensationId + 1));
+        // Get all the paymentAdviceList where survey equals to (surveyId + 1)
+        defaultPaymentAdviceShouldNotBeFound("surveyId.equals=" + (surveyId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentAdvicesByCitizenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+        Citizen citizen;
+        if (TestUtil.findAll(em, Citizen.class).isEmpty()) {
+            citizen = CitizenResourceIT.createEntity(em);
+            em.persist(citizen);
+            em.flush();
+        } else {
+            citizen = TestUtil.findAll(em, Citizen.class).get(0);
+        }
+        em.persist(citizen);
+        em.flush();
+        paymentAdvice.setCitizen(citizen);
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+        Long citizenId = citizen.getId();
+
+        // Get all the paymentAdviceList where citizen equals to citizenId
+        defaultPaymentAdviceShouldBeFound("citizenId.equals=" + citizenId);
+
+        // Get all the paymentAdviceList where citizen equals to (citizenId + 1)
+        defaultPaymentAdviceShouldNotBeFound("citizenId.equals=" + (citizenId + 1));
     }
 
     @Test
@@ -1367,8 +1564,20 @@ class PaymentAdviceResourceIT {
     @Test
     @Transactional
     void getAllPaymentAdvicesByPaymentFileReconIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        PaymentFileRecon paymentFileRecon = paymentAdvice.getPaymentFileRecon();
+        // Initialize the database
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+        PaymentFileRecon paymentFileRecon;
+        if (TestUtil.findAll(em, PaymentFileRecon.class).isEmpty()) {
+            paymentFileRecon = PaymentFileReconResourceIT.createEntity(em);
+            em.persist(paymentFileRecon);
+            em.flush();
+        } else {
+            paymentFileRecon = TestUtil.findAll(em, PaymentFileRecon.class).get(0);
+        }
+        em.persist(paymentFileRecon);
+        em.flush();
+        paymentAdvice.setPaymentFileRecon(paymentFileRecon);
+        paymentFileRecon.setPaymentAdvice(paymentAdvice);
         paymentAdviceRepository.saveAndFlush(paymentAdvice);
         Long paymentFileReconId = paymentFileRecon.getId();
 
@@ -1377,6 +1586,58 @@ class PaymentAdviceResourceIT {
 
         // Get all the paymentAdviceList where paymentFileRecon equals to (paymentFileReconId + 1)
         defaultPaymentAdviceShouldNotBeFound("paymentFileReconId.equals=" + (paymentFileReconId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentAdvicesByLandIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+        Land land;
+        if (TestUtil.findAll(em, Land.class).isEmpty()) {
+            land = LandResourceIT.createEntity(em);
+            em.persist(land);
+            em.flush();
+        } else {
+            land = TestUtil.findAll(em, Land.class).get(0);
+        }
+        em.persist(land);
+        em.flush();
+        paymentAdvice.setLand(land);
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+        Long landId = land.getId();
+
+        // Get all the paymentAdviceList where land equals to landId
+        defaultPaymentAdviceShouldBeFound("landId.equals=" + landId);
+
+        // Get all the paymentAdviceList where land equals to (landId + 1)
+        defaultPaymentAdviceShouldNotBeFound("landId.equals=" + (landId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentAdvicesByPaymentAdviceDetailsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+        PaymentAdviceDetails paymentAdviceDetails;
+        if (TestUtil.findAll(em, PaymentAdviceDetails.class).isEmpty()) {
+            paymentAdviceDetails = PaymentAdviceDetailsResourceIT.createEntity(em);
+            em.persist(paymentAdviceDetails);
+            em.flush();
+        } else {
+            paymentAdviceDetails = TestUtil.findAll(em, PaymentAdviceDetails.class).get(0);
+        }
+        em.persist(paymentAdviceDetails);
+        em.flush();
+        paymentAdvice.addPaymentAdviceDetails(paymentAdviceDetails);
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+        Long paymentAdviceDetailsId = paymentAdviceDetails.getId();
+
+        // Get all the paymentAdviceList where paymentAdviceDetails equals to paymentAdviceDetailsId
+        defaultPaymentAdviceShouldBeFound("paymentAdviceDetailsId.equals=" + paymentAdviceDetailsId);
+
+        // Get all the paymentAdviceList where paymentAdviceDetails equals to (paymentAdviceDetailsId + 1)
+        defaultPaymentAdviceShouldNotBeFound("paymentAdviceDetailsId.equals=" + (paymentAdviceDetailsId + 1));
     }
 
     /**
@@ -1389,6 +1650,7 @@ class PaymentAdviceResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(paymentAdvice.getId().intValue())))
             .andExpect(jsonPath("$.[*].accountHolderName").value(hasItem(DEFAULT_ACCOUNT_HOLDER_NAME)))
+            .andExpect(jsonPath("$.[*].accountHolderBankName").value(hasItem(DEFAULT_ACCOUNT_HOLDER_BANK_NAME)))
             .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.doubleValue())))
             .andExpect(jsonPath("$.[*].bankName").value(hasItem(DEFAULT_BANK_NAME)))
             .andExpect(jsonPath("$.[*].accountNumber").value(hasItem(DEFAULT_ACCOUNT_NUMBER)))
@@ -1448,6 +1710,7 @@ class PaymentAdviceResourceIT {
         em.detach(updatedPaymentAdvice);
         updatedPaymentAdvice
             .accountHolderName(UPDATED_ACCOUNT_HOLDER_NAME)
+            .accountHolderBankName(UPDATED_ACCOUNT_HOLDER_BANK_NAME)
             .paymentAmount(UPDATED_PAYMENT_AMOUNT)
             .bankName(UPDATED_BANK_NAME)
             .accountNumber(UPDATED_ACCOUNT_NUMBER)
@@ -1473,6 +1736,7 @@ class PaymentAdviceResourceIT {
         assertThat(paymentAdviceList).hasSize(databaseSizeBeforeUpdate);
         PaymentAdvice testPaymentAdvice = paymentAdviceList.get(paymentAdviceList.size() - 1);
         assertThat(testPaymentAdvice.getAccountHolderName()).isEqualTo(UPDATED_ACCOUNT_HOLDER_NAME);
+        assertThat(testPaymentAdvice.getAccountHolderBankName()).isEqualTo(UPDATED_ACCOUNT_HOLDER_BANK_NAME);
         assertThat(testPaymentAdvice.getPaymentAmount()).isEqualTo(UPDATED_PAYMENT_AMOUNT);
         assertThat(testPaymentAdvice.getBankName()).isEqualTo(UPDATED_BANK_NAME);
         assertThat(testPaymentAdvice.getAccountNumber()).isEqualTo(UPDATED_ACCOUNT_NUMBER);
@@ -1566,9 +1830,10 @@ class PaymentAdviceResourceIT {
 
         partialUpdatedPaymentAdvice
             .accountHolderName(UPDATED_ACCOUNT_HOLDER_NAME)
+            .accountHolderBankName(UPDATED_ACCOUNT_HOLDER_BANK_NAME)
             .paymentAmount(UPDATED_PAYMENT_AMOUNT)
-            .bankName(UPDATED_BANK_NAME)
-            .checkNumber(UPDATED_CHECK_NUMBER);
+            .ifscCode(UPDATED_IFSC_CODE)
+            .hissaType(UPDATED_HISSA_TYPE);
 
         restPaymentAdviceMockMvc
             .perform(
@@ -1583,16 +1848,17 @@ class PaymentAdviceResourceIT {
         assertThat(paymentAdviceList).hasSize(databaseSizeBeforeUpdate);
         PaymentAdvice testPaymentAdvice = paymentAdviceList.get(paymentAdviceList.size() - 1);
         assertThat(testPaymentAdvice.getAccountHolderName()).isEqualTo(UPDATED_ACCOUNT_HOLDER_NAME);
+        assertThat(testPaymentAdvice.getAccountHolderBankName()).isEqualTo(UPDATED_ACCOUNT_HOLDER_BANK_NAME);
         assertThat(testPaymentAdvice.getPaymentAmount()).isEqualTo(UPDATED_PAYMENT_AMOUNT);
-        assertThat(testPaymentAdvice.getBankName()).isEqualTo(UPDATED_BANK_NAME);
+        assertThat(testPaymentAdvice.getBankName()).isEqualTo(DEFAULT_BANK_NAME);
         assertThat(testPaymentAdvice.getAccountNumber()).isEqualTo(DEFAULT_ACCOUNT_NUMBER);
-        assertThat(testPaymentAdvice.getIfscCode()).isEqualTo(DEFAULT_IFSC_CODE);
-        assertThat(testPaymentAdvice.getCheckNumber()).isEqualTo(UPDATED_CHECK_NUMBER);
+        assertThat(testPaymentAdvice.getIfscCode()).isEqualTo(UPDATED_IFSC_CODE);
+        assertThat(testPaymentAdvice.getCheckNumber()).isEqualTo(DEFAULT_CHECK_NUMBER);
         assertThat(testPaymentAdvice.getMicrCode()).isEqualTo(DEFAULT_MICR_CODE);
         assertThat(testPaymentAdvice.getPaymentAdviceType()).isEqualTo(DEFAULT_PAYMENT_ADVICE_TYPE);
         assertThat(testPaymentAdvice.getReferenceNumber()).isEqualTo(DEFAULT_REFERENCE_NUMBER);
         assertThat(testPaymentAdvice.getPaymentStatus()).isEqualTo(DEFAULT_PAYMENT_STATUS);
-        assertThat(testPaymentAdvice.getHissaType()).isEqualTo(DEFAULT_HISSA_TYPE);
+        assertThat(testPaymentAdvice.getHissaType()).isEqualTo(UPDATED_HISSA_TYPE);
     }
 
     @Test
@@ -1609,6 +1875,7 @@ class PaymentAdviceResourceIT {
 
         partialUpdatedPaymentAdvice
             .accountHolderName(UPDATED_ACCOUNT_HOLDER_NAME)
+            .accountHolderBankName(UPDATED_ACCOUNT_HOLDER_BANK_NAME)
             .paymentAmount(UPDATED_PAYMENT_AMOUNT)
             .bankName(UPDATED_BANK_NAME)
             .accountNumber(UPDATED_ACCOUNT_NUMBER)
@@ -1633,6 +1900,7 @@ class PaymentAdviceResourceIT {
         assertThat(paymentAdviceList).hasSize(databaseSizeBeforeUpdate);
         PaymentAdvice testPaymentAdvice = paymentAdviceList.get(paymentAdviceList.size() - 1);
         assertThat(testPaymentAdvice.getAccountHolderName()).isEqualTo(UPDATED_ACCOUNT_HOLDER_NAME);
+        assertThat(testPaymentAdvice.getAccountHolderBankName()).isEqualTo(UPDATED_ACCOUNT_HOLDER_BANK_NAME);
         assertThat(testPaymentAdvice.getPaymentAmount()).isEqualTo(UPDATED_PAYMENT_AMOUNT);
         assertThat(testPaymentAdvice.getBankName()).isEqualTo(UPDATED_BANK_NAME);
         assertThat(testPaymentAdvice.getAccountNumber()).isEqualTo(UPDATED_ACCOUNT_NUMBER);

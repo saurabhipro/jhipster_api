@@ -91,11 +91,9 @@ public class LandCompensationCriteria implements Serializable, Criteria {
 
     private StringFilter transactionId;
 
-    private LongFilter khatedarId;
+    private LongFilter projectLandId;
 
     private LongFilter surveyId;
-
-    private LongFilter projectLandId;
 
     private LongFilter paymentAdviceId;
 
@@ -118,9 +116,8 @@ public class LandCompensationCriteria implements Serializable, Criteria {
         this.orderDate = other.orderDate == null ? null : other.orderDate.copy();
         this.paymentAmount = other.paymentAmount == null ? null : other.paymentAmount.copy();
         this.transactionId = other.transactionId == null ? null : other.transactionId.copy();
-        this.khatedarId = other.khatedarId == null ? null : other.khatedarId.copy();
-        this.surveyId = other.surveyId == null ? null : other.surveyId.copy();
         this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
+        this.surveyId = other.surveyId == null ? null : other.surveyId.copy();
         this.paymentAdviceId = other.paymentAdviceId == null ? null : other.paymentAdviceId.copy();
         this.distinct = other.distinct;
     }
@@ -340,19 +337,19 @@ public class LandCompensationCriteria implements Serializable, Criteria {
         this.transactionId = transactionId;
     }
 
-    public LongFilter getKhatedarId() {
-        return khatedarId;
+    public LongFilter getProjectLandId() {
+        return projectLandId;
     }
 
-    public LongFilter khatedarId() {
-        if (khatedarId == null) {
-            khatedarId = new LongFilter();
+    public LongFilter projectLandId() {
+        if (projectLandId == null) {
+            projectLandId = new LongFilter();
         }
-        return khatedarId;
+        return projectLandId;
     }
 
-    public void setKhatedarId(LongFilter khatedarId) {
-        this.khatedarId = khatedarId;
+    public void setProjectLandId(LongFilter projectLandId) {
+        this.projectLandId = projectLandId;
     }
 
     public LongFilter getSurveyId() {
@@ -368,21 +365,6 @@ public class LandCompensationCriteria implements Serializable, Criteria {
 
     public void setSurveyId(LongFilter surveyId) {
         this.surveyId = surveyId;
-    }
-
-    public LongFilter getProjectLandId() {
-        return projectLandId;
-    }
-
-    public LongFilter projectLandId() {
-        if (projectLandId == null) {
-            projectLandId = new LongFilter();
-        }
-        return projectLandId;
-    }
-
-    public void setProjectLandId(LongFilter projectLandId) {
-        this.projectLandId = projectLandId;
     }
 
     public LongFilter getPaymentAdviceId() {
@@ -432,9 +414,8 @@ public class LandCompensationCriteria implements Serializable, Criteria {
             Objects.equals(orderDate, that.orderDate) &&
             Objects.equals(paymentAmount, that.paymentAmount) &&
             Objects.equals(transactionId, that.transactionId) &&
-            Objects.equals(khatedarId, that.khatedarId) &&
-            Objects.equals(surveyId, that.surveyId) &&
             Objects.equals(projectLandId, that.projectLandId) &&
+            Objects.equals(surveyId, that.surveyId) &&
             Objects.equals(paymentAdviceId, that.paymentAdviceId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -457,9 +438,8 @@ public class LandCompensationCriteria implements Serializable, Criteria {
             orderDate,
             paymentAmount,
             transactionId,
-            khatedarId,
-            surveyId,
             projectLandId,
+            surveyId,
             paymentAdviceId,
             distinct
         );
@@ -483,9 +463,8 @@ public class LandCompensationCriteria implements Serializable, Criteria {
             (orderDate != null ? "orderDate=" + orderDate + ", " : "") +
             (paymentAmount != null ? "paymentAmount=" + paymentAmount + ", " : "") +
             (transactionId != null ? "transactionId=" + transactionId + ", " : "") +
-            (khatedarId != null ? "khatedarId=" + khatedarId + ", " : "") +
-            (surveyId != null ? "surveyId=" + surveyId + ", " : "") +
             (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
+            (surveyId != null ? "surveyId=" + surveyId + ", " : "") +
             (paymentAdviceId != null ? "paymentAdviceId=" + paymentAdviceId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

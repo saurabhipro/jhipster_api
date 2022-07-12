@@ -3,7 +3,6 @@ package com.melontech.landsys.service.dto;
 import com.melontech.landsys.domain.enumeration.NoticeStatus;
 import java.io.Serializable;
 import java.util.Objects;
-import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link com.melontech.landsys.domain.NoticeStatusInfo} entity.

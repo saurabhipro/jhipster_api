@@ -84,6 +84,8 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
 
     private StringFilter accountHolderName;
 
+    private StringFilter accountHolderBankName;
+
     private DoubleFilter paymentAmount;
 
     private StringFilter bankName;
@@ -104,13 +106,21 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
 
     private HissaTypeFilter hissaType;
 
+    private LongFilter landCompensationId;
+
     private LongFilter projectLandId;
 
-    private LongFilter landCompensationId;
+    private LongFilter surveyId;
+
+    private LongFilter citizenId;
 
     private LongFilter paymentFileId;
 
     private LongFilter paymentFileReconId;
+
+    private LongFilter landId;
+
+    private LongFilter paymentAdviceDetailsId;
 
     private Boolean distinct;
 
@@ -119,6 +129,7 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
     public PaymentAdviceCriteria(PaymentAdviceCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.accountHolderName = other.accountHolderName == null ? null : other.accountHolderName.copy();
+        this.accountHolderBankName = other.accountHolderBankName == null ? null : other.accountHolderBankName.copy();
         this.paymentAmount = other.paymentAmount == null ? null : other.paymentAmount.copy();
         this.bankName = other.bankName == null ? null : other.bankName.copy();
         this.accountNumber = other.accountNumber == null ? null : other.accountNumber.copy();
@@ -129,10 +140,14 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
         this.referenceNumber = other.referenceNumber == null ? null : other.referenceNumber.copy();
         this.paymentStatus = other.paymentStatus == null ? null : other.paymentStatus.copy();
         this.hissaType = other.hissaType == null ? null : other.hissaType.copy();
-        this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
         this.landCompensationId = other.landCompensationId == null ? null : other.landCompensationId.copy();
+        this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
+        this.surveyId = other.surveyId == null ? null : other.surveyId.copy();
+        this.citizenId = other.citizenId == null ? null : other.citizenId.copy();
         this.paymentFileId = other.paymentFileId == null ? null : other.paymentFileId.copy();
         this.paymentFileReconId = other.paymentFileReconId == null ? null : other.paymentFileReconId.copy();
+        this.landId = other.landId == null ? null : other.landId.copy();
+        this.paymentAdviceDetailsId = other.paymentAdviceDetailsId == null ? null : other.paymentAdviceDetailsId.copy();
         this.distinct = other.distinct;
     }
 
@@ -169,6 +184,21 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
 
     public void setAccountHolderName(StringFilter accountHolderName) {
         this.accountHolderName = accountHolderName;
+    }
+
+    public StringFilter getAccountHolderBankName() {
+        return accountHolderBankName;
+    }
+
+    public StringFilter accountHolderBankName() {
+        if (accountHolderBankName == null) {
+            accountHolderBankName = new StringFilter();
+        }
+        return accountHolderBankName;
+    }
+
+    public void setAccountHolderBankName(StringFilter accountHolderBankName) {
+        this.accountHolderBankName = accountHolderBankName;
     }
 
     public DoubleFilter getPaymentAmount() {
@@ -321,6 +351,21 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
         this.hissaType = hissaType;
     }
 
+    public LongFilter getLandCompensationId() {
+        return landCompensationId;
+    }
+
+    public LongFilter landCompensationId() {
+        if (landCompensationId == null) {
+            landCompensationId = new LongFilter();
+        }
+        return landCompensationId;
+    }
+
+    public void setLandCompensationId(LongFilter landCompensationId) {
+        this.landCompensationId = landCompensationId;
+    }
+
     public LongFilter getProjectLandId() {
         return projectLandId;
     }
@@ -336,19 +381,34 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
         this.projectLandId = projectLandId;
     }
 
-    public LongFilter getLandCompensationId() {
-        return landCompensationId;
+    public LongFilter getSurveyId() {
+        return surveyId;
     }
 
-    public LongFilter landCompensationId() {
-        if (landCompensationId == null) {
-            landCompensationId = new LongFilter();
+    public LongFilter surveyId() {
+        if (surveyId == null) {
+            surveyId = new LongFilter();
         }
-        return landCompensationId;
+        return surveyId;
     }
 
-    public void setLandCompensationId(LongFilter landCompensationId) {
-        this.landCompensationId = landCompensationId;
+    public void setSurveyId(LongFilter surveyId) {
+        this.surveyId = surveyId;
+    }
+
+    public LongFilter getCitizenId() {
+        return citizenId;
+    }
+
+    public LongFilter citizenId() {
+        if (citizenId == null) {
+            citizenId = new LongFilter();
+        }
+        return citizenId;
+    }
+
+    public void setCitizenId(LongFilter citizenId) {
+        this.citizenId = citizenId;
     }
 
     public LongFilter getPaymentFileId() {
@@ -381,6 +441,36 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
         this.paymentFileReconId = paymentFileReconId;
     }
 
+    public LongFilter getLandId() {
+        return landId;
+    }
+
+    public LongFilter landId() {
+        if (landId == null) {
+            landId = new LongFilter();
+        }
+        return landId;
+    }
+
+    public void setLandId(LongFilter landId) {
+        this.landId = landId;
+    }
+
+    public LongFilter getPaymentAdviceDetailsId() {
+        return paymentAdviceDetailsId;
+    }
+
+    public LongFilter paymentAdviceDetailsId() {
+        if (paymentAdviceDetailsId == null) {
+            paymentAdviceDetailsId = new LongFilter();
+        }
+        return paymentAdviceDetailsId;
+    }
+
+    public void setPaymentAdviceDetailsId(LongFilter paymentAdviceDetailsId) {
+        this.paymentAdviceDetailsId = paymentAdviceDetailsId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -401,6 +491,7 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
         return (
             Objects.equals(id, that.id) &&
             Objects.equals(accountHolderName, that.accountHolderName) &&
+            Objects.equals(accountHolderBankName, that.accountHolderBankName) &&
             Objects.equals(paymentAmount, that.paymentAmount) &&
             Objects.equals(bankName, that.bankName) &&
             Objects.equals(accountNumber, that.accountNumber) &&
@@ -411,10 +502,14 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
             Objects.equals(referenceNumber, that.referenceNumber) &&
             Objects.equals(paymentStatus, that.paymentStatus) &&
             Objects.equals(hissaType, that.hissaType) &&
-            Objects.equals(projectLandId, that.projectLandId) &&
             Objects.equals(landCompensationId, that.landCompensationId) &&
+            Objects.equals(projectLandId, that.projectLandId) &&
+            Objects.equals(surveyId, that.surveyId) &&
+            Objects.equals(citizenId, that.citizenId) &&
             Objects.equals(paymentFileId, that.paymentFileId) &&
             Objects.equals(paymentFileReconId, that.paymentFileReconId) &&
+            Objects.equals(landId, that.landId) &&
+            Objects.equals(paymentAdviceDetailsId, that.paymentAdviceDetailsId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -424,6 +519,7 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
         return Objects.hash(
             id,
             accountHolderName,
+            accountHolderBankName,
             paymentAmount,
             bankName,
             accountNumber,
@@ -434,10 +530,14 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
             referenceNumber,
             paymentStatus,
             hissaType,
-            projectLandId,
             landCompensationId,
+            projectLandId,
+            surveyId,
+            citizenId,
             paymentFileId,
             paymentFileReconId,
+            landId,
+            paymentAdviceDetailsId,
             distinct
         );
     }
@@ -448,6 +548,7 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
         return "PaymentAdviceCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
             (accountHolderName != null ? "accountHolderName=" + accountHolderName + ", " : "") +
+            (accountHolderBankName != null ? "accountHolderBankName=" + accountHolderBankName + ", " : "") +
             (paymentAmount != null ? "paymentAmount=" + paymentAmount + ", " : "") +
             (bankName != null ? "bankName=" + bankName + ", " : "") +
             (accountNumber != null ? "accountNumber=" + accountNumber + ", " : "") +
@@ -458,10 +559,14 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
             (referenceNumber != null ? "referenceNumber=" + referenceNumber + ", " : "") +
             (paymentStatus != null ? "paymentStatus=" + paymentStatus + ", " : "") +
             (hissaType != null ? "hissaType=" + hissaType + ", " : "") +
-            (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
             (landCompensationId != null ? "landCompensationId=" + landCompensationId + ", " : "") +
+            (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
+            (surveyId != null ? "surveyId=" + surveyId + ", " : "") +
+            (citizenId != null ? "citizenId=" + citizenId + ", " : "") +
             (paymentFileId != null ? "paymentFileId=" + paymentFileId + ", " : "") +
             (paymentFileReconId != null ? "paymentFileReconId=" + paymentFileReconId + ", " : "") +
+            (landId != null ? "landId=" + landId + ", " : "") +
+            (paymentAdviceDetailsId != null ? "paymentAdviceDetailsId=" + paymentAdviceDetailsId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

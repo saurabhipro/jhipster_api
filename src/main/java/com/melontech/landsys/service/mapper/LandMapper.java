@@ -1,12 +1,16 @@
 package com.melontech.landsys.service.mapper;
 
+import com.melontech.landsys.domain.Citizen;
 import com.melontech.landsys.domain.Land;
 import com.melontech.landsys.domain.LandType;
+import com.melontech.landsys.domain.Project;
 import com.melontech.landsys.domain.State;
 import com.melontech.landsys.domain.Unit;
 import com.melontech.landsys.domain.Village;
+import com.melontech.landsys.service.dto.CitizenDTO;
 import com.melontech.landsys.service.dto.LandDTO;
 import com.melontech.landsys.service.dto.LandTypeDTO;
+import com.melontech.landsys.service.dto.ProjectDTO;
 import com.melontech.landsys.service.dto.StateDTO;
 import com.melontech.landsys.service.dto.UnitDTO;
 import com.melontech.landsys.service.dto.VillageDTO;
@@ -17,17 +21,13 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface LandMapper extends EntityMapper<LandDTO, Land> {
-    @Mapping(target = "state", source = "state", qualifiedByName = "stateName")
     @Mapping(target = "village", source = "village", qualifiedByName = "villageName")
     @Mapping(target = "unit", source = "unit", qualifiedByName = "unitName")
     @Mapping(target = "landType", source = "landType", qualifiedByName = "landTypeName")
+    @Mapping(target = "state", source = "state", qualifiedByName = "stateName")
+    @Mapping(target = "citizen", source = "citizen", qualifiedByName = "citizenName")
+    @Mapping(target = "project", source = "project", qualifiedByName = "projectName")
     LandDTO toDto(Land s);
-
-    @Named("stateName")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "name", source = "name")
-    StateDTO toDtoStateName(State state);
 
     @Named("villageName")
     @BeanMapping(ignoreByDefault = true)
@@ -46,4 +46,22 @@ public interface LandMapper extends EntityMapper<LandDTO, Land> {
     @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "name")
     LandTypeDTO toDtoLandTypeName(LandType landType);
+
+    @Named("stateName")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
+    StateDTO toDtoStateName(State state);
+
+    @Named("citizenName")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
+    CitizenDTO toDtoCitizenName(Citizen citizen);
+
+    @Named("projectName")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
+    ProjectDTO toDtoProjectName(Project project);
 }

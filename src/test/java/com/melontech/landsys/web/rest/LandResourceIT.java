@@ -10,6 +10,7 @@ import com.melontech.landsys.IntegrationTest;
 import com.melontech.landsys.domain.Land;
 import com.melontech.landsys.domain.LandType;
 import com.melontech.landsys.domain.ProjectLand;
+import com.melontech.landsys.domain.State;
 import com.melontech.landsys.domain.Unit;
 import com.melontech.landsys.domain.Village;
 import com.melontech.landsys.repository.LandRepository;
@@ -49,6 +50,9 @@ class LandResourceIT {
 
     private static final String DEFAULT_KHASRA_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_KHASRA_NUMBER = "BBBBBBBBBB";
+
+    private static final String DEFAULT_KAHTAUNI_KHATA = "AAAAAAAAAA";
+    private static final String UPDATED_KAHTAUNI_KHATA = "BBBBBBBBBB";
 
     private static final Double DEFAULT_AREA = 1D;
     private static final Double UPDATED_AREA = 2D;
@@ -107,6 +111,7 @@ class LandResourceIT {
         Land land = new Land()
             .ulpin(DEFAULT_ULPIN)
             .khasraNumber(DEFAULT_KHASRA_NUMBER)
+            .kahtauniKhata(DEFAULT_KAHTAUNI_KHATA)
             .area(DEFAULT_AREA)
             .landMarketValue(DEFAULT_LAND_MARKET_VALUE)
             .structuralValue(DEFAULT_STRUCTURAL_VALUE)
@@ -145,6 +150,16 @@ class LandResourceIT {
         }
         land.setLandType(landType);
         // Add required entity
+        State state;
+        if (TestUtil.findAll(em, State.class).isEmpty()) {
+            state = StateResourceIT.createEntity(em);
+            em.persist(state);
+            em.flush();
+        } else {
+            state = TestUtil.findAll(em, State.class).get(0);
+        }
+        land.setState(state);
+        // Add required entity
         ProjectLand projectLand;
         if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
             projectLand = ProjectLandResourceIT.createEntity(em);
@@ -167,6 +182,7 @@ class LandResourceIT {
         Land land = new Land()
             .ulpin(UPDATED_ULPIN)
             .khasraNumber(UPDATED_KHASRA_NUMBER)
+            .kahtauniKhata(UPDATED_KAHTAUNI_KHATA)
             .area(UPDATED_AREA)
             .landMarketValue(UPDATED_LAND_MARKET_VALUE)
             .structuralValue(UPDATED_STRUCTURAL_VALUE)
@@ -205,6 +221,16 @@ class LandResourceIT {
         }
         land.setLandType(landType);
         // Add required entity
+        State state;
+        if (TestUtil.findAll(em, State.class).isEmpty()) {
+            state = StateResourceIT.createUpdatedEntity(em);
+            em.persist(state);
+            em.flush();
+        } else {
+            state = TestUtil.findAll(em, State.class).get(0);
+        }
+        land.setState(state);
+        // Add required entity
         ProjectLand projectLand;
         if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
             projectLand = ProjectLandResourceIT.createUpdatedEntity(em);
@@ -238,6 +264,7 @@ class LandResourceIT {
         Land testLand = landList.get(landList.size() - 1);
         assertThat(testLand.getUlpin()).isEqualTo(DEFAULT_ULPIN);
         assertThat(testLand.getKhasraNumber()).isEqualTo(DEFAULT_KHASRA_NUMBER);
+        assertThat(testLand.getKahtauniKhata()).isEqualTo(DEFAULT_KAHTAUNI_KHATA);
         assertThat(testLand.getArea()).isEqualTo(DEFAULT_AREA);
         assertThat(testLand.getLandMarketValue()).isEqualTo(DEFAULT_LAND_MARKET_VALUE);
         assertThat(testLand.getStructuralValue()).isEqualTo(DEFAULT_STRUCTURAL_VALUE);
@@ -298,6 +325,7 @@ class LandResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(land.getId().intValue())))
             .andExpect(jsonPath("$.[*].ulpin").value(hasItem(DEFAULT_ULPIN)))
             .andExpect(jsonPath("$.[*].khasraNumber").value(hasItem(DEFAULT_KHASRA_NUMBER)))
+            .andExpect(jsonPath("$.[*].kahtauniKhata").value(hasItem(DEFAULT_KAHTAUNI_KHATA)))
             .andExpect(jsonPath("$.[*].area").value(hasItem(DEFAULT_AREA.doubleValue())))
             .andExpect(jsonPath("$.[*].landMarketValue").value(hasItem(DEFAULT_LAND_MARKET_VALUE.doubleValue())))
             .andExpect(jsonPath("$.[*].structuralValue").value(hasItem(DEFAULT_STRUCTURAL_VALUE.doubleValue())))
@@ -339,6 +367,7 @@ class LandResourceIT {
             .andExpect(jsonPath("$.id").value(land.getId().intValue()))
             .andExpect(jsonPath("$.ulpin").value(DEFAULT_ULPIN))
             .andExpect(jsonPath("$.khasraNumber").value(DEFAULT_KHASRA_NUMBER))
+            .andExpect(jsonPath("$.kahtauniKhata").value(DEFAULT_KAHTAUNI_KHATA))
             .andExpect(jsonPath("$.area").value(DEFAULT_AREA.doubleValue()))
             .andExpect(jsonPath("$.landMarketValue").value(DEFAULT_LAND_MARKET_VALUE.doubleValue()))
             .andExpect(jsonPath("$.structuralValue").value(DEFAULT_STRUCTURAL_VALUE.doubleValue()))
@@ -370,6 +399,7 @@ class LandResourceIT {
         updatedLand
             .ulpin(UPDATED_ULPIN)
             .khasraNumber(UPDATED_KHASRA_NUMBER)
+            .kahtauniKhata(UPDATED_KAHTAUNI_KHATA)
             .area(UPDATED_AREA)
             .landMarketValue(UPDATED_LAND_MARKET_VALUE)
             .structuralValue(UPDATED_STRUCTURAL_VALUE)
@@ -393,6 +423,7 @@ class LandResourceIT {
         Land testLand = landList.get(landList.size() - 1);
         assertThat(testLand.getUlpin()).isEqualTo(UPDATED_ULPIN);
         assertThat(testLand.getKhasraNumber()).isEqualTo(UPDATED_KHASRA_NUMBER);
+        assertThat(testLand.getKahtauniKhata()).isEqualTo(UPDATED_KAHTAUNI_KHATA);
         assertThat(testLand.getArea()).isEqualTo(UPDATED_AREA);
         assertThat(testLand.getLandMarketValue()).isEqualTo(UPDATED_LAND_MARKET_VALUE);
         assertThat(testLand.getStructuralValue()).isEqualTo(UPDATED_STRUCTURAL_VALUE);
@@ -480,13 +511,13 @@ class LandResourceIT {
         partialUpdatedLand.setId(land.getId());
 
         partialUpdatedLand
+            .kahtauniKhata(UPDATED_KAHTAUNI_KHATA)
             .area(UPDATED_AREA)
             .landMarketValue(UPDATED_LAND_MARKET_VALUE)
             .structuralValue(UPDATED_STRUCTURAL_VALUE)
             .horticultureValue(UPDATED_HORTICULTURE_VALUE)
             .forestValue(UPDATED_FOREST_VALUE)
-            .distanceFromCity(UPDATED_DISTANCE_FROM_CITY)
-            .totalLandValue(UPDATED_TOTAL_LAND_VALUE);
+            .distanceFromCity(UPDATED_DISTANCE_FROM_CITY);
 
         restLandMockMvc
             .perform(
@@ -502,13 +533,14 @@ class LandResourceIT {
         Land testLand = landList.get(landList.size() - 1);
         assertThat(testLand.getUlpin()).isEqualTo(DEFAULT_ULPIN);
         assertThat(testLand.getKhasraNumber()).isEqualTo(DEFAULT_KHASRA_NUMBER);
+        assertThat(testLand.getKahtauniKhata()).isEqualTo(UPDATED_KAHTAUNI_KHATA);
         assertThat(testLand.getArea()).isEqualTo(UPDATED_AREA);
         assertThat(testLand.getLandMarketValue()).isEqualTo(UPDATED_LAND_MARKET_VALUE);
         assertThat(testLand.getStructuralValue()).isEqualTo(UPDATED_STRUCTURAL_VALUE);
         assertThat(testLand.getHorticultureValue()).isEqualTo(UPDATED_HORTICULTURE_VALUE);
         assertThat(testLand.getForestValue()).isEqualTo(UPDATED_FOREST_VALUE);
         assertThat(testLand.getDistanceFromCity()).isEqualTo(UPDATED_DISTANCE_FROM_CITY);
-        assertThat(testLand.getTotalLandValue()).isEqualTo(UPDATED_TOTAL_LAND_VALUE);
+        assertThat(testLand.getTotalLandValue()).isEqualTo(DEFAULT_TOTAL_LAND_VALUE);
     }
 
     @Test
@@ -526,6 +558,7 @@ class LandResourceIT {
         partialUpdatedLand
             .ulpin(UPDATED_ULPIN)
             .khasraNumber(UPDATED_KHASRA_NUMBER)
+            .kahtauniKhata(UPDATED_KAHTAUNI_KHATA)
             .area(UPDATED_AREA)
             .landMarketValue(UPDATED_LAND_MARKET_VALUE)
             .structuralValue(UPDATED_STRUCTURAL_VALUE)
@@ -548,6 +581,7 @@ class LandResourceIT {
         Land testLand = landList.get(landList.size() - 1);
         assertThat(testLand.getUlpin()).isEqualTo(UPDATED_ULPIN);
         assertThat(testLand.getKhasraNumber()).isEqualTo(UPDATED_KHASRA_NUMBER);
+        assertThat(testLand.getKahtauniKhata()).isEqualTo(UPDATED_KAHTAUNI_KHATA);
         assertThat(testLand.getArea()).isEqualTo(UPDATED_AREA);
         assertThat(testLand.getLandMarketValue()).isEqualTo(UPDATED_LAND_MARKET_VALUE);
         assertThat(testLand.getStructuralValue()).isEqualTo(UPDATED_STRUCTURAL_VALUE);

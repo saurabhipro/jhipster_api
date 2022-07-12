@@ -27,16 +27,18 @@ public interface ProjectLandRepository extends JpaRepository<ProjectLand, Long> 
     }
 
     @Query(
-        value = "select distinct projectLand from ProjectLand projectLand left join fetch projectLand.project left join fetch projectLand.land",
+        value = "select distinct projectLand from ProjectLand projectLand left join fetch projectLand.land left join fetch projectLand.project left join fetch projectLand.citizen",
         countQuery = "select count(distinct projectLand) from ProjectLand projectLand"
     )
     Page<ProjectLand> findAllWithToOneRelationships(Pageable pageable);
 
-    @Query("select distinct projectLand from ProjectLand projectLand left join fetch projectLand.project left join fetch projectLand.land")
+    @Query(
+        "select distinct projectLand from ProjectLand projectLand left join fetch projectLand.land left join fetch projectLand.project left join fetch projectLand.citizen"
+    )
     List<ProjectLand> findAllWithToOneRelationships();
 
     @Query(
-        "select projectLand from ProjectLand projectLand left join fetch projectLand.project left join fetch projectLand.land where projectLand.id =:id"
+        "select projectLand from ProjectLand projectLand left join fetch projectLand.land left join fetch projectLand.project left join fetch projectLand.citizen where projectLand.id =:id"
     )
     Optional<ProjectLand> findOneWithToOneRelationships(@Param("id") Long id);
 }

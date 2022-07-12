@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.melontech.landsys.IntegrationTest;
 import com.melontech.landsys.domain.Bank;
-import com.melontech.landsys.domain.BankBranch;
 import com.melontech.landsys.repository.BankRepository;
 import com.melontech.landsys.service.dto.BankDTO;
 import com.melontech.landsys.service.mapper.BankMapper;
@@ -66,16 +65,6 @@ class BankResourceIT {
      */
     public static Bank createEntity(EntityManager em) {
         Bank bank = new Bank().name(DEFAULT_NAME).code(DEFAULT_CODE);
-        // Add required entity
-        BankBranch bankBranch;
-        if (TestUtil.findAll(em, BankBranch.class).isEmpty()) {
-            bankBranch = BankBranchResourceIT.createEntity(em);
-            em.persist(bankBranch);
-            em.flush();
-        } else {
-            bankBranch = TestUtil.findAll(em, BankBranch.class).get(0);
-        }
-        bank.getBankNames().add(bankBranch);
         return bank;
     }
 
@@ -87,16 +76,6 @@ class BankResourceIT {
      */
     public static Bank createUpdatedEntity(EntityManager em) {
         Bank bank = new Bank().name(UPDATED_NAME).code(UPDATED_CODE);
-        // Add required entity
-        BankBranch bankBranch;
-        if (TestUtil.findAll(em, BankBranch.class).isEmpty()) {
-            bankBranch = BankBranchResourceIT.createUpdatedEntity(em);
-            em.persist(bankBranch);
-            em.flush();
-        } else {
-            bankBranch = TestUtil.findAll(em, BankBranch.class).get(0);
-        }
-        bank.getBankNames().add(bankBranch);
         return bank;
     }
 

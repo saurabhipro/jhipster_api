@@ -48,8 +48,6 @@ public class NoticeStatusInfoCriteria implements Serializable, Criteria {
 
     private NoticeStatusFilter status;
 
-    private LongFilter khatedarId;
-
     private LongFilter projectLandId;
 
     private Boolean distinct;
@@ -59,7 +57,6 @@ public class NoticeStatusInfoCriteria implements Serializable, Criteria {
     public NoticeStatusInfoCriteria(NoticeStatusInfoCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.status = other.status == null ? null : other.status.copy();
-        this.khatedarId = other.khatedarId == null ? null : other.khatedarId.copy();
         this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
         this.distinct = other.distinct;
     }
@@ -99,21 +96,6 @@ public class NoticeStatusInfoCriteria implements Serializable, Criteria {
         this.status = status;
     }
 
-    public LongFilter getKhatedarId() {
-        return khatedarId;
-    }
-
-    public LongFilter khatedarId() {
-        if (khatedarId == null) {
-            khatedarId = new LongFilter();
-        }
-        return khatedarId;
-    }
-
-    public void setKhatedarId(LongFilter khatedarId) {
-        this.khatedarId = khatedarId;
-    }
-
     public LongFilter getProjectLandId() {
         return projectLandId;
     }
@@ -149,7 +131,6 @@ public class NoticeStatusInfoCriteria implements Serializable, Criteria {
         return (
             Objects.equals(id, that.id) &&
             Objects.equals(status, that.status) &&
-            Objects.equals(khatedarId, that.khatedarId) &&
             Objects.equals(projectLandId, that.projectLandId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -157,7 +138,7 @@ public class NoticeStatusInfoCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, status, khatedarId, projectLandId, distinct);
+        return Objects.hash(id, status, projectLandId, distinct);
     }
 
     // prettier-ignore
@@ -166,7 +147,6 @@ public class NoticeStatusInfoCriteria implements Serializable, Criteria {
         return "NoticeStatusInfoCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
             (status != null ? "status=" + status + ", " : "") +
-            (khatedarId != null ? "khatedarId=" + khatedarId + ", " : "") +
             (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

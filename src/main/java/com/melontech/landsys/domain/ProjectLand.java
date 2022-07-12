@@ -37,35 +37,48 @@ public class ProjectLand implements Serializable {
     @Column(name = "hissa_type")
     private HissaType hissaType;
 
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = { "paymentAdvices", "village", "unit", "landType", "state", "citizen", "project", "projectLands" },
+        allowSetters = true
+    )
+    private Land land;
+
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "projectLands" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "lands", "projectLands" }, allowSetters = true)
     private Project project;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "state", "village", "unit", "landType", "projectLands" }, allowSetters = true)
-    private Land land;
+    @JsonIgnoreProperties(value = { "lands", "bankBranch", "projectLands", "paymentAdvices" }, allowSetters = true)
+    private Citizen citizen;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "khatedars", "projectLands" }, allowSetters = true)
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "projectLands" }, allowSetters = true)
     private NoticeStatusInfo noticeStatusInfo;
 
-    @OneToMany(mappedBy = "projectLand")
-    @JsonIgnoreProperties(value = { "citizen", "projectLand", "noticeStatusInfo", "survey", "landCompensations" }, allowSetters = true)
-    private Set<Khatedar> khatedars = new HashSet<>();
+    @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentAdvices" }, allowSetters = true)
+    @OneToOne(mappedBy = "projectLand")
+    private Survey survey;
+
+    @JsonIgnoreProperties(value = { "projectLand", "survey", "paymentAdvices" }, allowSetters = true)
+    @OneToOne(mappedBy = "projectLand")
+    private LandCompensation landCompensation;
 
     @OneToMany(mappedBy = "projectLand")
-    @JsonIgnoreProperties(value = { "khatedar", "projectLand", "landCompensations" }, allowSetters = true)
-    private Set<Survey> surveys = new HashSet<>();
-
-    @OneToMany(mappedBy = "projectLand")
-    @JsonIgnoreProperties(value = { "khatedar", "survey", "projectLand", "paymentAdvices" }, allowSetters = true)
-    private Set<LandCompensation> landCompensations = new HashSet<>();
-
-    @OneToMany(mappedBy = "projectLand")
-    @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentFile", "paymentFileRecon" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = {
+            "landCompensation", "projectLand", "survey", "citizen", "paymentFile", "paymentFileRecon", "land", "paymentAdviceDetails",
+        },
+        allowSetters = true
+    )
     private Set<PaymentAdvice> paymentAdvices = new HashSet<>();
+
+    @OneToMany(mappedBy = "projectLand")
+    @JsonIgnoreProperties(value = { "paymentAdvice", "projectLand" }, allowSetters = true)
+    private Set<PaymentAdviceDetails> paymentAdviceDetails = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -134,6 +147,19 @@ public class ProjectLand implements Serializable {
         this.hissaType = hissaType;
     }
 
+    public Land getLand() {
+        return this.land;
+    }
+
+    public void setLand(Land land) {
+        this.land = land;
+    }
+
+    public ProjectLand land(Land land) {
+        this.setLand(land);
+        return this;
+    }
+
     public Project getProject() {
         return this.project;
     }
@@ -147,16 +173,16 @@ public class ProjectLand implements Serializable {
         return this;
     }
 
-    public Land getLand() {
-        return this.land;
+    public Citizen getCitizen() {
+        return this.citizen;
     }
 
-    public void setLand(Land land) {
-        this.land = land;
+    public void setCitizen(Citizen citizen) {
+        this.citizen = citizen;
     }
 
-    public ProjectLand land(Land land) {
-        this.setLand(land);
+    public ProjectLand citizen(Citizen citizen) {
+        this.setCitizen(citizen);
         return this;
     }
 
@@ -173,96 +199,41 @@ public class ProjectLand implements Serializable {
         return this;
     }
 
-    public Set<Khatedar> getKhatedars() {
-        return this.khatedars;
+    public Survey getSurvey() {
+        return this.survey;
     }
 
-    public void setKhatedars(Set<Khatedar> khatedars) {
-        if (this.khatedars != null) {
-            this.khatedars.forEach(i -> i.setProjectLand(null));
+    public void setSurvey(Survey survey) {
+        if (this.survey != null) {
+            this.survey.setProjectLand(null);
         }
-        if (khatedars != null) {
-            khatedars.forEach(i -> i.setProjectLand(this));
+        if (survey != null) {
+            survey.setProjectLand(this);
         }
-        this.khatedars = khatedars;
+        this.survey = survey;
     }
 
-    public ProjectLand khatedars(Set<Khatedar> khatedars) {
-        this.setKhatedars(khatedars);
+    public ProjectLand survey(Survey survey) {
+        this.setSurvey(survey);
         return this;
     }
 
-    public ProjectLand addKhatedar(Khatedar khatedar) {
-        this.khatedars.add(khatedar);
-        khatedar.setProjectLand(this);
-        return this;
+    public LandCompensation getLandCompensation() {
+        return this.landCompensation;
     }
 
-    public ProjectLand removeKhatedar(Khatedar khatedar) {
-        this.khatedars.remove(khatedar);
-        khatedar.setProjectLand(null);
-        return this;
-    }
-
-    public Set<Survey> getSurveys() {
-        return this.surveys;
-    }
-
-    public void setSurveys(Set<Survey> surveys) {
-        if (this.surveys != null) {
-            this.surveys.forEach(i -> i.setProjectLand(null));
+    public void setLandCompensation(LandCompensation landCompensation) {
+        if (this.landCompensation != null) {
+            this.landCompensation.setProjectLand(null);
         }
-        if (surveys != null) {
-            surveys.forEach(i -> i.setProjectLand(this));
+        if (landCompensation != null) {
+            landCompensation.setProjectLand(this);
         }
-        this.surveys = surveys;
+        this.landCompensation = landCompensation;
     }
 
-    public ProjectLand surveys(Set<Survey> surveys) {
-        this.setSurveys(surveys);
-        return this;
-    }
-
-    public ProjectLand addSurvey(Survey survey) {
-        this.surveys.add(survey);
-        survey.setProjectLand(this);
-        return this;
-    }
-
-    public ProjectLand removeSurvey(Survey survey) {
-        this.surveys.remove(survey);
-        survey.setProjectLand(null);
-        return this;
-    }
-
-    public Set<LandCompensation> getLandCompensations() {
-        return this.landCompensations;
-    }
-
-    public void setLandCompensations(Set<LandCompensation> landCompensations) {
-        if (this.landCompensations != null) {
-            this.landCompensations.forEach(i -> i.setProjectLand(null));
-        }
-        if (landCompensations != null) {
-            landCompensations.forEach(i -> i.setProjectLand(this));
-        }
-        this.landCompensations = landCompensations;
-    }
-
-    public ProjectLand landCompensations(Set<LandCompensation> landCompensations) {
-        this.setLandCompensations(landCompensations);
-        return this;
-    }
-
-    public ProjectLand addLandCompensation(LandCompensation landCompensation) {
-        this.landCompensations.add(landCompensation);
-        landCompensation.setProjectLand(this);
-        return this;
-    }
-
-    public ProjectLand removeLandCompensation(LandCompensation landCompensation) {
-        this.landCompensations.remove(landCompensation);
-        landCompensation.setProjectLand(null);
+    public ProjectLand landCompensation(LandCompensation landCompensation) {
+        this.setLandCompensation(landCompensation);
         return this;
     }
 
@@ -294,6 +265,37 @@ public class ProjectLand implements Serializable {
     public ProjectLand removePaymentAdvice(PaymentAdvice paymentAdvice) {
         this.paymentAdvices.remove(paymentAdvice);
         paymentAdvice.setProjectLand(null);
+        return this;
+    }
+
+    public Set<PaymentAdviceDetails> getPaymentAdviceDetails() {
+        return this.paymentAdviceDetails;
+    }
+
+    public void setPaymentAdviceDetails(Set<PaymentAdviceDetails> paymentAdviceDetails) {
+        if (this.paymentAdviceDetails != null) {
+            this.paymentAdviceDetails.forEach(i -> i.setProjectLand(null));
+        }
+        if (paymentAdviceDetails != null) {
+            paymentAdviceDetails.forEach(i -> i.setProjectLand(this));
+        }
+        this.paymentAdviceDetails = paymentAdviceDetails;
+    }
+
+    public ProjectLand paymentAdviceDetails(Set<PaymentAdviceDetails> paymentAdviceDetails) {
+        this.setPaymentAdviceDetails(paymentAdviceDetails);
+        return this;
+    }
+
+    public ProjectLand addPaymentAdviceDetails(PaymentAdviceDetails paymentAdviceDetails) {
+        this.paymentAdviceDetails.add(paymentAdviceDetails);
+        paymentAdviceDetails.setProjectLand(this);
+        return this;
+    }
+
+    public ProjectLand removePaymentAdviceDetails(PaymentAdviceDetails paymentAdviceDetails) {
+        this.paymentAdviceDetails.remove(paymentAdviceDetails);
+        paymentAdviceDetails.setProjectLand(null);
         return this;
     }
 

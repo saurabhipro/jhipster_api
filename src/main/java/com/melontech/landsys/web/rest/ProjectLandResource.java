@@ -9,6 +9,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -143,13 +144,24 @@ public class ProjectLandResource {
      *
      * @param pageable the pagination information.
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
+     * @param filter the filter of the request.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of projectLands in body.
      */
     @GetMapping("/project-lands")
     public ResponseEntity<List<ProjectLandDTO>> getAllProjectLands(
         @org.springdoc.api.annotations.ParameterObject Pageable pageable,
+        @RequestParam(required = false) String filter,
         @RequestParam(required = false, defaultValue = "true") boolean eagerload
     ) {
+        if ("survey-is-null".equals(filter)) {
+            log.debug("REST request to get all ProjectLands where survey is null");
+            return new ResponseEntity<>(projectLandService.findAllWhereSurveyIsNull(), HttpStatus.OK);
+        }
+
+        if ("landcompensation-is-null".equals(filter)) {
+            log.debug("REST request to get all ProjectLands where landCompensation is null");
+            return new ResponseEntity<>(projectLandService.findAllWhereLandCompensationIsNull(), HttpStatus.OK);
+        }
         log.debug("REST request to get a page of ProjectLands");
         Page<ProjectLandDTO> page;
         if (eagerload) {

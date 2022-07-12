@@ -44,11 +44,9 @@ public class LandCompensationDTO implements Serializable {
 
     private String transactionId;
 
-    private KhatedarDTO khatedar;
+    private ProjectLandDTO projectLand;
 
     private SurveyDTO survey;
-
-    private ProjectLandDTO projectLand;
 
     public Long getId() {
         return id;
@@ -162,12 +160,12 @@ public class LandCompensationDTO implements Serializable {
         this.transactionId = transactionId;
     }
 
-    public KhatedarDTO getKhatedar() {
-        return khatedar;
+    public ProjectLandDTO getProjectLand() {
+        return projectLand;
     }
 
-    public void setKhatedar(KhatedarDTO khatedar) {
-        this.khatedar = khatedar;
+    public void setProjectLand(ProjectLandDTO projectLand) {
+        this.projectLand = projectLand;
     }
 
     public SurveyDTO getSurvey() {
@@ -176,14 +174,6 @@ public class LandCompensationDTO implements Serializable {
 
     public void setSurvey(SurveyDTO survey) {
         this.survey = survey;
-    }
-
-    public ProjectLandDTO getProjectLand() {
-        return projectLand;
-    }
-
-    public void setProjectLand(ProjectLandDTO projectLand) {
-        this.projectLand = projectLand;
     }
 
     @Override
@@ -225,9 +215,8 @@ public class LandCompensationDTO implements Serializable {
             ", orderDate='" + getOrderDate() + "'" +
             ", paymentAmount=" + getPaymentAmount() +
             ", transactionId='" + getTransactionId() + "'" +
-            ", khatedar=" + getKhatedar() +
-            ", survey=" + getSurvey() +
             ", projectLand=" + getProjectLand() +
+            ", survey=" + getSurvey() +
             "}";
     }
 }

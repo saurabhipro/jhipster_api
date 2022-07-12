@@ -18,6 +18,9 @@ public class PaymentAdviceDTO implements Serializable {
     private String accountHolderName;
 
     @NotNull
+    private String accountHolderBankName;
+
+    @NotNull
     private Double paymentAmount;
 
     @NotNull
@@ -43,11 +46,17 @@ public class PaymentAdviceDTO implements Serializable {
     @NotNull
     private HissaType hissaType;
 
-    private ProjectLandDTO projectLand;
-
     private LandCompensationDTO landCompensation;
 
+    private ProjectLandDTO projectLand;
+
+    private SurveyDTO survey;
+
+    private CitizenDTO citizen;
+
     private PaymentFileDTO paymentFile;
+
+    private LandDTO land;
 
     public Long getId() {
         return id;
@@ -63,6 +72,14 @@ public class PaymentAdviceDTO implements Serializable {
 
     public void setAccountHolderName(String accountHolderName) {
         this.accountHolderName = accountHolderName;
+    }
+
+    public String getAccountHolderBankName() {
+        return accountHolderBankName;
+    }
+
+    public void setAccountHolderBankName(String accountHolderBankName) {
+        this.accountHolderBankName = accountHolderBankName;
     }
 
     public Double getPaymentAmount() {
@@ -145,14 +162,6 @@ public class PaymentAdviceDTO implements Serializable {
         this.hissaType = hissaType;
     }
 
-    public ProjectLandDTO getProjectLand() {
-        return projectLand;
-    }
-
-    public void setProjectLand(ProjectLandDTO projectLand) {
-        this.projectLand = projectLand;
-    }
-
     public LandCompensationDTO getLandCompensation() {
         return landCompensation;
     }
@@ -161,12 +170,44 @@ public class PaymentAdviceDTO implements Serializable {
         this.landCompensation = landCompensation;
     }
 
+    public ProjectLandDTO getProjectLand() {
+        return projectLand;
+    }
+
+    public void setProjectLand(ProjectLandDTO projectLand) {
+        this.projectLand = projectLand;
+    }
+
+    public SurveyDTO getSurvey() {
+        return survey;
+    }
+
+    public void setSurvey(SurveyDTO survey) {
+        this.survey = survey;
+    }
+
+    public CitizenDTO getCitizen() {
+        return citizen;
+    }
+
+    public void setCitizen(CitizenDTO citizen) {
+        this.citizen = citizen;
+    }
+
     public PaymentFileDTO getPaymentFile() {
         return paymentFile;
     }
 
     public void setPaymentFile(PaymentFileDTO paymentFile) {
         this.paymentFile = paymentFile;
+    }
+
+    public LandDTO getLand() {
+        return land;
+    }
+
+    public void setLand(LandDTO land) {
+        this.land = land;
     }
 
     @Override
@@ -196,6 +237,7 @@ public class PaymentAdviceDTO implements Serializable {
         return "PaymentAdviceDTO{" +
             "id=" + getId() +
             ", accountHolderName='" + getAccountHolderName() + "'" +
+            ", accountHolderBankName='" + getAccountHolderBankName() + "'" +
             ", paymentAmount=" + getPaymentAmount() +
             ", bankName='" + getBankName() + "'" +
             ", accountNumber='" + getAccountNumber() + "'" +
@@ -206,9 +248,12 @@ public class PaymentAdviceDTO implements Serializable {
             ", referenceNumber='" + getReferenceNumber() + "'" +
             ", paymentStatus='" + getPaymentStatus() + "'" +
             ", hissaType='" + getHissaType() + "'" +
-            ", projectLand=" + getProjectLand() +
             ", landCompensation=" + getLandCompensation() +
+            ", projectLand=" + getProjectLand() +
+            ", survey=" + getSurvey() +
+            ", citizen=" + getCitizen() +
             ", paymentFile=" + getPaymentFile() +
+            ", land=" + getLand() +
             "}";
     }
 }

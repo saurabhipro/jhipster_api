@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.melontech.landsys.IntegrationTest;
-import com.melontech.landsys.domain.Khatedar;
 import com.melontech.landsys.domain.LandCompensation;
 import com.melontech.landsys.domain.PaymentAdvice;
 import com.melontech.landsys.domain.ProjectLand;
@@ -131,26 +130,6 @@ class LandCompensationResourceIT {
             .paymentAmount(DEFAULT_PAYMENT_AMOUNT)
             .transactionId(DEFAULT_TRANSACTION_ID);
         // Add required entity
-        Khatedar khatedar;
-        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
-            khatedar = KhatedarResourceIT.createEntity(em);
-            em.persist(khatedar);
-            em.flush();
-        } else {
-            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
-        }
-        landCompensation.setKhatedar(khatedar);
-        // Add required entity
-        Survey survey;
-        if (TestUtil.findAll(em, Survey.class).isEmpty()) {
-            survey = SurveyResourceIT.createEntity(em);
-            em.persist(survey);
-            em.flush();
-        } else {
-            survey = TestUtil.findAll(em, Survey.class).get(0);
-        }
-        landCompensation.setSurvey(survey);
-        // Add required entity
         ProjectLand projectLand;
         if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
             projectLand = ProjectLandResourceIT.createEntity(em);
@@ -160,16 +139,6 @@ class LandCompensationResourceIT {
             projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
         }
         landCompensation.setProjectLand(projectLand);
-        // Add required entity
-        PaymentAdvice paymentAdvice;
-        if (TestUtil.findAll(em, PaymentAdvice.class).isEmpty()) {
-            paymentAdvice = PaymentAdviceResourceIT.createEntity(em);
-            em.persist(paymentAdvice);
-            em.flush();
-        } else {
-            paymentAdvice = TestUtil.findAll(em, PaymentAdvice.class).get(0);
-        }
-        landCompensation.getPaymentAdvices().add(paymentAdvice);
         return landCompensation;
     }
 
@@ -195,26 +164,6 @@ class LandCompensationResourceIT {
             .paymentAmount(UPDATED_PAYMENT_AMOUNT)
             .transactionId(UPDATED_TRANSACTION_ID);
         // Add required entity
-        Khatedar khatedar;
-        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
-            khatedar = KhatedarResourceIT.createUpdatedEntity(em);
-            em.persist(khatedar);
-            em.flush();
-        } else {
-            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
-        }
-        landCompensation.setKhatedar(khatedar);
-        // Add required entity
-        Survey survey;
-        if (TestUtil.findAll(em, Survey.class).isEmpty()) {
-            survey = SurveyResourceIT.createUpdatedEntity(em);
-            em.persist(survey);
-            em.flush();
-        } else {
-            survey = TestUtil.findAll(em, Survey.class).get(0);
-        }
-        landCompensation.setSurvey(survey);
-        // Add required entity
         ProjectLand projectLand;
         if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
             projectLand = ProjectLandResourceIT.createUpdatedEntity(em);
@@ -224,16 +173,6 @@ class LandCompensationResourceIT {
             projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
         }
         landCompensation.setProjectLand(projectLand);
-        // Add required entity
-        PaymentAdvice paymentAdvice;
-        if (TestUtil.findAll(em, PaymentAdvice.class).isEmpty()) {
-            paymentAdvice = PaymentAdviceResourceIT.createUpdatedEntity(em);
-            em.persist(paymentAdvice);
-            em.flush();
-        } else {
-            paymentAdvice = TestUtil.findAll(em, PaymentAdvice.class).get(0);
-        }
-        landCompensation.getPaymentAdvices().add(paymentAdvice);
         return landCompensation;
     }
 
@@ -1676,28 +1615,17 @@ class LandCompensationResourceIT {
 
     @Test
     @Transactional
-    void getAllLandCompensationsByKhatedarIsEqualToSomething() throws Exception {
-        // Initialize the database
+    void getAllLandCompensationsByProjectLandIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        ProjectLand projectLand = landCompensation.getProjectLand();
         landCompensationRepository.saveAndFlush(landCompensation);
-        Khatedar khatedar;
-        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
-            khatedar = KhatedarResourceIT.createEntity(em);
-            em.persist(khatedar);
-            em.flush();
-        } else {
-            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
-        }
-        em.persist(khatedar);
-        em.flush();
-        landCompensation.setKhatedar(khatedar);
-        landCompensationRepository.saveAndFlush(landCompensation);
-        Long khatedarId = khatedar.getId();
+        Long projectLandId = projectLand.getId();
 
-        // Get all the landCompensationList where khatedar equals to khatedarId
-        defaultLandCompensationShouldBeFound("khatedarId.equals=" + khatedarId);
+        // Get all the landCompensationList where projectLand equals to projectLandId
+        defaultLandCompensationShouldBeFound("projectLandId.equals=" + projectLandId);
 
-        // Get all the landCompensationList where khatedar equals to (khatedarId + 1)
-        defaultLandCompensationShouldNotBeFound("khatedarId.equals=" + (khatedarId + 1));
+        // Get all the landCompensationList where projectLand equals to (projectLandId + 1)
+        defaultLandCompensationShouldNotBeFound("projectLandId.equals=" + (projectLandId + 1));
     }
 
     @Test
@@ -1724,32 +1652,6 @@ class LandCompensationResourceIT {
 
         // Get all the landCompensationList where survey equals to (surveyId + 1)
         defaultLandCompensationShouldNotBeFound("surveyId.equals=" + (surveyId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllLandCompensationsByProjectLandIsEqualToSomething() throws Exception {
-        // Initialize the database
-        landCompensationRepository.saveAndFlush(landCompensation);
-        ProjectLand projectLand;
-        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
-            projectLand = ProjectLandResourceIT.createEntity(em);
-            em.persist(projectLand);
-            em.flush();
-        } else {
-            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
-        }
-        em.persist(projectLand);
-        em.flush();
-        landCompensation.setProjectLand(projectLand);
-        landCompensationRepository.saveAndFlush(landCompensation);
-        Long projectLandId = projectLand.getId();
-
-        // Get all the landCompensationList where projectLand equals to projectLandId
-        defaultLandCompensationShouldBeFound("projectLandId.equals=" + projectLandId);
-
-        // Get all the landCompensationList where projectLand equals to (projectLandId + 1)
-        defaultLandCompensationShouldNotBeFound("projectLandId.equals=" + (projectLandId + 1));
     }
 
     @Test

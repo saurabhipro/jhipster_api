@@ -70,26 +70,29 @@ public class LandCompensation implements Serializable {
     @Column(name = "transaction_id")
     private String transactionId;
 
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties(value = { "citizen", "projectLand", "noticeStatusInfo", "survey", "landCompensations" }, allowSetters = true)
-    private Khatedar khatedar;
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties(value = { "khatedar", "projectLand", "landCompensations" }, allowSetters = true)
-    private Survey survey;
-
-    @ManyToOne(optional = false)
-    @NotNull
     @JsonIgnoreProperties(
-        value = { "project", "land", "noticeStatusInfo", "khatedars", "surveys", "landCompensations", "paymentAdvices" },
+        value = {
+            "land", "project", "citizen", "noticeStatusInfo", "survey", "landCompensation", "paymentAdvices", "paymentAdviceDetails",
+        },
         allowSetters = true
     )
+    @OneToOne(optional = false)
+    @NotNull
+    @JoinColumn(unique = true)
     private ProjectLand projectLand;
 
+    @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentAdvices" }, allowSetters = true)
+    @OneToOne
+    @JoinColumn(unique = true)
+    private Survey survey;
+
     @OneToMany(mappedBy = "landCompensation")
-    @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentFile", "paymentFileRecon" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = {
+            "landCompensation", "projectLand", "survey", "citizen", "paymentFile", "paymentFileRecon", "land", "paymentAdviceDetails",
+        },
+        allowSetters = true
+    )
     private Set<PaymentAdvice> paymentAdvices = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -276,16 +279,16 @@ public class LandCompensation implements Serializable {
         this.transactionId = transactionId;
     }
 
-    public Khatedar getKhatedar() {
-        return this.khatedar;
+    public ProjectLand getProjectLand() {
+        return this.projectLand;
     }
 
-    public void setKhatedar(Khatedar khatedar) {
-        this.khatedar = khatedar;
+    public void setProjectLand(ProjectLand projectLand) {
+        this.projectLand = projectLand;
     }
 
-    public LandCompensation khatedar(Khatedar khatedar) {
-        this.setKhatedar(khatedar);
+    public LandCompensation projectLand(ProjectLand projectLand) {
+        this.setProjectLand(projectLand);
         return this;
     }
 
@@ -299,19 +302,6 @@ public class LandCompensation implements Serializable {
 
     public LandCompensation survey(Survey survey) {
         this.setSurvey(survey);
-        return this;
-    }
-
-    public ProjectLand getProjectLand() {
-        return this.projectLand;
-    }
-
-    public void setProjectLand(ProjectLand projectLand) {
-        this.projectLand = projectLand;
-    }
-
-    public LandCompensation projectLand(ProjectLand projectLand) {
-        this.setProjectLand(projectLand);
         return this;
     }
 

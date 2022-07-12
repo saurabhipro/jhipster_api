@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.melontech.landsys.IntegrationTest;
-import com.melontech.landsys.domain.Land;
 import com.melontech.landsys.domain.SubDistrict;
 import com.melontech.landsys.domain.Village;
 import com.melontech.landsys.repository.VillageRepository;
@@ -89,16 +88,6 @@ class VillageResourceIT {
             subDistrict = TestUtil.findAll(em, SubDistrict.class).get(0);
         }
         village.setSubDistrict(subDistrict);
-        // Add required entity
-        Land land;
-        if (TestUtil.findAll(em, Land.class).isEmpty()) {
-            land = LandResourceIT.createEntity(em);
-            em.persist(land);
-            em.flush();
-        } else {
-            land = TestUtil.findAll(em, Land.class).get(0);
-        }
-        village.getLands().add(land);
         return village;
     }
 
@@ -120,16 +109,6 @@ class VillageResourceIT {
             subDistrict = TestUtil.findAll(em, SubDistrict.class).get(0);
         }
         village.setSubDistrict(subDistrict);
-        // Add required entity
-        Land land;
-        if (TestUtil.findAll(em, Land.class).isEmpty()) {
-            land = LandResourceIT.createUpdatedEntity(em);
-            em.persist(land);
-            em.flush();
-        } else {
-            land = TestUtil.findAll(em, Land.class).get(0);
-        }
-        village.getLands().add(land);
         return village;
     }
 

@@ -64,22 +64,29 @@ public class Survey implements Serializable {
     @Column(name = "status")
     private SurveyStatus status;
 
-    @JsonIgnoreProperties(value = { "citizen", "projectLand", "noticeStatusInfo", "survey", "landCompensations" }, allowSetters = true)
-    @OneToOne
-    @JoinColumn(unique = true)
-    private Khatedar khatedar;
-
-    @ManyToOne(optional = false)
-    @NotNull
     @JsonIgnoreProperties(
-        value = { "project", "land", "noticeStatusInfo", "khatedars", "surveys", "landCompensations", "paymentAdvices" },
+        value = {
+            "land", "project", "citizen", "noticeStatusInfo", "survey", "landCompensation", "paymentAdvices", "paymentAdviceDetails",
+        },
         allowSetters = true
     )
+    @OneToOne(optional = false)
+    @NotNull
+    @JoinColumn(unique = true)
     private ProjectLand projectLand;
 
+    @JsonIgnoreProperties(value = { "projectLand", "survey", "paymentAdvices" }, allowSetters = true)
+    @OneToOne(mappedBy = "survey")
+    private LandCompensation landCompensation;
+
     @OneToMany(mappedBy = "survey")
-    @JsonIgnoreProperties(value = { "khatedar", "survey", "projectLand", "paymentAdvices" }, allowSetters = true)
-    private Set<LandCompensation> landCompensations = new HashSet<>();
+    @JsonIgnoreProperties(
+        value = {
+            "landCompensation", "projectLand", "survey", "citizen", "paymentFile", "paymentFileRecon", "land", "paymentAdviceDetails",
+        },
+        allowSetters = true
+    )
+    private Set<PaymentAdvice> paymentAdvices = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -239,19 +246,6 @@ public class Survey implements Serializable {
         this.status = status;
     }
 
-    public Khatedar getKhatedar() {
-        return this.khatedar;
-    }
-
-    public void setKhatedar(Khatedar khatedar) {
-        this.khatedar = khatedar;
-    }
-
-    public Survey khatedar(Khatedar khatedar) {
-        this.setKhatedar(khatedar);
-        return this;
-    }
-
     public ProjectLand getProjectLand() {
         return this.projectLand;
     }
@@ -265,34 +259,53 @@ public class Survey implements Serializable {
         return this;
     }
 
-    public Set<LandCompensation> getLandCompensations() {
-        return this.landCompensations;
+    public LandCompensation getLandCompensation() {
+        return this.landCompensation;
     }
 
-    public void setLandCompensations(Set<LandCompensation> landCompensations) {
-        if (this.landCompensations != null) {
-            this.landCompensations.forEach(i -> i.setSurvey(null));
+    public void setLandCompensation(LandCompensation landCompensation) {
+        if (this.landCompensation != null) {
+            this.landCompensation.setSurvey(null);
         }
-        if (landCompensations != null) {
-            landCompensations.forEach(i -> i.setSurvey(this));
+        if (landCompensation != null) {
+            landCompensation.setSurvey(this);
         }
-        this.landCompensations = landCompensations;
+        this.landCompensation = landCompensation;
     }
 
-    public Survey landCompensations(Set<LandCompensation> landCompensations) {
-        this.setLandCompensations(landCompensations);
+    public Survey landCompensation(LandCompensation landCompensation) {
+        this.setLandCompensation(landCompensation);
         return this;
     }
 
-    public Survey addLandCompensation(LandCompensation landCompensation) {
-        this.landCompensations.add(landCompensation);
-        landCompensation.setSurvey(this);
+    public Set<PaymentAdvice> getPaymentAdvices() {
+        return this.paymentAdvices;
+    }
+
+    public void setPaymentAdvices(Set<PaymentAdvice> paymentAdvices) {
+        if (this.paymentAdvices != null) {
+            this.paymentAdvices.forEach(i -> i.setSurvey(null));
+        }
+        if (paymentAdvices != null) {
+            paymentAdvices.forEach(i -> i.setSurvey(this));
+        }
+        this.paymentAdvices = paymentAdvices;
+    }
+
+    public Survey paymentAdvices(Set<PaymentAdvice> paymentAdvices) {
+        this.setPaymentAdvices(paymentAdvices);
         return this;
     }
 
-    public Survey removeLandCompensation(LandCompensation landCompensation) {
-        this.landCompensations.remove(landCompensation);
-        landCompensation.setSurvey(null);
+    public Survey addPaymentAdvice(PaymentAdvice paymentAdvice) {
+        this.paymentAdvices.add(paymentAdvice);
+        paymentAdvice.setSurvey(this);
+        return this;
+    }
+
+    public Survey removePaymentAdvice(PaymentAdvice paymentAdvice) {
+        this.paymentAdvices.remove(paymentAdvice);
+        paymentAdvice.setSurvey(null);
         return this;
     }
 
