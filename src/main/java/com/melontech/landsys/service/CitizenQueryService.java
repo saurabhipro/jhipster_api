@@ -123,27 +123,12 @@ public class CitizenQueryService extends QueryService<Citizen> {
             if (criteria.getAccountNo() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getAccountNo(), Citizen_.accountNo));
             }
-            if (criteria.getLandId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getLandId(), root -> root.join(Citizen_.lands, JoinType.LEFT).get(Land_.id))
-                    );
-            }
             if (criteria.getBankBranchId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
                             criteria.getBankBranchId(),
                             root -> root.join(Citizen_.bankBranch, JoinType.LEFT).get(BankBranch_.id)
-                        )
-                    );
-            }
-            if (criteria.getPaymentAdviceId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getPaymentAdviceId(),
-                            root -> root.join(Citizen_.paymentAdvices, JoinType.LEFT).get(PaymentAdvice_.id)
                         )
                     );
             }

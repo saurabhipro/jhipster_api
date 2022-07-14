@@ -1,4 +1,4 @@
-id;account_holder_name;account_holder_bank_name;payment_amount;bank_name;account_number;ifsc_code;check_number;micr_code;payment_advice_type;reference_number;payment_status;hissa_type;land_compensation_id;project_land_id;survey_id;citizen_id
+id;account_holder_name;account_holder_bank_name;payment_amount;bank_name;account_number;ifsc_code;check_number;micr_code;payment_advice_type;reference_number;payment_status;hissa_type;khatedar_id;land_compensation_id;project_land_id;survey_id
 1;Account Avon;Intelligent Rustic;40460;ROI ADP;installation Idaho Handmade;content architect;paradigms mission-critical communities;Gloves Designer;OTHER;Knoll Account;PENDING;SINGLE_OWNER;1;1;1;1
 2;system Kuwaiti;calculating;68024;Specialist Steel back;Product;Bedfordshire Facilitator neural;Books payment;Solutions algorithm;CHECQUE;Web;PENDING;DIVIDED;2;2;2;2
 3;infomediaries redundant;invoice;66968;Branding;XML bluetooth;Sleek withdrawal Turnpike;Kansas;override web-enabled;ONLINE;evolve;PAID;DIVIDED;3;3;3;3

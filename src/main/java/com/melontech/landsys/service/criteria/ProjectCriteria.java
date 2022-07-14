@@ -43,8 +43,6 @@ public class ProjectCriteria implements Serializable, Criteria {
 
     private StringFilter approver3;
 
-    private LongFilter landId;
-
     private LongFilter projectLandId;
 
     private Boolean distinct;
@@ -60,7 +58,6 @@ public class ProjectCriteria implements Serializable, Criteria {
         this.approver1 = other.approver1 == null ? null : other.approver1.copy();
         this.approver2 = other.approver2 == null ? null : other.approver2.copy();
         this.approver3 = other.approver3 == null ? null : other.approver3.copy();
-        this.landId = other.landId == null ? null : other.landId.copy();
         this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
         this.distinct = other.distinct;
     }
@@ -190,21 +187,6 @@ public class ProjectCriteria implements Serializable, Criteria {
         this.approver3 = approver3;
     }
 
-    public LongFilter getLandId() {
-        return landId;
-    }
-
-    public LongFilter landId() {
-        if (landId == null) {
-            landId = new LongFilter();
-        }
-        return landId;
-    }
-
-    public void setLandId(LongFilter landId) {
-        this.landId = landId;
-    }
-
     public LongFilter getProjectLandId() {
         return projectLandId;
     }
@@ -246,7 +228,6 @@ public class ProjectCriteria implements Serializable, Criteria {
             Objects.equals(approver1, that.approver1) &&
             Objects.equals(approver2, that.approver2) &&
             Objects.equals(approver3, that.approver3) &&
-            Objects.equals(landId, that.landId) &&
             Objects.equals(projectLandId, that.projectLandId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -254,7 +235,7 @@ public class ProjectCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, startDate, endDate, budget, approver1, approver2, approver3, landId, projectLandId, distinct);
+        return Objects.hash(id, name, startDate, endDate, budget, approver1, approver2, approver3, projectLandId, distinct);
     }
 
     // prettier-ignore
@@ -269,7 +250,6 @@ public class ProjectCriteria implements Serializable, Criteria {
             (approver1 != null ? "approver1=" + approver1 + ", " : "") +
             (approver2 != null ? "approver2=" + approver2 + ", " : "") +
             (approver3 != null ? "approver3=" + approver3 + ", " : "") +
-            (landId != null ? "landId=" + landId + ", " : "") +
             (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

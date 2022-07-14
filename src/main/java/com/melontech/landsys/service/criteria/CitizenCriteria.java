@@ -51,11 +51,7 @@ public class CitizenCriteria implements Serializable, Criteria {
 
     private StringFilter accountNo;
 
-    private LongFilter landId;
-
     private LongFilter bankBranchId;
-
-    private LongFilter paymentAdviceId;
 
     private LongFilter khatedarId;
 
@@ -76,9 +72,7 @@ public class CitizenCriteria implements Serializable, Criteria {
         this.aadhar = other.aadhar == null ? null : other.aadhar.copy();
         this.pan = other.pan == null ? null : other.pan.copy();
         this.accountNo = other.accountNo == null ? null : other.accountNo.copy();
-        this.landId = other.landId == null ? null : other.landId.copy();
         this.bankBranchId = other.bankBranchId == null ? null : other.bankBranchId.copy();
-        this.paymentAdviceId = other.paymentAdviceId == null ? null : other.paymentAdviceId.copy();
         this.khatedarId = other.khatedarId == null ? null : other.khatedarId.copy();
         this.distinct = other.distinct;
     }
@@ -268,21 +262,6 @@ public class CitizenCriteria implements Serializable, Criteria {
         this.accountNo = accountNo;
     }
 
-    public LongFilter getLandId() {
-        return landId;
-    }
-
-    public LongFilter landId() {
-        if (landId == null) {
-            landId = new LongFilter();
-        }
-        return landId;
-    }
-
-    public void setLandId(LongFilter landId) {
-        this.landId = landId;
-    }
-
     public LongFilter getBankBranchId() {
         return bankBranchId;
     }
@@ -296,21 +275,6 @@ public class CitizenCriteria implements Serializable, Criteria {
 
     public void setBankBranchId(LongFilter bankBranchId) {
         this.bankBranchId = bankBranchId;
-    }
-
-    public LongFilter getPaymentAdviceId() {
-        return paymentAdviceId;
-    }
-
-    public LongFilter paymentAdviceId() {
-        if (paymentAdviceId == null) {
-            paymentAdviceId = new LongFilter();
-        }
-        return paymentAdviceId;
-    }
-
-    public void setPaymentAdviceId(LongFilter paymentAdviceId) {
-        this.paymentAdviceId = paymentAdviceId;
     }
 
     public LongFilter getKhatedarId() {
@@ -358,9 +322,7 @@ public class CitizenCriteria implements Serializable, Criteria {
             Objects.equals(aadhar, that.aadhar) &&
             Objects.equals(pan, that.pan) &&
             Objects.equals(accountNo, that.accountNo) &&
-            Objects.equals(landId, that.landId) &&
             Objects.equals(bankBranchId, that.bankBranchId) &&
-            Objects.equals(paymentAdviceId, that.paymentAdviceId) &&
             Objects.equals(khatedarId, that.khatedarId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -381,9 +343,7 @@ public class CitizenCriteria implements Serializable, Criteria {
             aadhar,
             pan,
             accountNo,
-            landId,
             bankBranchId,
-            paymentAdviceId,
             khatedarId,
             distinct
         );
@@ -405,9 +365,7 @@ public class CitizenCriteria implements Serializable, Criteria {
             (aadhar != null ? "aadhar=" + aadhar + ", " : "") +
             (pan != null ? "pan=" + pan + ", " : "") +
             (accountNo != null ? "accountNo=" + accountNo + ", " : "") +
-            (landId != null ? "landId=" + landId + ", " : "") +
             (bankBranchId != null ? "bankBranchId=" + bankBranchId + ", " : "") +
-            (paymentAdviceId != null ? "paymentAdviceId=" + paymentAdviceId + ", " : "") +
             (khatedarId != null ? "khatedarId=" + khatedarId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

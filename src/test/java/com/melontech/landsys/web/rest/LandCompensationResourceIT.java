@@ -150,6 +150,16 @@ class LandCompensationResourceIT {
             projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
         }
         landCompensation.setProjectLand(projectLand);
+        // Add required entity
+        Survey survey;
+        if (TestUtil.findAll(em, Survey.class).isEmpty()) {
+            survey = SurveyResourceIT.createEntity(em);
+            em.persist(survey);
+            em.flush();
+        } else {
+            survey = TestUtil.findAll(em, Survey.class).get(0);
+        }
+        landCompensation.setSurvey(survey);
         return landCompensation;
     }
 
@@ -186,6 +196,16 @@ class LandCompensationResourceIT {
             projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
         }
         landCompensation.setProjectLand(projectLand);
+        // Add required entity
+        Survey survey;
+        if (TestUtil.findAll(em, Survey.class).isEmpty()) {
+            survey = SurveyResourceIT.createUpdatedEntity(em);
+            em.persist(survey);
+            em.flush();
+        } else {
+            survey = TestUtil.findAll(em, Survey.class).get(0);
+        }
+        landCompensation.setSurvey(survey);
         return landCompensation;
     }
 
@@ -1858,19 +1878,8 @@ class LandCompensationResourceIT {
     @Test
     @Transactional
     void getAllLandCompensationsBySurveyIsEqualToSomething() throws Exception {
-        // Initialize the database
-        landCompensationRepository.saveAndFlush(landCompensation);
-        Survey survey;
-        if (TestUtil.findAll(em, Survey.class).isEmpty()) {
-            survey = SurveyResourceIT.createEntity(em);
-            em.persist(survey);
-            em.flush();
-        } else {
-            survey = TestUtil.findAll(em, Survey.class).get(0);
-        }
-        em.persist(survey);
-        em.flush();
-        landCompensation.setSurvey(survey);
+        // Get already existing entity
+        Survey survey = landCompensation.getSurvey();
         landCompensationRepository.saveAndFlush(landCompensation);
         Long surveyId = survey.getId();
 

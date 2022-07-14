@@ -37,16 +37,14 @@ public class ProjectLand implements Serializable {
     @Column(name = "hissa_type")
     private HissaType hissaType;
 
-    @ManyToOne
-    @JsonIgnoreProperties(
-        value = { "paymentAdvices", "village", "unit", "landType", "state", "citizen", "project", "projectLands" },
-        allowSetters = true
-    )
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "village", "unit", "landType", "state", "projectLands" }, allowSetters = true)
     private Land land;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "lands", "projectLands" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "projectLands" }, allowSetters = true)
     private Project project;
 
     @ManyToOne
@@ -63,17 +61,7 @@ public class ProjectLand implements Serializable {
 
     @OneToMany(mappedBy = "projectLand")
     @JsonIgnoreProperties(
-        value = {
-            "khatedars",
-            "landCompensation",
-            "projectLand",
-            "survey",
-            "citizen",
-            "paymentFileRecon",
-            "paymentFile",
-            "land",
-            "paymentAdviceDetails",
-        },
+        value = { "khatedar", "landCompensation", "projectLand", "survey", "paymentFileRecon", "paymentFile", "paymentAdviceDetails" },
         allowSetters = true
     )
     private Set<PaymentAdvice> paymentAdvices = new HashSet<>();
@@ -90,7 +78,7 @@ public class ProjectLand implements Serializable {
     private Set<PaymentFile> paymentFiles = new HashSet<>();
 
     @OneToMany(mappedBy = "projectLand")
-    @JsonIgnoreProperties(value = { "projectLand", "citizen", "paymentFile", "paymentAdvice" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "projectLand", "citizen", "paymentAdvice", "paymentFile" }, allowSetters = true)
     private Set<Khatedar> khatedars = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

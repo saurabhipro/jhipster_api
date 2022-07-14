@@ -89,17 +89,7 @@ public class Survey implements Serializable {
 
     @OneToMany(mappedBy = "survey")
     @JsonIgnoreProperties(
-        value = {
-            "khatedars",
-            "landCompensation",
-            "projectLand",
-            "survey",
-            "citizen",
-            "paymentFileRecon",
-            "paymentFile",
-            "land",
-            "paymentAdviceDetails",
-        },
+        value = { "khatedar", "landCompensation", "projectLand", "survey", "paymentFileRecon", "paymentFile", "paymentAdviceDetails" },
         allowSetters = true
     )
     private Set<PaymentAdvice> paymentAdvices = new HashSet<>();

@@ -133,7 +133,7 @@ public class PaymentAdviceQueryService extends QueryService<PaymentAdvice> {
                     specification.and(
                         buildSpecification(
                             criteria.getKhatedarId(),
-                            root -> root.join(PaymentAdvice_.khatedars, JoinType.LEFT).get(Khatedar_.id)
+                            root -> root.join(PaymentAdvice_.khatedar, JoinType.LEFT).get(Khatedar_.id)
                         )
                     );
             }
@@ -161,15 +161,6 @@ public class PaymentAdviceQueryService extends QueryService<PaymentAdvice> {
                         buildSpecification(criteria.getSurveyId(), root -> root.join(PaymentAdvice_.survey, JoinType.LEFT).get(Survey_.id))
                     );
             }
-            if (criteria.getCitizenId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getCitizenId(),
-                            root -> root.join(PaymentAdvice_.citizen, JoinType.LEFT).get(Citizen_.id)
-                        )
-                    );
-            }
             if (criteria.getPaymentFileReconId() != null) {
                 specification =
                     specification.and(
@@ -186,12 +177,6 @@ public class PaymentAdviceQueryService extends QueryService<PaymentAdvice> {
                             criteria.getPaymentFileId(),
                             root -> root.join(PaymentAdvice_.paymentFile, JoinType.LEFT).get(PaymentFile_.id)
                         )
-                    );
-            }
-            if (criteria.getLandId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getLandId(), root -> root.join(PaymentAdvice_.land, JoinType.LEFT).get(Land_.id))
                     );
             }
             if (criteria.getPaymentAdviceDetailsId() != null) {

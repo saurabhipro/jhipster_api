@@ -73,10 +73,6 @@ public class PaymentAdviceServiceImpl implements PaymentAdviceService {
         return paymentAdviceRepository.findAll(pageable).map(paymentAdviceMapper::toDto);
     }
 
-    public Page<PaymentAdviceDTO> findAllWithEagerRelationships(Pageable pageable) {
-        return paymentAdviceRepository.findAllWithEagerRelationships(pageable).map(paymentAdviceMapper::toDto);
-    }
-
     /**
      *  Get all the paymentAdvices where PaymentFileRecon is {@code null}.
      *  @return the list of entities.
@@ -109,7 +105,7 @@ public class PaymentAdviceServiceImpl implements PaymentAdviceService {
     @Transactional(readOnly = true)
     public Optional<PaymentAdviceDTO> findOne(Long id) {
         log.debug("Request to get PaymentAdvice : {}", id);
-        return paymentAdviceRepository.findOneWithEagerRelationships(id).map(paymentAdviceMapper::toDto);
+        return paymentAdviceRepository.findById(id).map(paymentAdviceMapper::toDto);
     }
 
     @Override

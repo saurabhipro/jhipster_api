@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.melontech.landsys.IntegrationTest;
 import com.melontech.landsys.domain.Land;
 import com.melontech.landsys.domain.LandType;
-import com.melontech.landsys.domain.ProjectLand;
 import com.melontech.landsys.domain.State;
 import com.melontech.landsys.domain.Unit;
 import com.melontech.landsys.domain.Village;
@@ -159,16 +158,6 @@ class LandResourceIT {
             state = TestUtil.findAll(em, State.class).get(0);
         }
         land.setState(state);
-        // Add required entity
-        ProjectLand projectLand;
-        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
-            projectLand = ProjectLandResourceIT.createEntity(em);
-            em.persist(projectLand);
-            em.flush();
-        } else {
-            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
-        }
-        land.getProjectLands().add(projectLand);
         return land;
     }
 
@@ -230,16 +219,6 @@ class LandResourceIT {
             state = TestUtil.findAll(em, State.class).get(0);
         }
         land.setState(state);
-        // Add required entity
-        ProjectLand projectLand;
-        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
-            projectLand = ProjectLandResourceIT.createUpdatedEntity(em);
-            em.persist(projectLand);
-            em.flush();
-        } else {
-            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
-        }
-        land.getProjectLands().add(projectLand);
         return land;
     }
 

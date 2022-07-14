@@ -46,15 +46,13 @@ public class PaymentAdviceDTO implements Serializable {
     @NotNull
     private HissaType hissaType;
 
+    private KhatedarDTO khatedar;
+
     private LandCompensationDTO landCompensation;
 
     private ProjectLandDTO projectLand;
 
     private SurveyDTO survey;
-
-    private CitizenDTO citizen;
-
-    private LandDTO land;
 
     public Long getId() {
         return id;
@@ -160,6 +158,14 @@ public class PaymentAdviceDTO implements Serializable {
         this.hissaType = hissaType;
     }
 
+    public KhatedarDTO getKhatedar() {
+        return khatedar;
+    }
+
+    public void setKhatedar(KhatedarDTO khatedar) {
+        this.khatedar = khatedar;
+    }
+
     public LandCompensationDTO getLandCompensation() {
         return landCompensation;
     }
@@ -182,22 +188,6 @@ public class PaymentAdviceDTO implements Serializable {
 
     public void setSurvey(SurveyDTO survey) {
         this.survey = survey;
-    }
-
-    public CitizenDTO getCitizen() {
-        return citizen;
-    }
-
-    public void setCitizen(CitizenDTO citizen) {
-        this.citizen = citizen;
-    }
-
-    public LandDTO getLand() {
-        return land;
-    }
-
-    public void setLand(LandDTO land) {
-        this.land = land;
     }
 
     @Override
@@ -238,11 +228,10 @@ public class PaymentAdviceDTO implements Serializable {
             ", referenceNumber='" + getReferenceNumber() + "'" +
             ", paymentStatus='" + getPaymentStatus() + "'" +
             ", hissaType='" + getHissaType() + "'" +
+            ", khatedar=" + getKhatedar() +
             ", landCompensation=" + getLandCompensation() +
             ", projectLand=" + getProjectLand() +
             ", survey=" + getSurvey() +
-            ", citizen=" + getCitizen() +
-            ", land=" + getLand() +
             "}";
     }
 }

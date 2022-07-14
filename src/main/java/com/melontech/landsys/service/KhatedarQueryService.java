@@ -114,21 +114,21 @@ public class KhatedarQueryService extends QueryService<Khatedar> {
                         buildSpecification(criteria.getCitizenId(), root -> root.join(Khatedar_.citizen, JoinType.LEFT).get(Citizen_.id))
                     );
             }
-            if (criteria.getPaymentFileId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getPaymentFileId(),
-                            root -> root.join(Khatedar_.paymentFile, JoinType.LEFT).get(PaymentFile_.id)
-                        )
-                    );
-            }
             if (criteria.getPaymentAdviceId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
                             criteria.getPaymentAdviceId(),
                             root -> root.join(Khatedar_.paymentAdvice, JoinType.LEFT).get(PaymentAdvice_.id)
+                        )
+                    );
+            }
+            if (criteria.getPaymentFileId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPaymentFileId(),
+                            root -> root.join(Khatedar_.paymentFile, JoinType.LEFT).get(PaymentFile_.id)
                         )
                     );
             }

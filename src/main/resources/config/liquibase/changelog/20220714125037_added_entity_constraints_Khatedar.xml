@@ -19,11 +19,5 @@
                                  constraintName="fk_landsys_khatedar__citizen_id"
                                  referencedColumnNames="id"
                                  referencedTableName="landsys_citizen"/>
-
-        <addForeignKeyConstraint baseColumnNames="payment_advice_id"
-                                 baseTableName="landsys_khatedar"
-                                 constraintName="fk_landsys_khatedar__payment_advice_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="landsys_payment_advice"/>
     </changeSet>
 </databaseChangeLog>

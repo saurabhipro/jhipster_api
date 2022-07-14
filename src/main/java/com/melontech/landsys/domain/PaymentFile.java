@@ -49,24 +49,14 @@ public class PaymentFile implements Serializable {
     @Column(name = "payment_mode")
     private PaymentAdviceType paymentMode;
 
-    @JsonIgnoreProperties(value = { "projectLand", "citizen", "paymentFile", "paymentAdvice" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "projectLand", "citizen", "paymentAdvice", "paymentFile" }, allowSetters = true)
     @OneToOne(optional = false)
     @NotNull
     @JoinColumn(unique = true)
     private Khatedar khatedar;
 
     @JsonIgnoreProperties(
-        value = {
-            "khatedars",
-            "landCompensation",
-            "projectLand",
-            "survey",
-            "citizen",
-            "paymentFileRecon",
-            "paymentFile",
-            "land",
-            "paymentAdviceDetails",
-        },
+        value = { "khatedar", "landCompensation", "projectLand", "survey", "paymentFileRecon", "paymentFile", "paymentAdviceDetails" },
         allowSetters = true
     )
     @OneToOne(optional = false)

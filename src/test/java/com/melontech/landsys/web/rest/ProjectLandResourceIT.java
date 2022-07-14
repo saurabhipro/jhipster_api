@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.melontech.landsys.IntegrationTest;
+import com.melontech.landsys.domain.Land;
 import com.melontech.landsys.domain.Project;
 import com.melontech.landsys.domain.ProjectLand;
 import com.melontech.landsys.domain.enumeration.HissaType;
@@ -93,6 +94,16 @@ class ProjectLandResourceIT {
             .documentsContentType(DEFAULT_DOCUMENTS_CONTENT_TYPE)
             .hissaType(DEFAULT_HISSA_TYPE);
         // Add required entity
+        Land land;
+        if (TestUtil.findAll(em, Land.class).isEmpty()) {
+            land = LandResourceIT.createEntity(em);
+            em.persist(land);
+            em.flush();
+        } else {
+            land = TestUtil.findAll(em, Land.class).get(0);
+        }
+        projectLand.setLand(land);
+        // Add required entity
         Project project;
         if (TestUtil.findAll(em, Project.class).isEmpty()) {
             project = ProjectResourceIT.createEntity(em);
@@ -117,6 +128,16 @@ class ProjectLandResourceIT {
             .documents(UPDATED_DOCUMENTS)
             .documentsContentType(UPDATED_DOCUMENTS_CONTENT_TYPE)
             .hissaType(UPDATED_HISSA_TYPE);
+        // Add required entity
+        Land land;
+        if (TestUtil.findAll(em, Land.class).isEmpty()) {
+            land = LandResourceIT.createUpdatedEntity(em);
+            em.persist(land);
+            em.flush();
+        } else {
+            land = TestUtil.findAll(em, Land.class).get(0);
+        }
+        projectLand.setLand(land);
         // Add required entity
         Project project;
         if (TestUtil.findAll(em, Project.class).isEmpty()) {

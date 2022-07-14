@@ -46,17 +46,7 @@ public class PaymentFileRecon implements Serializable {
     private PaymentStatus paymentStatus;
 
     @JsonIgnoreProperties(
-        value = {
-            "khatedars",
-            "landCompensation",
-            "projectLand",
-            "survey",
-            "citizen",
-            "paymentFileRecon",
-            "paymentFile",
-            "land",
-            "paymentAdviceDetails",
-        },
+        value = { "khatedar", "landCompensation", "projectLand", "survey", "paymentFileRecon", "paymentFile", "paymentAdviceDetails" },
         allowSetters = true
     )
     @OneToOne(optional = false)

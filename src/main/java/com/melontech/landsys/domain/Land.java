@@ -53,23 +53,6 @@ public class Land implements Serializable {
     @Column(name = "total_land_value")
     private Double totalLandValue;
 
-    @OneToMany(mappedBy = "land")
-    @JsonIgnoreProperties(
-        value = {
-            "khatedars",
-            "landCompensation",
-            "projectLand",
-            "survey",
-            "citizen",
-            "paymentFileRecon",
-            "paymentFile",
-            "land",
-            "paymentAdviceDetails",
-        },
-        allowSetters = true
-    )
-    private Set<PaymentAdvice> paymentAdvices = new HashSet<>();
-
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = { "subDistrict", "lands" }, allowSetters = true)
@@ -89,14 +72,6 @@ public class Land implements Serializable {
     @NotNull
     @JsonIgnoreProperties(value = { "districts", "lands" }, allowSetters = true)
     private State state;
-
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "lands", "bankBranch", "paymentAdvices", "khatedars" }, allowSetters = true)
-    private Citizen citizen;
-
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "lands", "projectLands" }, allowSetters = true)
-    private Project project;
 
     @OneToMany(mappedBy = "land")
     @JsonIgnoreProperties(
@@ -260,37 +235,6 @@ public class Land implements Serializable {
         this.totalLandValue = totalLandValue;
     }
 
-    public Set<PaymentAdvice> getPaymentAdvices() {
-        return this.paymentAdvices;
-    }
-
-    public void setPaymentAdvices(Set<PaymentAdvice> paymentAdvices) {
-        if (this.paymentAdvices != null) {
-            this.paymentAdvices.forEach(i -> i.setLand(null));
-        }
-        if (paymentAdvices != null) {
-            paymentAdvices.forEach(i -> i.setLand(this));
-        }
-        this.paymentAdvices = paymentAdvices;
-    }
-
-    public Land paymentAdvices(Set<PaymentAdvice> paymentAdvices) {
-        this.setPaymentAdvices(paymentAdvices);
-        return this;
-    }
-
-    public Land addPaymentAdvice(PaymentAdvice paymentAdvice) {
-        this.paymentAdvices.add(paymentAdvice);
-        paymentAdvice.setLand(this);
-        return this;
-    }
-
-    public Land removePaymentAdvice(PaymentAdvice paymentAdvice) {
-        this.paymentAdvices.remove(paymentAdvice);
-        paymentAdvice.setLand(null);
-        return this;
-    }
-
     public Village getVillage() {
         return this.village;
     }
@@ -340,32 +284,6 @@ public class Land implements Serializable {
 
     public Land state(State state) {
         this.setState(state);
-        return this;
-    }
-
-    public Citizen getCitizen() {
-        return this.citizen;
-    }
-
-    public void setCitizen(Citizen citizen) {
-        this.citizen = citizen;
-    }
-
-    public Land citizen(Citizen citizen) {
-        this.setCitizen(citizen);
-        return this;
-    }
-
-    public Project getProject() {
-        return this.project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
-    }
-
-    public Land project(Project project) {
-        this.setProject(project);
         return this;
     }
 

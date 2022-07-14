@@ -111,12 +111,6 @@ public class ProjectQueryService extends QueryService<Project> {
             if (criteria.getApprover3() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getApprover3(), Project_.approver3));
             }
-            if (criteria.getLandId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getLandId(), root -> root.join(Project_.lands, JoinType.LEFT).get(Land_.id))
-                    );
-            }
             if (criteria.getProjectLandId() != null) {
                 specification =
                     specification.and(

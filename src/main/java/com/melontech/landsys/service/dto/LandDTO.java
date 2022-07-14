@@ -40,10 +40,6 @@ public class LandDTO implements Serializable {
 
     private StateDTO state;
 
-    private CitizenDTO citizen;
-
-    private ProjectDTO project;
-
     public Long getId() {
         return id;
     }
@@ -164,22 +160,6 @@ public class LandDTO implements Serializable {
         this.state = state;
     }
 
-    public CitizenDTO getCitizen() {
-        return citizen;
-    }
-
-    public void setCitizen(CitizenDTO citizen) {
-        this.citizen = citizen;
-    }
-
-    public ProjectDTO getProject() {
-        return project;
-    }
-
-    public void setProject(ProjectDTO project) {
-        this.project = project;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -220,8 +200,6 @@ public class LandDTO implements Serializable {
             ", unit=" + getUnit() +
             ", landType=" + getLandType() +
             ", state=" + getState() +
-            ", citizen=" + getCitizen() +
-            ", project=" + getProject() +
             "}";
     }
 }

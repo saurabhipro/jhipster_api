@@ -23,8 +23,6 @@ public class KhatedarDTO implements Serializable {
 
     private CitizenDTO citizen;
 
-    private PaymentAdviceDTO paymentAdvice;
-
     public Long getId() {
         return id;
     }
@@ -73,14 +71,6 @@ public class KhatedarDTO implements Serializable {
         this.citizen = citizen;
     }
 
-    public PaymentAdviceDTO getPaymentAdvice() {
-        return paymentAdvice;
-    }
-
-    public void setPaymentAdvice(PaymentAdviceDTO paymentAdvice) {
-        this.paymentAdvice = paymentAdvice;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -112,7 +102,6 @@ public class KhatedarDTO implements Serializable {
             ", khatedarStatus='" + getKhatedarStatus() + "'" +
             ", projectLand=" + getProjectLand() +
             ", citizen=" + getCitizen() +
-            ", paymentAdvice=" + getPaymentAdvice() +
             "}";
     }
 }

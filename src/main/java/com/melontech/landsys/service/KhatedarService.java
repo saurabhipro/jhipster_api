@@ -42,6 +42,12 @@ public interface KhatedarService {
      */
     Page<KhatedarDTO> findAll(Pageable pageable);
     /**
+     * Get all the KhatedarDTO where PaymentAdvice is {@code null}.
+     *
+     * @return the {@link List} of entities.
+     */
+    List<KhatedarDTO> findAllWherePaymentAdviceIsNull();
+    /**
      * Get all the KhatedarDTO where PaymentFile is {@code null}.
      *
      * @return the {@link List} of entities.

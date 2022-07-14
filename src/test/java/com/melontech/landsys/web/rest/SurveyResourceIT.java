@@ -127,16 +127,6 @@ class SurveyResourceIT {
             projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
         }
         survey.setProjectLand(projectLand);
-        // Add required entity
-        LandCompensation landCompensation;
-        if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
-            landCompensation = LandCompensationResourceIT.createEntity(em);
-            em.persist(landCompensation);
-            em.flush();
-        } else {
-            landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
-        }
-        survey.setLandCompensation(landCompensation);
         return survey;
     }
 
@@ -169,16 +159,6 @@ class SurveyResourceIT {
             projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
         }
         survey.setProjectLand(projectLand);
-        // Add required entity
-        LandCompensation landCompensation;
-        if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
-            landCompensation = LandCompensationResourceIT.createUpdatedEntity(em);
-            em.persist(landCompensation);
-            em.flush();
-        } else {
-            landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
-        }
-        survey.setLandCompensation(landCompensation);
         return survey;
     }
 
@@ -1397,8 +1377,20 @@ class SurveyResourceIT {
     @Test
     @Transactional
     void getAllSurveysByLandCompensationIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        LandCompensation landCompensation = survey.getLandCompensation();
+        // Initialize the database
+        surveyRepository.saveAndFlush(survey);
+        LandCompensation landCompensation;
+        if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
+            landCompensation = LandCompensationResourceIT.createEntity(em);
+            em.persist(landCompensation);
+            em.flush();
+        } else {
+            landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
+        }
+        em.persist(landCompensation);
+        em.flush();
+        survey.setLandCompensation(landCompensation);
+        landCompensation.setSurvey(survey);
         surveyRepository.saveAndFlush(survey);
         Long landCompensationId = landCompensation.getId();
 

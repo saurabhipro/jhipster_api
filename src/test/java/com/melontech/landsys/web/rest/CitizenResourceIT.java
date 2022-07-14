@@ -10,8 +10,6 @@ import com.melontech.landsys.IntegrationTest;
 import com.melontech.landsys.domain.BankBranch;
 import com.melontech.landsys.domain.Citizen;
 import com.melontech.landsys.domain.Khatedar;
-import com.melontech.landsys.domain.Land;
-import com.melontech.landsys.domain.PaymentAdvice;
 import com.melontech.landsys.repository.CitizenRepository;
 import com.melontech.landsys.service.CitizenService;
 import com.melontech.landsys.service.criteria.CitizenCriteria;
@@ -1307,32 +1305,6 @@ class CitizenResourceIT {
 
     @Test
     @Transactional
-    void getAllCitizensByLandIsEqualToSomething() throws Exception {
-        // Initialize the database
-        citizenRepository.saveAndFlush(citizen);
-        Land land;
-        if (TestUtil.findAll(em, Land.class).isEmpty()) {
-            land = LandResourceIT.createEntity(em);
-            em.persist(land);
-            em.flush();
-        } else {
-            land = TestUtil.findAll(em, Land.class).get(0);
-        }
-        em.persist(land);
-        em.flush();
-        citizen.addLand(land);
-        citizenRepository.saveAndFlush(citizen);
-        Long landId = land.getId();
-
-        // Get all the citizenList where land equals to landId
-        defaultCitizenShouldBeFound("landId.equals=" + landId);
-
-        // Get all the citizenList where land equals to (landId + 1)
-        defaultCitizenShouldNotBeFound("landId.equals=" + (landId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllCitizensByBankBranchIsEqualToSomething() throws Exception {
         // Initialize the database
         citizenRepository.saveAndFlush(citizen);
@@ -1355,32 +1327,6 @@ class CitizenResourceIT {
 
         // Get all the citizenList where bankBranch equals to (bankBranchId + 1)
         defaultCitizenShouldNotBeFound("bankBranchId.equals=" + (bankBranchId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllCitizensByPaymentAdviceIsEqualToSomething() throws Exception {
-        // Initialize the database
-        citizenRepository.saveAndFlush(citizen);
-        PaymentAdvice paymentAdvice;
-        if (TestUtil.findAll(em, PaymentAdvice.class).isEmpty()) {
-            paymentAdvice = PaymentAdviceResourceIT.createEntity(em);
-            em.persist(paymentAdvice);
-            em.flush();
-        } else {
-            paymentAdvice = TestUtil.findAll(em, PaymentAdvice.class).get(0);
-        }
-        em.persist(paymentAdvice);
-        em.flush();
-        citizen.addPaymentAdvice(paymentAdvice);
-        citizenRepository.saveAndFlush(citizen);
-        Long paymentAdviceId = paymentAdvice.getId();
-
-        // Get all the citizenList where paymentAdvice equals to paymentAdviceId
-        defaultCitizenShouldBeFound("paymentAdviceId.equals=" + paymentAdviceId);
-
-        // Get all the citizenList where paymentAdvice equals to (paymentAdviceId + 1)
-        defaultCitizenShouldNotBeFound("paymentAdviceId.equals=" + (paymentAdviceId + 1));
     }
 
     @Test

@@ -1,14 +1,12 @@
 package com.melontech.landsys.service.mapper;
 
-import com.melontech.landsys.domain.Citizen;
-import com.melontech.landsys.domain.Land;
+import com.melontech.landsys.domain.Khatedar;
 import com.melontech.landsys.domain.LandCompensation;
 import com.melontech.landsys.domain.PaymentAdvice;
 import com.melontech.landsys.domain.ProjectLand;
 import com.melontech.landsys.domain.Survey;
-import com.melontech.landsys.service.dto.CitizenDTO;
+import com.melontech.landsys.service.dto.KhatedarDTO;
 import com.melontech.landsys.service.dto.LandCompensationDTO;
-import com.melontech.landsys.service.dto.LandDTO;
 import com.melontech.landsys.service.dto.PaymentAdviceDTO;
 import com.melontech.landsys.service.dto.ProjectLandDTO;
 import com.melontech.landsys.service.dto.SurveyDTO;
@@ -19,12 +17,16 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface PaymentAdviceMapper extends EntityMapper<PaymentAdviceDTO, PaymentAdvice> {
+    @Mapping(target = "khatedar", source = "khatedar", qualifiedByName = "khatedarId")
     @Mapping(target = "landCompensation", source = "landCompensation", qualifiedByName = "landCompensationId")
     @Mapping(target = "projectLand", source = "projectLand", qualifiedByName = "projectLandId")
     @Mapping(target = "survey", source = "survey", qualifiedByName = "surveyId")
-    @Mapping(target = "citizen", source = "citizen", qualifiedByName = "citizenId")
-    @Mapping(target = "land", source = "land", qualifiedByName = "landKhasraNumber")
     PaymentAdviceDTO toDto(PaymentAdvice s);
+
+    @Named("khatedarId")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    KhatedarDTO toDtoKhatedarId(Khatedar khatedar);
 
     @Named("landCompensationId")
     @BeanMapping(ignoreByDefault = true)
@@ -40,15 +42,4 @@ public interface PaymentAdviceMapper extends EntityMapper<PaymentAdviceDTO, Paym
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     SurveyDTO toDtoSurveyId(Survey survey);
-
-    @Named("citizenId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    CitizenDTO toDtoCitizenId(Citizen citizen);
-
-    @Named("landKhasraNumber")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "khasraNumber", source = "khasraNumber")
-    LandDTO toDtoLandKhasraNumber(Land land);
 }

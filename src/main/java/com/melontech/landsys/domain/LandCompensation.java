@@ -96,23 +96,14 @@ public class LandCompensation implements Serializable {
     private ProjectLand projectLand;
 
     @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentAdvices", "paymentFiles" }, allowSetters = true)
-    @OneToOne
+    @OneToOne(optional = false)
+    @NotNull
     @JoinColumn(unique = true)
     private Survey survey;
 
     @OneToMany(mappedBy = "landCompensation")
     @JsonIgnoreProperties(
-        value = {
-            "khatedars",
-            "landCompensation",
-            "projectLand",
-            "survey",
-            "citizen",
-            "paymentFileRecon",
-            "paymentFile",
-            "land",
-            "paymentAdviceDetails",
-        },
+        value = { "khatedar", "landCompensation", "projectLand", "survey", "paymentFileRecon", "paymentFile", "paymentAdviceDetails" },
         allowSetters = true
     )
     private Set<PaymentAdvice> paymentAdvices = new HashSet<>();

@@ -114,13 +114,9 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
 
     private LongFilter surveyId;
 
-    private LongFilter citizenId;
-
     private LongFilter paymentFileReconId;
 
     private LongFilter paymentFileId;
-
-    private LongFilter landId;
 
     private LongFilter paymentAdviceDetailsId;
 
@@ -146,10 +142,8 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
         this.landCompensationId = other.landCompensationId == null ? null : other.landCompensationId.copy();
         this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
         this.surveyId = other.surveyId == null ? null : other.surveyId.copy();
-        this.citizenId = other.citizenId == null ? null : other.citizenId.copy();
         this.paymentFileReconId = other.paymentFileReconId == null ? null : other.paymentFileReconId.copy();
         this.paymentFileId = other.paymentFileId == null ? null : other.paymentFileId.copy();
-        this.landId = other.landId == null ? null : other.landId.copy();
         this.paymentAdviceDetailsId = other.paymentAdviceDetailsId == null ? null : other.paymentAdviceDetailsId.copy();
         this.distinct = other.distinct;
     }
@@ -414,21 +408,6 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
         this.surveyId = surveyId;
     }
 
-    public LongFilter getCitizenId() {
-        return citizenId;
-    }
-
-    public LongFilter citizenId() {
-        if (citizenId == null) {
-            citizenId = new LongFilter();
-        }
-        return citizenId;
-    }
-
-    public void setCitizenId(LongFilter citizenId) {
-        this.citizenId = citizenId;
-    }
-
     public LongFilter getPaymentFileReconId() {
         return paymentFileReconId;
     }
@@ -457,21 +436,6 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
 
     public void setPaymentFileId(LongFilter paymentFileId) {
         this.paymentFileId = paymentFileId;
-    }
-
-    public LongFilter getLandId() {
-        return landId;
-    }
-
-    public LongFilter landId() {
-        if (landId == null) {
-            landId = new LongFilter();
-        }
-        return landId;
-    }
-
-    public void setLandId(LongFilter landId) {
-        this.landId = landId;
     }
 
     public LongFilter getPaymentAdviceDetailsId() {
@@ -524,10 +488,8 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
             Objects.equals(landCompensationId, that.landCompensationId) &&
             Objects.equals(projectLandId, that.projectLandId) &&
             Objects.equals(surveyId, that.surveyId) &&
-            Objects.equals(citizenId, that.citizenId) &&
             Objects.equals(paymentFileReconId, that.paymentFileReconId) &&
             Objects.equals(paymentFileId, that.paymentFileId) &&
-            Objects.equals(landId, that.landId) &&
             Objects.equals(paymentAdviceDetailsId, that.paymentAdviceDetailsId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -553,10 +515,8 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
             landCompensationId,
             projectLandId,
             surveyId,
-            citizenId,
             paymentFileReconId,
             paymentFileId,
-            landId,
             paymentAdviceDetailsId,
             distinct
         );
@@ -583,10 +543,8 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
             (landCompensationId != null ? "landCompensationId=" + landCompensationId + ", " : "") +
             (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
             (surveyId != null ? "surveyId=" + surveyId + ", " : "") +
-            (citizenId != null ? "citizenId=" + citizenId + ", " : "") +
             (paymentFileReconId != null ? "paymentFileReconId=" + paymentFileReconId + ", " : "") +
             (paymentFileId != null ? "paymentFileId=" + paymentFileId + ", " : "") +
-            (landId != null ? "landId=" + landId + ", " : "") +
             (paymentAdviceDetailsId != null ? "paymentAdviceDetailsId=" + paymentAdviceDetailsId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

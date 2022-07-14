@@ -74,6 +74,20 @@ public class KhatedarServiceImpl implements KhatedarService {
     }
 
     /**
+     *  Get all the khatedars where PaymentAdvice is {@code null}.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<KhatedarDTO> findAllWherePaymentAdviceIsNull() {
+        log.debug("Request to get all khatedars where PaymentAdvice is null");
+        return StreamSupport
+            .stream(khatedarRepository.findAll().spliterator(), false)
+            .filter(khatedar -> khatedar.getPaymentAdvice() == null)
+            .map(khatedarMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    /**
      *  Get all the khatedars where PaymentFile is {@code null}.
      *  @return the list of entities.
      */

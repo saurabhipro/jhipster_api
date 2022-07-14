@@ -2,14 +2,11 @@ package com.melontech.landsys.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.melontech.landsys.IntegrationTest;
-import com.melontech.landsys.domain.Citizen;
 import com.melontech.landsys.domain.Khatedar;
-import com.melontech.landsys.domain.Land;
 import com.melontech.landsys.domain.LandCompensation;
 import com.melontech.landsys.domain.PaymentAdvice;
 import com.melontech.landsys.domain.PaymentAdviceDetails;
@@ -21,24 +18,17 @@ import com.melontech.landsys.domain.enumeration.HissaType;
 import com.melontech.landsys.domain.enumeration.PaymentAdviceType;
 import com.melontech.landsys.domain.enumeration.PaymentStatus;
 import com.melontech.landsys.repository.PaymentAdviceRepository;
-import com.melontech.landsys.service.PaymentAdviceService;
 import com.melontech.landsys.service.criteria.PaymentAdviceCriteria;
 import com.melontech.landsys.service.dto.PaymentAdviceDTO;
 import com.melontech.landsys.service.mapper.PaymentAdviceMapper;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -48,7 +38,6 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link PaymentAdviceResource} REST controller.
  */
 @IntegrationTest
-@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class PaymentAdviceResourceIT {
@@ -99,14 +88,8 @@ class PaymentAdviceResourceIT {
     @Autowired
     private PaymentAdviceRepository paymentAdviceRepository;
 
-    @Mock
-    private PaymentAdviceRepository paymentAdviceRepositoryMock;
-
     @Autowired
     private PaymentAdviceMapper paymentAdviceMapper;
-
-    @Mock
-    private PaymentAdviceService paymentAdviceServiceMock;
 
     @Autowired
     private EntityManager em;
@@ -145,7 +128,7 @@ class PaymentAdviceResourceIT {
         } else {
             khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
         }
-        paymentAdvice.getKhatedars().add(khatedar);
+        paymentAdvice.setKhatedar(khatedar);
         // Add required entity
         LandCompensation landCompensation;
         if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
@@ -176,16 +159,6 @@ class PaymentAdviceResourceIT {
             survey = TestUtil.findAll(em, Survey.class).get(0);
         }
         paymentAdvice.setSurvey(survey);
-        // Add required entity
-        Citizen citizen;
-        if (TestUtil.findAll(em, Citizen.class).isEmpty()) {
-            citizen = CitizenResourceIT.createEntity(em);
-            em.persist(citizen);
-            em.flush();
-        } else {
-            citizen = TestUtil.findAll(em, Citizen.class).get(0);
-        }
-        paymentAdvice.setCitizen(citizen);
         return paymentAdvice;
     }
 
@@ -218,7 +191,7 @@ class PaymentAdviceResourceIT {
         } else {
             khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
         }
-        paymentAdvice.getKhatedars().add(khatedar);
+        paymentAdvice.setKhatedar(khatedar);
         // Add required entity
         LandCompensation landCompensation;
         if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
@@ -249,16 +222,6 @@ class PaymentAdviceResourceIT {
             survey = TestUtil.findAll(em, Survey.class).get(0);
         }
         paymentAdvice.setSurvey(survey);
-        // Add required entity
-        Citizen citizen;
-        if (TestUtil.findAll(em, Citizen.class).isEmpty()) {
-            citizen = CitizenResourceIT.createUpdatedEntity(em);
-            em.persist(citizen);
-            em.flush();
-        } else {
-            citizen = TestUtil.findAll(em, Citizen.class).get(0);
-        }
-        paymentAdvice.setCitizen(citizen);
         return paymentAdvice;
     }
 
@@ -502,24 +465,6 @@ class PaymentAdviceResourceIT {
             .andExpect(jsonPath("$.[*].referenceNumber").value(hasItem(DEFAULT_REFERENCE_NUMBER)))
             .andExpect(jsonPath("$.[*].paymentStatus").value(hasItem(DEFAULT_PAYMENT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].hissaType").value(hasItem(DEFAULT_HISSA_TYPE.toString())));
-    }
-
-    @SuppressWarnings({ "unchecked" })
-    void getAllPaymentAdvicesWithEagerRelationshipsIsEnabled() throws Exception {
-        when(paymentAdviceServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-
-        restPaymentAdviceMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
-
-        verify(paymentAdviceServiceMock, times(1)).findAllWithEagerRelationships(any());
-    }
-
-    @SuppressWarnings({ "unchecked" })
-    void getAllPaymentAdvicesWithEagerRelationshipsIsNotEnabled() throws Exception {
-        when(paymentAdviceServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-
-        restPaymentAdviceMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
-
-        verify(paymentAdviceServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -1455,19 +1400,8 @@ class PaymentAdviceResourceIT {
     @Test
     @Transactional
     void getAllPaymentAdvicesByKhatedarIsEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentAdviceRepository.saveAndFlush(paymentAdvice);
-        Khatedar khatedar;
-        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
-            khatedar = KhatedarResourceIT.createEntity(em);
-            em.persist(khatedar);
-            em.flush();
-        } else {
-            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
-        }
-        em.persist(khatedar);
-        em.flush();
-        paymentAdvice.addKhatedar(khatedar);
+        // Get already existing entity
+        Khatedar khatedar = paymentAdvice.getKhatedar();
         paymentAdviceRepository.saveAndFlush(paymentAdvice);
         Long khatedarId = khatedar.getId();
 
@@ -1558,32 +1492,6 @@ class PaymentAdviceResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentAdvicesByCitizenIsEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentAdviceRepository.saveAndFlush(paymentAdvice);
-        Citizen citizen;
-        if (TestUtil.findAll(em, Citizen.class).isEmpty()) {
-            citizen = CitizenResourceIT.createEntity(em);
-            em.persist(citizen);
-            em.flush();
-        } else {
-            citizen = TestUtil.findAll(em, Citizen.class).get(0);
-        }
-        em.persist(citizen);
-        em.flush();
-        paymentAdvice.setCitizen(citizen);
-        paymentAdviceRepository.saveAndFlush(paymentAdvice);
-        Long citizenId = citizen.getId();
-
-        // Get all the paymentAdviceList where citizen equals to citizenId
-        defaultPaymentAdviceShouldBeFound("citizenId.equals=" + citizenId);
-
-        // Get all the paymentAdviceList where citizen equals to (citizenId + 1)
-        defaultPaymentAdviceShouldNotBeFound("citizenId.equals=" + (citizenId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllPaymentAdvicesByPaymentFileReconIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentAdviceRepository.saveAndFlush(paymentAdvice);
@@ -1634,32 +1542,6 @@ class PaymentAdviceResourceIT {
 
         // Get all the paymentAdviceList where paymentFile equals to (paymentFileId + 1)
         defaultPaymentAdviceShouldNotBeFound("paymentFileId.equals=" + (paymentFileId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentAdvicesByLandIsEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentAdviceRepository.saveAndFlush(paymentAdvice);
-        Land land;
-        if (TestUtil.findAll(em, Land.class).isEmpty()) {
-            land = LandResourceIT.createEntity(em);
-            em.persist(land);
-            em.flush();
-        } else {
-            land = TestUtil.findAll(em, Land.class).get(0);
-        }
-        em.persist(land);
-        em.flush();
-        paymentAdvice.setLand(land);
-        paymentAdviceRepository.saveAndFlush(paymentAdvice);
-        Long landId = land.getId();
-
-        // Get all the paymentAdviceList where land equals to landId
-        defaultPaymentAdviceShouldBeFound("landId.equals=" + landId);
-
-        // Get all the paymentAdviceList where land equals to (landId + 1)
-        defaultPaymentAdviceShouldNotBeFound("landId.equals=" + (landId + 1));
     }
 
     @Test

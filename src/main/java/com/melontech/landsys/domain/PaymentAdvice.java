@@ -72,9 +72,11 @@ public class PaymentAdvice implements Serializable {
     @Column(name = "hissa_type", nullable = false)
     private HissaType hissaType;
 
-    @OneToMany(mappedBy = "paymentAdvice")
-    @JsonIgnoreProperties(value = { "projectLand", "citizen", "paymentFile", "paymentAdvice" }, allowSetters = true)
-    private Set<Khatedar> khatedars = new HashSet<>();
+    @JsonIgnoreProperties(value = { "projectLand", "citizen", "paymentAdvice", "paymentFile" }, allowSetters = true)
+    @OneToOne(optional = false)
+    @NotNull
+    @JoinColumn(unique = true)
+    private Khatedar khatedar;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -104,11 +106,6 @@ public class PaymentAdvice implements Serializable {
     @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentAdvices", "paymentFiles" }, allowSetters = true)
     private Survey survey;
 
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties(value = { "lands", "bankBranch", "paymentAdvices", "khatedars" }, allowSetters = true)
-    private Citizen citizen;
-
     @JsonIgnoreProperties(value = { "paymentAdvice" }, allowSetters = true)
     @OneToOne(mappedBy = "paymentAdvice")
     private PaymentFileRecon paymentFileRecon;
@@ -119,13 +116,6 @@ public class PaymentAdvice implements Serializable {
     )
     @OneToOne(mappedBy = "paymentAdvice")
     private PaymentFile paymentFile;
-
-    @ManyToOne
-    @JsonIgnoreProperties(
-        value = { "paymentAdvices", "village", "unit", "landType", "state", "citizen", "project", "projectLands" },
-        allowSetters = true
-    )
-    private Land land;
 
     @OneToMany(mappedBy = "paymentAdvice")
     @JsonIgnoreProperties(value = { "paymentAdvice", "projectLand" }, allowSetters = true)
@@ -302,34 +292,16 @@ public class PaymentAdvice implements Serializable {
         this.hissaType = hissaType;
     }
 
-    public Set<Khatedar> getKhatedars() {
-        return this.khatedars;
+    public Khatedar getKhatedar() {
+        return this.khatedar;
     }
 
-    public void setKhatedars(Set<Khatedar> khatedars) {
-        if (this.khatedars != null) {
-            this.khatedars.forEach(i -> i.setPaymentAdvice(null));
-        }
-        if (khatedars != null) {
-            khatedars.forEach(i -> i.setPaymentAdvice(this));
-        }
-        this.khatedars = khatedars;
+    public void setKhatedar(Khatedar khatedar) {
+        this.khatedar = khatedar;
     }
 
-    public PaymentAdvice khatedars(Set<Khatedar> khatedars) {
-        this.setKhatedars(khatedars);
-        return this;
-    }
-
-    public PaymentAdvice addKhatedar(Khatedar khatedar) {
-        this.khatedars.add(khatedar);
-        khatedar.setPaymentAdvice(this);
-        return this;
-    }
-
-    public PaymentAdvice removeKhatedar(Khatedar khatedar) {
-        this.khatedars.remove(khatedar);
-        khatedar.setPaymentAdvice(null);
+    public PaymentAdvice khatedar(Khatedar khatedar) {
+        this.setKhatedar(khatedar);
         return this;
     }
 
@@ -372,19 +344,6 @@ public class PaymentAdvice implements Serializable {
         return this;
     }
 
-    public Citizen getCitizen() {
-        return this.citizen;
-    }
-
-    public void setCitizen(Citizen citizen) {
-        this.citizen = citizen;
-    }
-
-    public PaymentAdvice citizen(Citizen citizen) {
-        this.setCitizen(citizen);
-        return this;
-    }
-
     public PaymentFileRecon getPaymentFileRecon() {
         return this.paymentFileRecon;
     }
@@ -420,19 +379,6 @@ public class PaymentAdvice implements Serializable {
 
     public PaymentAdvice paymentFile(PaymentFile paymentFile) {
         this.setPaymentFile(paymentFile);
-        return this;
-    }
-
-    public Land getLand() {
-        return this.land;
-    }
-
-    public void setLand(Land land) {
-        this.land = land;
-    }
-
-    public PaymentAdvice land(Land land) {
-        this.setLand(land);
         return this;
     }
 

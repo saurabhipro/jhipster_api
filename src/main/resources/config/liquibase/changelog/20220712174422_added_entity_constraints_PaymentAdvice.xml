@@ -8,6 +8,12 @@
     -->
     <changeSet id="20220712174422-2" author="jhipster">
 
+        <addForeignKeyConstraint baseColumnNames="khatedar_id"
+                                 baseTableName="landsys_payment_advice"
+                                 constraintName="fk_landsys_payment_advice__khatedar_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landsys_khatedar"/>
+
         <addForeignKeyConstraint baseColumnNames="land_compensation_id"
                                  baseTableName="landsys_payment_advice"
                                  constraintName="fk_landsys_payment_advice__land_compensation_id"
@@ -25,17 +31,5 @@
                                  constraintName="fk_landsys_payment_advice__survey_id"
                                  referencedColumnNames="id"
                                  referencedTableName="landsys_survey"/>
-
-        <addForeignKeyConstraint baseColumnNames="citizen_id"
-                                 baseTableName="landsys_payment_advice"
-                                 constraintName="fk_landsys_payment_advice__citizen_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="landsys_citizen"/>
-
-        <addForeignKeyConstraint baseColumnNames="land_id"
-                                 baseTableName="landsys_payment_advice"
-                                 constraintName="fk_landsys_payment_advice__land_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="landsys_land"/>
     </changeSet>
 </databaseChangeLog>

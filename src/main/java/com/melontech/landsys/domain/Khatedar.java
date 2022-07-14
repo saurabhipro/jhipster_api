@@ -51,8 +51,15 @@ public class Khatedar implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "lands", "bankBranch", "paymentAdvices", "khatedars" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "bankBranch", "khatedars" }, allowSetters = true)
     private Citizen citizen;
+
+    @JsonIgnoreProperties(
+        value = { "khatedar", "landCompensation", "projectLand", "survey", "paymentFileRecon", "paymentFile", "paymentAdviceDetails" },
+        allowSetters = true
+    )
+    @OneToOne(mappedBy = "khatedar")
+    private PaymentAdvice paymentAdvice;
 
     @JsonIgnoreProperties(
         value = { "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation" },
@@ -60,23 +67,6 @@ public class Khatedar implements Serializable {
     )
     @OneToOne(mappedBy = "khatedar")
     private PaymentFile paymentFile;
-
-    @ManyToOne
-    @JsonIgnoreProperties(
-        value = {
-            "khatedars",
-            "landCompensation",
-            "projectLand",
-            "survey",
-            "citizen",
-            "paymentFileRecon",
-            "paymentFile",
-            "land",
-            "paymentAdviceDetails",
-        },
-        allowSetters = true
-    )
-    private PaymentAdvice paymentAdvice;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -158,6 +148,25 @@ public class Khatedar implements Serializable {
         return this;
     }
 
+    public PaymentAdvice getPaymentAdvice() {
+        return this.paymentAdvice;
+    }
+
+    public void setPaymentAdvice(PaymentAdvice paymentAdvice) {
+        if (this.paymentAdvice != null) {
+            this.paymentAdvice.setKhatedar(null);
+        }
+        if (paymentAdvice != null) {
+            paymentAdvice.setKhatedar(this);
+        }
+        this.paymentAdvice = paymentAdvice;
+    }
+
+    public Khatedar paymentAdvice(PaymentAdvice paymentAdvice) {
+        this.setPaymentAdvice(paymentAdvice);
+        return this;
+    }
+
     public PaymentFile getPaymentFile() {
         return this.paymentFile;
     }
@@ -174,19 +183,6 @@ public class Khatedar implements Serializable {
 
     public Khatedar paymentFile(PaymentFile paymentFile) {
         this.setPaymentFile(paymentFile);
-        return this;
-    }
-
-    public PaymentAdvice getPaymentAdvice() {
-        return this.paymentAdvice;
-    }
-
-    public void setPaymentAdvice(PaymentAdvice paymentAdvice) {
-        this.paymentAdvice = paymentAdvice;
-    }
-
-    public Khatedar paymentAdvice(PaymentAdvice paymentAdvice) {
-        this.setPaymentAdvice(paymentAdvice);
         return this;
     }
 

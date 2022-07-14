@@ -552,6 +552,33 @@ class KhatedarResourceIT {
 
     @Test
     @Transactional
+    void getAllKhatedarsByPaymentAdviceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        khatedarRepository.saveAndFlush(khatedar);
+        PaymentAdvice paymentAdvice;
+        if (TestUtil.findAll(em, PaymentAdvice.class).isEmpty()) {
+            paymentAdvice = PaymentAdviceResourceIT.createEntity(em);
+            em.persist(paymentAdvice);
+            em.flush();
+        } else {
+            paymentAdvice = TestUtil.findAll(em, PaymentAdvice.class).get(0);
+        }
+        em.persist(paymentAdvice);
+        em.flush();
+        khatedar.setPaymentAdvice(paymentAdvice);
+        paymentAdvice.setKhatedar(khatedar);
+        khatedarRepository.saveAndFlush(khatedar);
+        Long paymentAdviceId = paymentAdvice.getId();
+
+        // Get all the khatedarList where paymentAdvice equals to paymentAdviceId
+        defaultKhatedarShouldBeFound("paymentAdviceId.equals=" + paymentAdviceId);
+
+        // Get all the khatedarList where paymentAdvice equals to (paymentAdviceId + 1)
+        defaultKhatedarShouldNotBeFound("paymentAdviceId.equals=" + (paymentAdviceId + 1));
+    }
+
+    @Test
+    @Transactional
     void getAllKhatedarsByPaymentFileIsEqualToSomething() throws Exception {
         // Initialize the database
         khatedarRepository.saveAndFlush(khatedar);
@@ -575,32 +602,6 @@ class KhatedarResourceIT {
 
         // Get all the khatedarList where paymentFile equals to (paymentFileId + 1)
         defaultKhatedarShouldNotBeFound("paymentFileId.equals=" + (paymentFileId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllKhatedarsByPaymentAdviceIsEqualToSomething() throws Exception {
-        // Initialize the database
-        khatedarRepository.saveAndFlush(khatedar);
-        PaymentAdvice paymentAdvice;
-        if (TestUtil.findAll(em, PaymentAdvice.class).isEmpty()) {
-            paymentAdvice = PaymentAdviceResourceIT.createEntity(em);
-            em.persist(paymentAdvice);
-            em.flush();
-        } else {
-            paymentAdvice = TestUtil.findAll(em, PaymentAdvice.class).get(0);
-        }
-        em.persist(paymentAdvice);
-        em.flush();
-        khatedar.setPaymentAdvice(paymentAdvice);
-        khatedarRepository.saveAndFlush(khatedar);
-        Long paymentAdviceId = paymentAdvice.getId();
-
-        // Get all the khatedarList where paymentAdvice equals to paymentAdviceId
-        defaultKhatedarShouldBeFound("paymentAdviceId.equals=" + paymentAdviceId);
-
-        // Get all the khatedarList where paymentAdvice equals to (paymentAdviceId + 1)
-        defaultKhatedarShouldNotBeFound("paymentAdviceId.equals=" + (paymentAdviceId + 1));
     }
 
     /**

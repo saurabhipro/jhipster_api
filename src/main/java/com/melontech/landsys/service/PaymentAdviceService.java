@@ -55,14 +55,6 @@ public interface PaymentAdviceService {
     List<PaymentAdviceDTO> findAllWherePaymentFileIsNull();
 
     /**
-     * Get all the paymentAdvices with eager load of many-to-many relationships.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    Page<PaymentAdviceDTO> findAllWithEagerRelationships(Pageable pageable);
-
-    /**
      * Get the "id" paymentAdvice.
      *
      * @param id the id of the entity.

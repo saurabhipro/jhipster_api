@@ -2,11 +2,9 @@ package com.melontech.landsys.service.mapper;
 
 import com.melontech.landsys.domain.Citizen;
 import com.melontech.landsys.domain.Khatedar;
-import com.melontech.landsys.domain.PaymentAdvice;
 import com.melontech.landsys.domain.ProjectLand;
 import com.melontech.landsys.service.dto.CitizenDTO;
 import com.melontech.landsys.service.dto.KhatedarDTO;
-import com.melontech.landsys.service.dto.PaymentAdviceDTO;
 import com.melontech.landsys.service.dto.ProjectLandDTO;
 import org.mapstruct.*;
 
@@ -17,7 +15,6 @@ import org.mapstruct.*;
 public interface KhatedarMapper extends EntityMapper<KhatedarDTO, Khatedar> {
     @Mapping(target = "projectLand", source = "projectLand", qualifiedByName = "projectLandId")
     @Mapping(target = "citizen", source = "citizen", qualifiedByName = "citizenId")
-    @Mapping(target = "paymentAdvice", source = "paymentAdvice", qualifiedByName = "paymentAdviceId")
     KhatedarDTO toDto(Khatedar s);
 
     @Named("projectLandId")
@@ -29,9 +26,4 @@ public interface KhatedarMapper extends EntityMapper<KhatedarDTO, Khatedar> {
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     CitizenDTO toDtoCitizenId(Citizen citizen);
-
-    @Named("paymentAdviceId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    PaymentAdviceDTO toDtoPaymentAdviceId(PaymentAdvice paymentAdvice);
 }
