@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.melontech.landsys.IntegrationTest;
 import com.melontech.landsys.domain.LandCompensation;
 import com.melontech.landsys.domain.PaymentAdvice;
+import com.melontech.landsys.domain.PaymentFile;
 import com.melontech.landsys.domain.ProjectLand;
 import com.melontech.landsys.domain.Survey;
 import com.melontech.landsys.domain.enumeration.CompensationStatus;
@@ -45,6 +46,10 @@ class LandCompensationResourceIT {
     private static final Double DEFAULT_AREA = 1D;
     private static final Double UPDATED_AREA = 2D;
     private static final Double SMALLER_AREA = 1D - 1D;
+
+    private static final Double DEFAULT_SHARE_PERCENTAGE = 1D;
+    private static final Double UPDATED_SHARE_PERCENTAGE = 2D;
+    private static final Double SMALLER_SHARE_PERCENTAGE = 1D - 1D;
 
     private static final Double DEFAULT_LAND_MARKET_VALUE = 1D;
     private static final Double UPDATED_LAND_MARKET_VALUE = 2D;
@@ -114,6 +119,7 @@ class LandCompensationResourceIT {
         LandCompensation landCompensation = new LandCompensation()
             .hissaType(DEFAULT_HISSA_TYPE)
             .area(DEFAULT_AREA)
+            .sharePercentage(DEFAULT_SHARE_PERCENTAGE)
             .landMarketValue(DEFAULT_LAND_MARKET_VALUE)
             .structuralCompensation(DEFAULT_STRUCTURAL_COMPENSATION)
             .horticultureCompensation(DEFAULT_HORTICULTURE_COMPENSATION)
@@ -147,6 +153,7 @@ class LandCompensationResourceIT {
         LandCompensation landCompensation = new LandCompensation()
             .hissaType(UPDATED_HISSA_TYPE)
             .area(UPDATED_AREA)
+            .sharePercentage(UPDATED_SHARE_PERCENTAGE)
             .landMarketValue(UPDATED_LAND_MARKET_VALUE)
             .structuralCompensation(UPDATED_STRUCTURAL_COMPENSATION)
             .horticultureCompensation(UPDATED_HORTICULTURE_COMPENSATION)
@@ -193,6 +200,7 @@ class LandCompensationResourceIT {
         LandCompensation testLandCompensation = landCompensationList.get(landCompensationList.size() - 1);
         assertThat(testLandCompensation.getHissaType()).isEqualTo(DEFAULT_HISSA_TYPE);
         assertThat(testLandCompensation.getArea()).isEqualTo(DEFAULT_AREA);
+        assertThat(testLandCompensation.getSharePercentage()).isEqualTo(DEFAULT_SHARE_PERCENTAGE);
         assertThat(testLandCompensation.getLandMarketValue()).isEqualTo(DEFAULT_LAND_MARKET_VALUE);
         assertThat(testLandCompensation.getStructuralCompensation()).isEqualTo(DEFAULT_STRUCTURAL_COMPENSATION);
         assertThat(testLandCompensation.getHorticultureCompensation()).isEqualTo(DEFAULT_HORTICULTURE_COMPENSATION);
@@ -268,6 +276,26 @@ class LandCompensationResourceIT {
 
     @Test
     @Transactional
+    void checkSharePercentageIsRequired() throws Exception {
+        int databaseSizeBeforeTest = landCompensationRepository.findAll().size();
+        // set the field null
+        landCompensation.setSharePercentage(null);
+
+        // Create the LandCompensation, which fails.
+        LandCompensationDTO landCompensationDTO = landCompensationMapper.toDto(landCompensation);
+
+        restLandCompensationMockMvc
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(landCompensationDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<LandCompensation> landCompensationList = landCompensationRepository.findAll();
+        assertThat(landCompensationList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void checkLandMarketValueIsRequired() throws Exception {
         int databaseSizeBeforeTest = landCompensationRepository.findAll().size();
         // set the field null
@@ -300,6 +328,7 @@ class LandCompensationResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(landCompensation.getId().intValue())))
             .andExpect(jsonPath("$.[*].hissaType").value(hasItem(DEFAULT_HISSA_TYPE.toString())))
             .andExpect(jsonPath("$.[*].area").value(hasItem(DEFAULT_AREA.doubleValue())))
+            .andExpect(jsonPath("$.[*].sharePercentage").value(hasItem(DEFAULT_SHARE_PERCENTAGE.doubleValue())))
             .andExpect(jsonPath("$.[*].landMarketValue").value(hasItem(DEFAULT_LAND_MARKET_VALUE.doubleValue())))
             .andExpect(jsonPath("$.[*].structuralCompensation").value(hasItem(DEFAULT_STRUCTURAL_COMPENSATION.doubleValue())))
             .andExpect(jsonPath("$.[*].horticultureCompensation").value(hasItem(DEFAULT_HORTICULTURE_COMPENSATION.doubleValue())))
@@ -326,6 +355,7 @@ class LandCompensationResourceIT {
             .andExpect(jsonPath("$.id").value(landCompensation.getId().intValue()))
             .andExpect(jsonPath("$.hissaType").value(DEFAULT_HISSA_TYPE.toString()))
             .andExpect(jsonPath("$.area").value(DEFAULT_AREA.doubleValue()))
+            .andExpect(jsonPath("$.sharePercentage").value(DEFAULT_SHARE_PERCENTAGE.doubleValue()))
             .andExpect(jsonPath("$.landMarketValue").value(DEFAULT_LAND_MARKET_VALUE.doubleValue()))
             .andExpect(jsonPath("$.structuralCompensation").value(DEFAULT_STRUCTURAL_COMPENSATION.doubleValue()))
             .andExpect(jsonPath("$.horticultureCompensation").value(DEFAULT_HORTICULTURE_COMPENSATION.doubleValue()))
@@ -510,6 +540,110 @@ class LandCompensationResourceIT {
 
         // Get all the landCompensationList where area is greater than SMALLER_AREA
         defaultLandCompensationShouldBeFound("area.greaterThan=" + SMALLER_AREA);
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsBySharePercentageIsEqualToSomething() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where sharePercentage equals to DEFAULT_SHARE_PERCENTAGE
+        defaultLandCompensationShouldBeFound("sharePercentage.equals=" + DEFAULT_SHARE_PERCENTAGE);
+
+        // Get all the landCompensationList where sharePercentage equals to UPDATED_SHARE_PERCENTAGE
+        defaultLandCompensationShouldNotBeFound("sharePercentage.equals=" + UPDATED_SHARE_PERCENTAGE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsBySharePercentageIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where sharePercentage not equals to DEFAULT_SHARE_PERCENTAGE
+        defaultLandCompensationShouldNotBeFound("sharePercentage.notEquals=" + DEFAULT_SHARE_PERCENTAGE);
+
+        // Get all the landCompensationList where sharePercentage not equals to UPDATED_SHARE_PERCENTAGE
+        defaultLandCompensationShouldBeFound("sharePercentage.notEquals=" + UPDATED_SHARE_PERCENTAGE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsBySharePercentageIsInShouldWork() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where sharePercentage in DEFAULT_SHARE_PERCENTAGE or UPDATED_SHARE_PERCENTAGE
+        defaultLandCompensationShouldBeFound("sharePercentage.in=" + DEFAULT_SHARE_PERCENTAGE + "," + UPDATED_SHARE_PERCENTAGE);
+
+        // Get all the landCompensationList where sharePercentage equals to UPDATED_SHARE_PERCENTAGE
+        defaultLandCompensationShouldNotBeFound("sharePercentage.in=" + UPDATED_SHARE_PERCENTAGE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsBySharePercentageIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where sharePercentage is not null
+        defaultLandCompensationShouldBeFound("sharePercentage.specified=true");
+
+        // Get all the landCompensationList where sharePercentage is null
+        defaultLandCompensationShouldNotBeFound("sharePercentage.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsBySharePercentageIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where sharePercentage is greater than or equal to DEFAULT_SHARE_PERCENTAGE
+        defaultLandCompensationShouldBeFound("sharePercentage.greaterThanOrEqual=" + DEFAULT_SHARE_PERCENTAGE);
+
+        // Get all the landCompensationList where sharePercentage is greater than or equal to UPDATED_SHARE_PERCENTAGE
+        defaultLandCompensationShouldNotBeFound("sharePercentage.greaterThanOrEqual=" + UPDATED_SHARE_PERCENTAGE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsBySharePercentageIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where sharePercentage is less than or equal to DEFAULT_SHARE_PERCENTAGE
+        defaultLandCompensationShouldBeFound("sharePercentage.lessThanOrEqual=" + DEFAULT_SHARE_PERCENTAGE);
+
+        // Get all the landCompensationList where sharePercentage is less than or equal to SMALLER_SHARE_PERCENTAGE
+        defaultLandCompensationShouldNotBeFound("sharePercentage.lessThanOrEqual=" + SMALLER_SHARE_PERCENTAGE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsBySharePercentageIsLessThanSomething() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where sharePercentage is less than DEFAULT_SHARE_PERCENTAGE
+        defaultLandCompensationShouldNotBeFound("sharePercentage.lessThan=" + DEFAULT_SHARE_PERCENTAGE);
+
+        // Get all the landCompensationList where sharePercentage is less than UPDATED_SHARE_PERCENTAGE
+        defaultLandCompensationShouldBeFound("sharePercentage.lessThan=" + UPDATED_SHARE_PERCENTAGE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsBySharePercentageIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where sharePercentage is greater than DEFAULT_SHARE_PERCENTAGE
+        defaultLandCompensationShouldNotBeFound("sharePercentage.greaterThan=" + DEFAULT_SHARE_PERCENTAGE);
+
+        // Get all the landCompensationList where sharePercentage is greater than SMALLER_SHARE_PERCENTAGE
+        defaultLandCompensationShouldBeFound("sharePercentage.greaterThan=" + SMALLER_SHARE_PERCENTAGE);
     }
 
     @Test
@@ -1547,6 +1681,32 @@ class LandCompensationResourceIT {
         defaultLandCompensationShouldNotBeFound("paymentAdviceId.equals=" + (paymentAdviceId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllLandCompensationsByPaymentFileIsEqualToSomething() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+        PaymentFile paymentFile;
+        if (TestUtil.findAll(em, PaymentFile.class).isEmpty()) {
+            paymentFile = PaymentFileResourceIT.createEntity(em);
+            em.persist(paymentFile);
+            em.flush();
+        } else {
+            paymentFile = TestUtil.findAll(em, PaymentFile.class).get(0);
+        }
+        em.persist(paymentFile);
+        em.flush();
+        landCompensation.addPaymentFile(paymentFile);
+        landCompensationRepository.saveAndFlush(landCompensation);
+        Long paymentFileId = paymentFile.getId();
+
+        // Get all the landCompensationList where paymentFile equals to paymentFileId
+        defaultLandCompensationShouldBeFound("paymentFileId.equals=" + paymentFileId);
+
+        // Get all the landCompensationList where paymentFile equals to (paymentFileId + 1)
+        defaultLandCompensationShouldNotBeFound("paymentFileId.equals=" + (paymentFileId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -1558,6 +1718,7 @@ class LandCompensationResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(landCompensation.getId().intValue())))
             .andExpect(jsonPath("$.[*].hissaType").value(hasItem(DEFAULT_HISSA_TYPE.toString())))
             .andExpect(jsonPath("$.[*].area").value(hasItem(DEFAULT_AREA.doubleValue())))
+            .andExpect(jsonPath("$.[*].sharePercentage").value(hasItem(DEFAULT_SHARE_PERCENTAGE.doubleValue())))
             .andExpect(jsonPath("$.[*].landMarketValue").value(hasItem(DEFAULT_LAND_MARKET_VALUE.doubleValue())))
             .andExpect(jsonPath("$.[*].structuralCompensation").value(hasItem(DEFAULT_STRUCTURAL_COMPENSATION.doubleValue())))
             .andExpect(jsonPath("$.[*].horticultureCompensation").value(hasItem(DEFAULT_HORTICULTURE_COMPENSATION.doubleValue())))
@@ -1618,6 +1779,7 @@ class LandCompensationResourceIT {
         updatedLandCompensation
             .hissaType(UPDATED_HISSA_TYPE)
             .area(UPDATED_AREA)
+            .sharePercentage(UPDATED_SHARE_PERCENTAGE)
             .landMarketValue(UPDATED_LAND_MARKET_VALUE)
             .structuralCompensation(UPDATED_STRUCTURAL_COMPENSATION)
             .horticultureCompensation(UPDATED_HORTICULTURE_COMPENSATION)
@@ -1644,6 +1806,7 @@ class LandCompensationResourceIT {
         LandCompensation testLandCompensation = landCompensationList.get(landCompensationList.size() - 1);
         assertThat(testLandCompensation.getHissaType()).isEqualTo(UPDATED_HISSA_TYPE);
         assertThat(testLandCompensation.getArea()).isEqualTo(UPDATED_AREA);
+        assertThat(testLandCompensation.getSharePercentage()).isEqualTo(UPDATED_SHARE_PERCENTAGE);
         assertThat(testLandCompensation.getLandMarketValue()).isEqualTo(UPDATED_LAND_MARKET_VALUE);
         assertThat(testLandCompensation.getStructuralCompensation()).isEqualTo(UPDATED_STRUCTURAL_COMPENSATION);
         assertThat(testLandCompensation.getHorticultureCompensation()).isEqualTo(UPDATED_HORTICULTURE_COMPENSATION);
@@ -1738,14 +1901,15 @@ class LandCompensationResourceIT {
         partialUpdatedLandCompensation
             .hissaType(UPDATED_HISSA_TYPE)
             .area(UPDATED_AREA)
+            .sharePercentage(UPDATED_SHARE_PERCENTAGE)
             .landMarketValue(UPDATED_LAND_MARKET_VALUE)
-            .structuralCompensation(UPDATED_STRUCTURAL_COMPENSATION)
+            .horticultureCompensation(UPDATED_HORTICULTURE_COMPENSATION)
             .forestCompensation(UPDATED_FOREST_COMPENSATION)
             .solatiumMoney(UPDATED_SOLATIUM_MONEY)
             .additionalCompensation(UPDATED_ADDITIONAL_COMPENSATION)
             .status(UPDATED_STATUS)
             .orderDate(UPDATED_ORDER_DATE)
-            .paymentAmount(UPDATED_PAYMENT_AMOUNT);
+            .transactionId(UPDATED_TRANSACTION_ID);
 
         restLandCompensationMockMvc
             .perform(
@@ -1761,16 +1925,17 @@ class LandCompensationResourceIT {
         LandCompensation testLandCompensation = landCompensationList.get(landCompensationList.size() - 1);
         assertThat(testLandCompensation.getHissaType()).isEqualTo(UPDATED_HISSA_TYPE);
         assertThat(testLandCompensation.getArea()).isEqualTo(UPDATED_AREA);
+        assertThat(testLandCompensation.getSharePercentage()).isEqualTo(UPDATED_SHARE_PERCENTAGE);
         assertThat(testLandCompensation.getLandMarketValue()).isEqualTo(UPDATED_LAND_MARKET_VALUE);
-        assertThat(testLandCompensation.getStructuralCompensation()).isEqualTo(UPDATED_STRUCTURAL_COMPENSATION);
-        assertThat(testLandCompensation.getHorticultureCompensation()).isEqualTo(DEFAULT_HORTICULTURE_COMPENSATION);
+        assertThat(testLandCompensation.getStructuralCompensation()).isEqualTo(DEFAULT_STRUCTURAL_COMPENSATION);
+        assertThat(testLandCompensation.getHorticultureCompensation()).isEqualTo(UPDATED_HORTICULTURE_COMPENSATION);
         assertThat(testLandCompensation.getForestCompensation()).isEqualTo(UPDATED_FOREST_COMPENSATION);
         assertThat(testLandCompensation.getSolatiumMoney()).isEqualTo(UPDATED_SOLATIUM_MONEY);
         assertThat(testLandCompensation.getAdditionalCompensation()).isEqualTo(UPDATED_ADDITIONAL_COMPENSATION);
         assertThat(testLandCompensation.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testLandCompensation.getOrderDate()).isEqualTo(UPDATED_ORDER_DATE);
-        assertThat(testLandCompensation.getPaymentAmount()).isEqualTo(UPDATED_PAYMENT_AMOUNT);
-        assertThat(testLandCompensation.getTransactionId()).isEqualTo(DEFAULT_TRANSACTION_ID);
+        assertThat(testLandCompensation.getPaymentAmount()).isEqualTo(DEFAULT_PAYMENT_AMOUNT);
+        assertThat(testLandCompensation.getTransactionId()).isEqualTo(UPDATED_TRANSACTION_ID);
     }
 
     @Test
@@ -1788,6 +1953,7 @@ class LandCompensationResourceIT {
         partialUpdatedLandCompensation
             .hissaType(UPDATED_HISSA_TYPE)
             .area(UPDATED_AREA)
+            .sharePercentage(UPDATED_SHARE_PERCENTAGE)
             .landMarketValue(UPDATED_LAND_MARKET_VALUE)
             .structuralCompensation(UPDATED_STRUCTURAL_COMPENSATION)
             .horticultureCompensation(UPDATED_HORTICULTURE_COMPENSATION)
@@ -1813,6 +1979,7 @@ class LandCompensationResourceIT {
         LandCompensation testLandCompensation = landCompensationList.get(landCompensationList.size() - 1);
         assertThat(testLandCompensation.getHissaType()).isEqualTo(UPDATED_HISSA_TYPE);
         assertThat(testLandCompensation.getArea()).isEqualTo(UPDATED_AREA);
+        assertThat(testLandCompensation.getSharePercentage()).isEqualTo(UPDATED_SHARE_PERCENTAGE);
         assertThat(testLandCompensation.getLandMarketValue()).isEqualTo(UPDATED_LAND_MARKET_VALUE);
         assertThat(testLandCompensation.getStructuralCompensation()).isEqualTo(UPDATED_STRUCTURAL_COMPENSATION);
         assertThat(testLandCompensation.getHorticultureCompensation()).isEqualTo(UPDATED_HORTICULTURE_COMPENSATION);

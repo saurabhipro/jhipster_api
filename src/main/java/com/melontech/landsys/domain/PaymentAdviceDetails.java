@@ -34,7 +34,15 @@ public class PaymentAdviceDetails implements Serializable {
     @NotNull
     @JsonIgnoreProperties(
         value = {
-            "landCompensation", "projectLand", "survey", "citizen", "paymentFile", "paymentFileRecon", "land", "paymentAdviceDetails",
+            "khatedars",
+            "landCompensation",
+            "projectLand",
+            "survey",
+            "citizen",
+            "paymentFileRecon",
+            "paymentFile",
+            "land",
+            "paymentAdviceDetails",
         },
         allowSetters = true
     )
@@ -44,7 +52,16 @@ public class PaymentAdviceDetails implements Serializable {
     @NotNull
     @JsonIgnoreProperties(
         value = {
-            "land", "project", "citizen", "noticeStatusInfo", "survey", "landCompensation", "paymentAdvices", "paymentAdviceDetails",
+            "land",
+            "project",
+            "citizen",
+            "noticeStatusInfo",
+            "survey",
+            "landCompensation",
+            "paymentAdvices",
+            "paymentAdviceDetails",
+            "paymentFiles",
+            "khatedars",
         },
         allowSetters = true
     )

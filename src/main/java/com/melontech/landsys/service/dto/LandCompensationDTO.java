@@ -21,6 +21,9 @@ public class LandCompensationDTO implements Serializable {
     private Double area;
 
     @NotNull
+    private Double sharePercentage;
+
+    @NotNull
     private Double landMarketValue;
 
     private Double structuralCompensation;
@@ -67,6 +70,14 @@ public class LandCompensationDTO implements Serializable {
 
     public void setArea(Double area) {
         this.area = area;
+    }
+
+    public Double getSharePercentage() {
+        return sharePercentage;
+    }
+
+    public void setSharePercentage(Double sharePercentage) {
+        this.sharePercentage = sharePercentage;
     }
 
     public Double getLandMarketValue() {
@@ -193,6 +204,7 @@ public class LandCompensationDTO implements Serializable {
             "id=" + getId() +
             ", hissaType='" + getHissaType() + "'" +
             ", area=" + getArea() +
+            ", sharePercentage=" + getSharePercentage() +
             ", landMarketValue=" + getLandMarketValue() +
             ", structuralCompensation=" + getStructuralCompensation() +
             ", horticultureCompensation=" + getHorticultureCompensation() +

@@ -1,5 +1,6 @@
 package com.melontech.landsys.service.dto;
 
+import com.melontech.landsys.domain.enumeration.PaymentAdviceType;
 import com.melontech.landsys.domain.enumeration.PaymentStatus;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -27,6 +28,22 @@ public class PaymentFileDTO implements Serializable {
     private String bankName;
 
     private String ifscCode;
+
+    private PaymentAdviceType paymentMode;
+
+    private KhatedarDTO khatedar;
+
+    private PaymentAdviceDTO paymentAdvice;
+
+    private ProjectLandDTO projectLand;
+
+    private SurveyDTO survey;
+
+    private BankDTO bank;
+
+    private BankBranchDTO bankBranch;
+
+    private LandCompensationDTO landCompensation;
 
     public Long getId() {
         return id;
@@ -84,6 +101,70 @@ public class PaymentFileDTO implements Serializable {
         this.ifscCode = ifscCode;
     }
 
+    public PaymentAdviceType getPaymentMode() {
+        return paymentMode;
+    }
+
+    public void setPaymentMode(PaymentAdviceType paymentMode) {
+        this.paymentMode = paymentMode;
+    }
+
+    public KhatedarDTO getKhatedar() {
+        return khatedar;
+    }
+
+    public void setKhatedar(KhatedarDTO khatedar) {
+        this.khatedar = khatedar;
+    }
+
+    public PaymentAdviceDTO getPaymentAdvice() {
+        return paymentAdvice;
+    }
+
+    public void setPaymentAdvice(PaymentAdviceDTO paymentAdvice) {
+        this.paymentAdvice = paymentAdvice;
+    }
+
+    public ProjectLandDTO getProjectLand() {
+        return projectLand;
+    }
+
+    public void setProjectLand(ProjectLandDTO projectLand) {
+        this.projectLand = projectLand;
+    }
+
+    public SurveyDTO getSurvey() {
+        return survey;
+    }
+
+    public void setSurvey(SurveyDTO survey) {
+        this.survey = survey;
+    }
+
+    public BankDTO getBank() {
+        return bank;
+    }
+
+    public void setBank(BankDTO bank) {
+        this.bank = bank;
+    }
+
+    public BankBranchDTO getBankBranch() {
+        return bankBranch;
+    }
+
+    public void setBankBranch(BankBranchDTO bankBranch) {
+        this.bankBranch = bankBranch;
+    }
+
+    public LandCompensationDTO getLandCompensation() {
+        return landCompensation;
+    }
+
+    public void setLandCompensation(LandCompensationDTO landCompensation) {
+        this.landCompensation = landCompensation;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -116,6 +197,14 @@ public class PaymentFileDTO implements Serializable {
             ", paymentStatus='" + getPaymentStatus() + "'" +
             ", bankName='" + getBankName() + "'" +
             ", ifscCode='" + getIfscCode() + "'" +
+            ", paymentMode='" + getPaymentMode() + "'" +
+            ", khatedar=" + getKhatedar() +
+            ", paymentAdvice=" + getPaymentAdvice() +
+            ", projectLand=" + getProjectLand() +
+            ", survey=" + getSurvey() +
+            ", bank=" + getBank() +
+            ", bankBranch=" + getBankBranch() +
+            ", landCompensation=" + getLandCompensation() +
             "}";
     }
 }

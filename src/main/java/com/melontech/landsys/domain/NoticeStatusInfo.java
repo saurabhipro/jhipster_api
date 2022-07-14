@@ -29,7 +29,16 @@ public class NoticeStatusInfo implements Serializable {
     @OneToMany(mappedBy = "noticeStatusInfo")
     @JsonIgnoreProperties(
         value = {
-            "land", "project", "citizen", "noticeStatusInfo", "survey", "landCompensation", "paymentAdvices", "paymentAdviceDetails",
+            "land",
+            "project",
+            "citizen",
+            "noticeStatusInfo",
+            "survey",
+            "landCompensation",
+            "paymentAdvices",
+            "paymentAdviceDetails",
+            "paymentFiles",
+            "khatedars",
         },
         allowSetters = true
     )

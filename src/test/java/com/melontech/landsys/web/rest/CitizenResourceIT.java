@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.melontech.landsys.IntegrationTest;
 import com.melontech.landsys.domain.BankBranch;
 import com.melontech.landsys.domain.Citizen;
+import com.melontech.landsys.domain.Khatedar;
 import com.melontech.landsys.domain.Land;
 import com.melontech.landsys.domain.PaymentAdvice;
 import com.melontech.landsys.domain.ProjectLand;
@@ -155,16 +156,6 @@ class CitizenResourceIT {
             .accountNo(DEFAULT_ACCOUNT_NO)
             .accNoImage(DEFAULT_ACC_NO_IMAGE)
             .accNoImageContentType(DEFAULT_ACC_NO_IMAGE_CONTENT_TYPE);
-        // Add required entity
-        BankBranch bankBranch;
-        if (TestUtil.findAll(em, BankBranch.class).isEmpty()) {
-            bankBranch = BankBranchResourceIT.createEntity(em);
-            em.persist(bankBranch);
-            em.flush();
-        } else {
-            bankBranch = TestUtil.findAll(em, BankBranch.class).get(0);
-        }
-        citizen.setBankBranch(bankBranch);
         return citizen;
     }
 
@@ -195,16 +186,6 @@ class CitizenResourceIT {
             .accountNo(UPDATED_ACCOUNT_NO)
             .accNoImage(UPDATED_ACC_NO_IMAGE)
             .accNoImageContentType(UPDATED_ACC_NO_IMAGE_CONTENT_TYPE);
-        // Add required entity
-        BankBranch bankBranch;
-        if (TestUtil.findAll(em, BankBranch.class).isEmpty()) {
-            bankBranch = BankBranchResourceIT.createUpdatedEntity(em);
-            em.persist(bankBranch);
-            em.flush();
-        } else {
-            bankBranch = TestUtil.findAll(em, BankBranch.class).get(0);
-        }
-        citizen.setBankBranch(bankBranch);
         return citizen;
     }
 
@@ -1427,6 +1408,32 @@ class CitizenResourceIT {
 
         // Get all the citizenList where paymentAdvice equals to (paymentAdviceId + 1)
         defaultCitizenShouldNotBeFound("paymentAdviceId.equals=" + (paymentAdviceId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllCitizensByKhatedarIsEqualToSomething() throws Exception {
+        // Initialize the database
+        citizenRepository.saveAndFlush(citizen);
+        Khatedar khatedar;
+        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
+            khatedar = KhatedarResourceIT.createEntity(em);
+            em.persist(khatedar);
+            em.flush();
+        } else {
+            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
+        }
+        em.persist(khatedar);
+        em.flush();
+        citizen.addKhatedar(khatedar);
+        citizenRepository.saveAndFlush(citizen);
+        Long khatedarId = khatedar.getId();
+
+        // Get all the citizenList where khatedar equals to khatedarId
+        defaultCitizenShouldBeFound("khatedarId.equals=" + khatedarId);
+
+        // Get all the citizenList where khatedar equals to (khatedarId + 1)
+        defaultCitizenShouldNotBeFound("khatedarId.equals=" + (khatedarId + 1));
     }
 
     /**

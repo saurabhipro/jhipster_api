@@ -99,6 +99,10 @@ public class LandCompensationQueryService extends QueryService<LandCompensation>
             if (criteria.getArea() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getArea(), LandCompensation_.area));
             }
+            if (criteria.getSharePercentage() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getSharePercentage(), LandCompensation_.sharePercentage));
+            }
             if (criteria.getLandMarketValue() != null) {
                 specification =
                     specification.and(buildRangeSpecification(criteria.getLandMarketValue(), LandCompensation_.landMarketValue));
@@ -164,6 +168,15 @@ public class LandCompensationQueryService extends QueryService<LandCompensation>
                         buildSpecification(
                             criteria.getPaymentAdviceId(),
                             root -> root.join(LandCompensation_.paymentAdvices, JoinType.LEFT).get(PaymentAdvice_.id)
+                        )
+                    );
+            }
+            if (criteria.getPaymentFileId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPaymentFileId(),
+                            root -> root.join(LandCompensation_.paymentFiles, JoinType.LEFT).get(PaymentFile_.id)
                         )
                     );
             }

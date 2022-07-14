@@ -31,8 +31,15 @@ public class Bank implements Serializable {
     private String code;
 
     @OneToMany(mappedBy = "bank")
-    @JsonIgnoreProperties(value = { "bank", "citizens" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "bank", "citizens", "paymentFiles" }, allowSetters = true)
     private Set<BankBranch> bankBranches = new HashSet<>();
+
+    @OneToMany(mappedBy = "bank")
+    @JsonIgnoreProperties(
+        value = { "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation" },
+        allowSetters = true
+    )
+    private Set<PaymentFile> paymentFiles = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -103,6 +110,37 @@ public class Bank implements Serializable {
     public Bank removeBankBranch(BankBranch bankBranch) {
         this.bankBranches.remove(bankBranch);
         bankBranch.setBank(null);
+        return this;
+    }
+
+    public Set<PaymentFile> getPaymentFiles() {
+        return this.paymentFiles;
+    }
+
+    public void setPaymentFiles(Set<PaymentFile> paymentFiles) {
+        if (this.paymentFiles != null) {
+            this.paymentFiles.forEach(i -> i.setBank(null));
+        }
+        if (paymentFiles != null) {
+            paymentFiles.forEach(i -> i.setBank(this));
+        }
+        this.paymentFiles = paymentFiles;
+    }
+
+    public Bank paymentFiles(Set<PaymentFile> paymentFiles) {
+        this.setPaymentFiles(paymentFiles);
+        return this;
+    }
+
+    public Bank addPaymentFile(PaymentFile paymentFile) {
+        this.paymentFiles.add(paymentFile);
+        paymentFile.setBank(this);
+        return this;
+    }
+
+    public Bank removePaymentFile(PaymentFile paymentFile) {
+        this.paymentFiles.remove(paymentFile);
+        paymentFile.setBank(null);
         return this;
     }
 

@@ -1,5 +1,6 @@
 package com.melontech.landsys.service.criteria;
 
+import com.melontech.landsys.domain.enumeration.PaymentAdviceType;
 import com.melontech.landsys.domain.enumeration.PaymentStatus;
 import java.io.Serializable;
 import java.util.Objects;
@@ -43,6 +44,23 @@ public class PaymentFileCriteria implements Serializable, Criteria {
         }
     }
 
+    /**
+     * Class for filtering PaymentAdviceType
+     */
+    public static class PaymentAdviceTypeFilter extends Filter<PaymentAdviceType> {
+
+        public PaymentAdviceTypeFilter() {}
+
+        public PaymentAdviceTypeFilter(PaymentAdviceTypeFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public PaymentAdviceTypeFilter copy() {
+            return new PaymentAdviceTypeFilter(this);
+        }
+    }
+
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
@@ -59,7 +77,21 @@ public class PaymentFileCriteria implements Serializable, Criteria {
 
     private StringFilter ifscCode;
 
+    private PaymentAdviceTypeFilter paymentMode;
+
+    private LongFilter khatedarId;
+
     private LongFilter paymentAdviceId;
+
+    private LongFilter projectLandId;
+
+    private LongFilter surveyId;
+
+    private LongFilter bankId;
+
+    private LongFilter bankBranchId;
+
+    private LongFilter landCompensationId;
 
     private Boolean distinct;
 
@@ -73,7 +105,14 @@ public class PaymentFileCriteria implements Serializable, Criteria {
         this.paymentStatus = other.paymentStatus == null ? null : other.paymentStatus.copy();
         this.bankName = other.bankName == null ? null : other.bankName.copy();
         this.ifscCode = other.ifscCode == null ? null : other.ifscCode.copy();
+        this.paymentMode = other.paymentMode == null ? null : other.paymentMode.copy();
+        this.khatedarId = other.khatedarId == null ? null : other.khatedarId.copy();
         this.paymentAdviceId = other.paymentAdviceId == null ? null : other.paymentAdviceId.copy();
+        this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
+        this.surveyId = other.surveyId == null ? null : other.surveyId.copy();
+        this.bankId = other.bankId == null ? null : other.bankId.copy();
+        this.bankBranchId = other.bankBranchId == null ? null : other.bankBranchId.copy();
+        this.landCompensationId = other.landCompensationId == null ? null : other.landCompensationId.copy();
         this.distinct = other.distinct;
     }
 
@@ -187,6 +226,36 @@ public class PaymentFileCriteria implements Serializable, Criteria {
         this.ifscCode = ifscCode;
     }
 
+    public PaymentAdviceTypeFilter getPaymentMode() {
+        return paymentMode;
+    }
+
+    public PaymentAdviceTypeFilter paymentMode() {
+        if (paymentMode == null) {
+            paymentMode = new PaymentAdviceTypeFilter();
+        }
+        return paymentMode;
+    }
+
+    public void setPaymentMode(PaymentAdviceTypeFilter paymentMode) {
+        this.paymentMode = paymentMode;
+    }
+
+    public LongFilter getKhatedarId() {
+        return khatedarId;
+    }
+
+    public LongFilter khatedarId() {
+        if (khatedarId == null) {
+            khatedarId = new LongFilter();
+        }
+        return khatedarId;
+    }
+
+    public void setKhatedarId(LongFilter khatedarId) {
+        this.khatedarId = khatedarId;
+    }
+
     public LongFilter getPaymentAdviceId() {
         return paymentAdviceId;
     }
@@ -200,6 +269,81 @@ public class PaymentFileCriteria implements Serializable, Criteria {
 
     public void setPaymentAdviceId(LongFilter paymentAdviceId) {
         this.paymentAdviceId = paymentAdviceId;
+    }
+
+    public LongFilter getProjectLandId() {
+        return projectLandId;
+    }
+
+    public LongFilter projectLandId() {
+        if (projectLandId == null) {
+            projectLandId = new LongFilter();
+        }
+        return projectLandId;
+    }
+
+    public void setProjectLandId(LongFilter projectLandId) {
+        this.projectLandId = projectLandId;
+    }
+
+    public LongFilter getSurveyId() {
+        return surveyId;
+    }
+
+    public LongFilter surveyId() {
+        if (surveyId == null) {
+            surveyId = new LongFilter();
+        }
+        return surveyId;
+    }
+
+    public void setSurveyId(LongFilter surveyId) {
+        this.surveyId = surveyId;
+    }
+
+    public LongFilter getBankId() {
+        return bankId;
+    }
+
+    public LongFilter bankId() {
+        if (bankId == null) {
+            bankId = new LongFilter();
+        }
+        return bankId;
+    }
+
+    public void setBankId(LongFilter bankId) {
+        this.bankId = bankId;
+    }
+
+    public LongFilter getBankBranchId() {
+        return bankBranchId;
+    }
+
+    public LongFilter bankBranchId() {
+        if (bankBranchId == null) {
+            bankBranchId = new LongFilter();
+        }
+        return bankBranchId;
+    }
+
+    public void setBankBranchId(LongFilter bankBranchId) {
+        this.bankBranchId = bankBranchId;
+    }
+
+    public LongFilter getLandCompensationId() {
+        return landCompensationId;
+    }
+
+    public LongFilter landCompensationId() {
+        if (landCompensationId == null) {
+            landCompensationId = new LongFilter();
+        }
+        return landCompensationId;
+    }
+
+    public void setLandCompensationId(LongFilter landCompensationId) {
+        this.landCompensationId = landCompensationId;
     }
 
     public Boolean getDistinct() {
@@ -227,7 +371,14 @@ public class PaymentFileCriteria implements Serializable, Criteria {
             Objects.equals(paymentStatus, that.paymentStatus) &&
             Objects.equals(bankName, that.bankName) &&
             Objects.equals(ifscCode, that.ifscCode) &&
+            Objects.equals(paymentMode, that.paymentMode) &&
+            Objects.equals(khatedarId, that.khatedarId) &&
             Objects.equals(paymentAdviceId, that.paymentAdviceId) &&
+            Objects.equals(projectLandId, that.projectLandId) &&
+            Objects.equals(surveyId, that.surveyId) &&
+            Objects.equals(bankId, that.bankId) &&
+            Objects.equals(bankBranchId, that.bankBranchId) &&
+            Objects.equals(landCompensationId, that.landCompensationId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -242,7 +393,14 @@ public class PaymentFileCriteria implements Serializable, Criteria {
             paymentStatus,
             bankName,
             ifscCode,
+            paymentMode,
+            khatedarId,
             paymentAdviceId,
+            projectLandId,
+            surveyId,
+            bankId,
+            bankBranchId,
+            landCompensationId,
             distinct
         );
     }
@@ -258,7 +416,14 @@ public class PaymentFileCriteria implements Serializable, Criteria {
             (paymentStatus != null ? "paymentStatus=" + paymentStatus + ", " : "") +
             (bankName != null ? "bankName=" + bankName + ", " : "") +
             (ifscCode != null ? "ifscCode=" + ifscCode + ", " : "") +
+            (paymentMode != null ? "paymentMode=" + paymentMode + ", " : "") +
+            (khatedarId != null ? "khatedarId=" + khatedarId + ", " : "") +
             (paymentAdviceId != null ? "paymentAdviceId=" + paymentAdviceId + ", " : "") +
+            (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
+            (surveyId != null ? "surveyId=" + surveyId + ", " : "") +
+            (bankId != null ? "bankId=" + bankId + ", " : "") +
+            (bankBranchId != null ? "bankBranchId=" + bankBranchId + ", " : "") +
+            (landCompensationId != null ? "landCompensationId=" + landCompensationId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

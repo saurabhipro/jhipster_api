@@ -106,6 +106,8 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
 
     private HissaTypeFilter hissaType;
 
+    private LongFilter khatedarId;
+
     private LongFilter landCompensationId;
 
     private LongFilter projectLandId;
@@ -114,9 +116,9 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
 
     private LongFilter citizenId;
 
-    private LongFilter paymentFileId;
-
     private LongFilter paymentFileReconId;
+
+    private LongFilter paymentFileId;
 
     private LongFilter landId;
 
@@ -140,12 +142,13 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
         this.referenceNumber = other.referenceNumber == null ? null : other.referenceNumber.copy();
         this.paymentStatus = other.paymentStatus == null ? null : other.paymentStatus.copy();
         this.hissaType = other.hissaType == null ? null : other.hissaType.copy();
+        this.khatedarId = other.khatedarId == null ? null : other.khatedarId.copy();
         this.landCompensationId = other.landCompensationId == null ? null : other.landCompensationId.copy();
         this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
         this.surveyId = other.surveyId == null ? null : other.surveyId.copy();
         this.citizenId = other.citizenId == null ? null : other.citizenId.copy();
-        this.paymentFileId = other.paymentFileId == null ? null : other.paymentFileId.copy();
         this.paymentFileReconId = other.paymentFileReconId == null ? null : other.paymentFileReconId.copy();
+        this.paymentFileId = other.paymentFileId == null ? null : other.paymentFileId.copy();
         this.landId = other.landId == null ? null : other.landId.copy();
         this.paymentAdviceDetailsId = other.paymentAdviceDetailsId == null ? null : other.paymentAdviceDetailsId.copy();
         this.distinct = other.distinct;
@@ -351,6 +354,21 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
         this.hissaType = hissaType;
     }
 
+    public LongFilter getKhatedarId() {
+        return khatedarId;
+    }
+
+    public LongFilter khatedarId() {
+        if (khatedarId == null) {
+            khatedarId = new LongFilter();
+        }
+        return khatedarId;
+    }
+
+    public void setKhatedarId(LongFilter khatedarId) {
+        this.khatedarId = khatedarId;
+    }
+
     public LongFilter getLandCompensationId() {
         return landCompensationId;
     }
@@ -411,21 +429,6 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
         this.citizenId = citizenId;
     }
 
-    public LongFilter getPaymentFileId() {
-        return paymentFileId;
-    }
-
-    public LongFilter paymentFileId() {
-        if (paymentFileId == null) {
-            paymentFileId = new LongFilter();
-        }
-        return paymentFileId;
-    }
-
-    public void setPaymentFileId(LongFilter paymentFileId) {
-        this.paymentFileId = paymentFileId;
-    }
-
     public LongFilter getPaymentFileReconId() {
         return paymentFileReconId;
     }
@@ -439,6 +442,21 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
 
     public void setPaymentFileReconId(LongFilter paymentFileReconId) {
         this.paymentFileReconId = paymentFileReconId;
+    }
+
+    public LongFilter getPaymentFileId() {
+        return paymentFileId;
+    }
+
+    public LongFilter paymentFileId() {
+        if (paymentFileId == null) {
+            paymentFileId = new LongFilter();
+        }
+        return paymentFileId;
+    }
+
+    public void setPaymentFileId(LongFilter paymentFileId) {
+        this.paymentFileId = paymentFileId;
     }
 
     public LongFilter getLandId() {
@@ -502,12 +520,13 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
             Objects.equals(referenceNumber, that.referenceNumber) &&
             Objects.equals(paymentStatus, that.paymentStatus) &&
             Objects.equals(hissaType, that.hissaType) &&
+            Objects.equals(khatedarId, that.khatedarId) &&
             Objects.equals(landCompensationId, that.landCompensationId) &&
             Objects.equals(projectLandId, that.projectLandId) &&
             Objects.equals(surveyId, that.surveyId) &&
             Objects.equals(citizenId, that.citizenId) &&
-            Objects.equals(paymentFileId, that.paymentFileId) &&
             Objects.equals(paymentFileReconId, that.paymentFileReconId) &&
+            Objects.equals(paymentFileId, that.paymentFileId) &&
             Objects.equals(landId, that.landId) &&
             Objects.equals(paymentAdviceDetailsId, that.paymentAdviceDetailsId) &&
             Objects.equals(distinct, that.distinct)
@@ -530,12 +549,13 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
             referenceNumber,
             paymentStatus,
             hissaType,
+            khatedarId,
             landCompensationId,
             projectLandId,
             surveyId,
             citizenId,
-            paymentFileId,
             paymentFileReconId,
+            paymentFileId,
             landId,
             paymentAdviceDetailsId,
             distinct
@@ -559,12 +579,13 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
             (referenceNumber != null ? "referenceNumber=" + referenceNumber + ", " : "") +
             (paymentStatus != null ? "paymentStatus=" + paymentStatus + ", " : "") +
             (hissaType != null ? "hissaType=" + hissaType + ", " : "") +
+            (khatedarId != null ? "khatedarId=" + khatedarId + ", " : "") +
             (landCompensationId != null ? "landCompensationId=" + landCompensationId + ", " : "") +
             (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
             (surveyId != null ? "surveyId=" + surveyId + ", " : "") +
             (citizenId != null ? "citizenId=" + citizenId + ", " : "") +
-            (paymentFileId != null ? "paymentFileId=" + paymentFileId + ", " : "") +
             (paymentFileReconId != null ? "paymentFileReconId=" + paymentFileReconId + ", " : "") +
+            (paymentFileId != null ? "paymentFileId=" + paymentFileId + ", " : "") +
             (landId != null ? "landId=" + landId + ", " : "") +
             (paymentAdviceDetailsId != null ? "paymentAdviceDetailsId=" + paymentAdviceDetailsId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

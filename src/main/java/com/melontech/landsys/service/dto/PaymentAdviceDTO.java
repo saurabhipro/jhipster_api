@@ -54,8 +54,6 @@ public class PaymentAdviceDTO implements Serializable {
 
     private CitizenDTO citizen;
 
-    private PaymentFileDTO paymentFile;
-
     private LandDTO land;
 
     public Long getId() {
@@ -194,14 +192,6 @@ public class PaymentAdviceDTO implements Serializable {
         this.citizen = citizen;
     }
 
-    public PaymentFileDTO getPaymentFile() {
-        return paymentFile;
-    }
-
-    public void setPaymentFile(PaymentFileDTO paymentFile) {
-        this.paymentFile = paymentFile;
-    }
-
     public LandDTO getLand() {
         return land;
     }
@@ -252,7 +242,6 @@ public class PaymentAdviceDTO implements Serializable {
             ", projectLand=" + getProjectLand() +
             ", survey=" + getSurvey() +
             ", citizen=" + getCitizen() +
-            ", paymentFile=" + getPaymentFile() +
             ", land=" + getLand() +
             "}";
     }

@@ -72,16 +72,29 @@ public class PaymentAdvice implements Serializable {
     @Column(name = "hissa_type", nullable = false)
     private HissaType hissaType;
 
+    @OneToMany(mappedBy = "paymentAdvice")
+    @JsonIgnoreProperties(value = { "projectLand", "citizen", "paymentFile", "paymentAdvice" }, allowSetters = true)
+    private Set<Khatedar> khatedars = new HashSet<>();
+
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "projectLand", "survey", "paymentAdvices" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "projectLand", "survey", "paymentAdvices", "paymentFiles" }, allowSetters = true)
     private LandCompensation landCompensation;
 
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(
         value = {
-            "land", "project", "citizen", "noticeStatusInfo", "survey", "landCompensation", "paymentAdvices", "paymentAdviceDetails",
+            "land",
+            "project",
+            "citizen",
+            "noticeStatusInfo",
+            "survey",
+            "landCompensation",
+            "paymentAdvices",
+            "paymentAdviceDetails",
+            "paymentFiles",
+            "khatedars",
         },
         allowSetters = true
     )
@@ -89,21 +102,24 @@ public class PaymentAdvice implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentAdvices" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentAdvices", "paymentFiles" }, allowSetters = true)
     private Survey survey;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "lands", "bankBranch", "projectLands", "paymentAdvices" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "lands", "bankBranch", "projectLands", "paymentAdvices", "khatedars" }, allowSetters = true)
     private Citizen citizen;
-
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "paymentAdvices" }, allowSetters = true)
-    private PaymentFile paymentFile;
 
     @JsonIgnoreProperties(value = { "paymentAdvice" }, allowSetters = true)
     @OneToOne(mappedBy = "paymentAdvice")
     private PaymentFileRecon paymentFileRecon;
+
+    @JsonIgnoreProperties(
+        value = { "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation" },
+        allowSetters = true
+    )
+    @OneToOne(mappedBy = "paymentAdvice")
+    private PaymentFile paymentFile;
 
     @ManyToOne
     @JsonIgnoreProperties(
@@ -287,6 +303,37 @@ public class PaymentAdvice implements Serializable {
         this.hissaType = hissaType;
     }
 
+    public Set<Khatedar> getKhatedars() {
+        return this.khatedars;
+    }
+
+    public void setKhatedars(Set<Khatedar> khatedars) {
+        if (this.khatedars != null) {
+            this.khatedars.forEach(i -> i.setPaymentAdvice(null));
+        }
+        if (khatedars != null) {
+            khatedars.forEach(i -> i.setPaymentAdvice(this));
+        }
+        this.khatedars = khatedars;
+    }
+
+    public PaymentAdvice khatedars(Set<Khatedar> khatedars) {
+        this.setKhatedars(khatedars);
+        return this;
+    }
+
+    public PaymentAdvice addKhatedar(Khatedar khatedar) {
+        this.khatedars.add(khatedar);
+        khatedar.setPaymentAdvice(this);
+        return this;
+    }
+
+    public PaymentAdvice removeKhatedar(Khatedar khatedar) {
+        this.khatedars.remove(khatedar);
+        khatedar.setPaymentAdvice(null);
+        return this;
+    }
+
     public LandCompensation getLandCompensation() {
         return this.landCompensation;
     }
@@ -339,19 +386,6 @@ public class PaymentAdvice implements Serializable {
         return this;
     }
 
-    public PaymentFile getPaymentFile() {
-        return this.paymentFile;
-    }
-
-    public void setPaymentFile(PaymentFile paymentFile) {
-        this.paymentFile = paymentFile;
-    }
-
-    public PaymentAdvice paymentFile(PaymentFile paymentFile) {
-        this.setPaymentFile(paymentFile);
-        return this;
-    }
-
     public PaymentFileRecon getPaymentFileRecon() {
         return this.paymentFileRecon;
     }
@@ -368,6 +402,25 @@ public class PaymentAdvice implements Serializable {
 
     public PaymentAdvice paymentFileRecon(PaymentFileRecon paymentFileRecon) {
         this.setPaymentFileRecon(paymentFileRecon);
+        return this;
+    }
+
+    public PaymentFile getPaymentFile() {
+        return this.paymentFile;
+    }
+
+    public void setPaymentFile(PaymentFile paymentFile) {
+        if (this.paymentFile != null) {
+            this.paymentFile.setPaymentAdvice(null);
+        }
+        if (paymentFile != null) {
+            paymentFile.setPaymentAdvice(this);
+        }
+        this.paymentFile = paymentFile;
+    }
+
+    public PaymentAdvice paymentFile(PaymentFile paymentFile) {
+        this.setPaymentFile(paymentFile);
         return this;
     }
 

@@ -51,26 +51,33 @@ public class ProjectLand implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "lands", "bankBranch", "projectLands", "paymentAdvices" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "lands", "bankBranch", "projectLands", "paymentAdvices", "khatedars" }, allowSetters = true)
     private Citizen citizen;
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne
     @JsonIgnoreProperties(value = { "projectLands" }, allowSetters = true)
     private NoticeStatusInfo noticeStatusInfo;
 
-    @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentAdvices" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentAdvices", "paymentFiles" }, allowSetters = true)
     @OneToOne(mappedBy = "projectLand")
     private Survey survey;
 
-    @JsonIgnoreProperties(value = { "projectLand", "survey", "paymentAdvices" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "projectLand", "survey", "paymentAdvices", "paymentFiles" }, allowSetters = true)
     @OneToOne(mappedBy = "projectLand")
     private LandCompensation landCompensation;
 
     @OneToMany(mappedBy = "projectLand")
     @JsonIgnoreProperties(
         value = {
-            "landCompensation", "projectLand", "survey", "citizen", "paymentFile", "paymentFileRecon", "land", "paymentAdviceDetails",
+            "khatedars",
+            "landCompensation",
+            "projectLand",
+            "survey",
+            "citizen",
+            "paymentFileRecon",
+            "paymentFile",
+            "land",
+            "paymentAdviceDetails",
         },
         allowSetters = true
     )
@@ -79,6 +86,17 @@ public class ProjectLand implements Serializable {
     @OneToMany(mappedBy = "projectLand")
     @JsonIgnoreProperties(value = { "paymentAdvice", "projectLand" }, allowSetters = true)
     private Set<PaymentAdviceDetails> paymentAdviceDetails = new HashSet<>();
+
+    @OneToMany(mappedBy = "projectLand")
+    @JsonIgnoreProperties(
+        value = { "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation" },
+        allowSetters = true
+    )
+    private Set<PaymentFile> paymentFiles = new HashSet<>();
+
+    @OneToMany(mappedBy = "projectLand")
+    @JsonIgnoreProperties(value = { "projectLand", "citizen", "paymentFile", "paymentAdvice" }, allowSetters = true)
+    private Set<Khatedar> khatedars = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -296,6 +314,68 @@ public class ProjectLand implements Serializable {
     public ProjectLand removePaymentAdviceDetails(PaymentAdviceDetails paymentAdviceDetails) {
         this.paymentAdviceDetails.remove(paymentAdviceDetails);
         paymentAdviceDetails.setProjectLand(null);
+        return this;
+    }
+
+    public Set<PaymentFile> getPaymentFiles() {
+        return this.paymentFiles;
+    }
+
+    public void setPaymentFiles(Set<PaymentFile> paymentFiles) {
+        if (this.paymentFiles != null) {
+            this.paymentFiles.forEach(i -> i.setProjectLand(null));
+        }
+        if (paymentFiles != null) {
+            paymentFiles.forEach(i -> i.setProjectLand(this));
+        }
+        this.paymentFiles = paymentFiles;
+    }
+
+    public ProjectLand paymentFiles(Set<PaymentFile> paymentFiles) {
+        this.setPaymentFiles(paymentFiles);
+        return this;
+    }
+
+    public ProjectLand addPaymentFile(PaymentFile paymentFile) {
+        this.paymentFiles.add(paymentFile);
+        paymentFile.setProjectLand(this);
+        return this;
+    }
+
+    public ProjectLand removePaymentFile(PaymentFile paymentFile) {
+        this.paymentFiles.remove(paymentFile);
+        paymentFile.setProjectLand(null);
+        return this;
+    }
+
+    public Set<Khatedar> getKhatedars() {
+        return this.khatedars;
+    }
+
+    public void setKhatedars(Set<Khatedar> khatedars) {
+        if (this.khatedars != null) {
+            this.khatedars.forEach(i -> i.setProjectLand(null));
+        }
+        if (khatedars != null) {
+            khatedars.forEach(i -> i.setProjectLand(this));
+        }
+        this.khatedars = khatedars;
+    }
+
+    public ProjectLand khatedars(Set<Khatedar> khatedars) {
+        this.setKhatedars(khatedars);
+        return this;
+    }
+
+    public ProjectLand addKhatedar(Khatedar khatedar) {
+        this.khatedars.add(khatedar);
+        khatedar.setProjectLand(this);
+        return this;
+    }
+
+    public ProjectLand removeKhatedar(Khatedar khatedar) {
+        this.khatedars.remove(khatedar);
+        khatedar.setProjectLand(null);
         return this;
     }
 

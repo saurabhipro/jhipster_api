@@ -36,12 +36,19 @@ public class BankBranch implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "bankBranches" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "bankBranches", "paymentFiles" }, allowSetters = true)
     private Bank bank;
 
     @OneToMany(mappedBy = "bankBranch")
-    @JsonIgnoreProperties(value = { "lands", "bankBranch", "projectLands", "paymentAdvices" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "lands", "bankBranch", "projectLands", "paymentAdvices", "khatedars" }, allowSetters = true)
     private Set<Citizen> citizens = new HashSet<>();
+
+    @OneToMany(mappedBy = "bankBranch")
+    @JsonIgnoreProperties(
+        value = { "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation" },
+        allowSetters = true
+    )
+    private Set<PaymentFile> paymentFiles = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -138,6 +145,37 @@ public class BankBranch implements Serializable {
     public BankBranch removeCitizen(Citizen citizen) {
         this.citizens.remove(citizen);
         citizen.setBankBranch(null);
+        return this;
+    }
+
+    public Set<PaymentFile> getPaymentFiles() {
+        return this.paymentFiles;
+    }
+
+    public void setPaymentFiles(Set<PaymentFile> paymentFiles) {
+        if (this.paymentFiles != null) {
+            this.paymentFiles.forEach(i -> i.setBankBranch(null));
+        }
+        if (paymentFiles != null) {
+            paymentFiles.forEach(i -> i.setBankBranch(this));
+        }
+        this.paymentFiles = paymentFiles;
+    }
+
+    public BankBranch paymentFiles(Set<PaymentFile> paymentFiles) {
+        this.setPaymentFiles(paymentFiles);
+        return this;
+    }
+
+    public BankBranch addPaymentFile(PaymentFile paymentFile) {
+        this.paymentFiles.add(paymentFile);
+        paymentFile.setBankBranch(this);
+        return this;
+    }
+
+    public BankBranch removePaymentFile(PaymentFile paymentFile) {
+        this.paymentFiles.remove(paymentFile);
+        paymentFile.setBankBranch(null);
         return this;
     }
 

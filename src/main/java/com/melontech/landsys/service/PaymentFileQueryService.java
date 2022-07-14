@@ -109,12 +109,63 @@ public class PaymentFileQueryService extends QueryService<PaymentFile> {
             if (criteria.getIfscCode() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getIfscCode(), PaymentFile_.ifscCode));
             }
+            if (criteria.getPaymentMode() != null) {
+                specification = specification.and(buildSpecification(criteria.getPaymentMode(), PaymentFile_.paymentMode));
+            }
+            if (criteria.getKhatedarId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getKhatedarId(),
+                            root -> root.join(PaymentFile_.khatedar, JoinType.LEFT).get(Khatedar_.id)
+                        )
+                    );
+            }
             if (criteria.getPaymentAdviceId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
                             criteria.getPaymentAdviceId(),
-                            root -> root.join(PaymentFile_.paymentAdvices, JoinType.LEFT).get(PaymentAdvice_.id)
+                            root -> root.join(PaymentFile_.paymentAdvice, JoinType.LEFT).get(PaymentAdvice_.id)
+                        )
+                    );
+            }
+            if (criteria.getProjectLandId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getProjectLandId(),
+                            root -> root.join(PaymentFile_.projectLand, JoinType.LEFT).get(ProjectLand_.id)
+                        )
+                    );
+            }
+            if (criteria.getSurveyId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getSurveyId(), root -> root.join(PaymentFile_.survey, JoinType.LEFT).get(Survey_.id))
+                    );
+            }
+            if (criteria.getBankId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getBankId(), root -> root.join(PaymentFile_.bank, JoinType.LEFT).get(Bank_.id))
+                    );
+            }
+            if (criteria.getBankBranchId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getBankBranchId(),
+                            root -> root.join(PaymentFile_.bankBranch, JoinType.LEFT).get(BankBranch_.id)
+                        )
+                    );
+            }
+            if (criteria.getLandCompensationId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLandCompensationId(),
+                            root -> root.join(PaymentFile_.landCompensation, JoinType.LEFT).get(LandCompensation_.id)
                         )
                     );
             }

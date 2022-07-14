@@ -32,12 +32,6 @@
                                  referencedColumnNames="id"
                                  referencedTableName="landsys_citizen"/>
 
-        <addForeignKeyConstraint baseColumnNames="payment_file_id"
-                                 baseTableName="landsys_payment_advice"
-                                 constraintName="fk_landsys_payment_advice__payment_file_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="landsys_payment_file"/>
-
         <addForeignKeyConstraint baseColumnNames="land_id"
                                  baseTableName="landsys_payment_advice"
                                  constraintName="fk_landsys_payment_advice__land_id"

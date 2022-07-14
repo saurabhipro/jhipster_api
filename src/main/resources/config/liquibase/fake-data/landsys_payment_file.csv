@@ -1,11 +1,11 @@
-id;payment_file_id;total_payment_amount;payment_file_date;payment_status;bank_name;ifsc_code
-1;21100;26921;2022-07-12;PAID;Division Assimilated;withdrawal
-2;34172;4837;2022-07-11;APPROVED;digital;Pound magnetic Supervisor
-3;66980;27772;2022-07-12;PAID;Lake Supervisor maroon;engineer
-4;24293;78551;2022-07-12;PENDING;program Fresh;Berkshire Credit
-5;15347;22966;2022-07-12;PAID;leverage Avon;driver deposit functionalities
-6;53666;36014;2022-07-12;APPROVED;Loan;Alaska microchip Colorado
-7;14437;52975;2022-07-12;PAID;instruction;Common Identity parsing
-8;67949;41091;2022-07-12;PAID;Nevada bus Officer;parse withdrawal cutting-edge
-9;494;80851;2022-07-11;PENDING;streamline;parse sensor
-10;48421;77554;2022-07-12;PENDING;Agent navigate;Gloves Communications killer
+id;payment_file_id;total_payment_amount;payment_file_date;payment_status;bank_name;ifsc_code;payment_mode;khatedar_id;payment_advice_id;project_land_id;survey_id;bank_id;bank_branch_id;land_compensation_id
+1;21100;26921;2022-07-12;PAID;Division Assimilated;withdrawal;CHECQUE;1;1;1;1;1;1;1
+2;4837;96108;2022-07-12;PENDING;indigo Pound magnetic;Kids coherent Central;OTHER;2;2;2;2;2;2;2
+3;98763;3130;2022-07-12;PENDING;Executive multi-byte;Plastic program Fresh;CHECQUE;3;3;3;3;3;3;3
+4;50572;36416;2022-07-12;APPROVED;Rustic Streamlined leverage;Tools driver;CHECQUE;4;4;4;4;4;4;4
+5;6198;73243;2022-07-12;PAID;Guernsey;Phased collaborative;ONLINE;5;5;5;5;5;5;5
+6;86777;71810;2022-07-12;PENDING;Gorgeous Greenland;instruction;OTHER;6;6;6;6;6;6;6
+7;44982;8983;2022-07-12;PAID;Creative Technician;calculating Angola;OTHER;7;7;7;7;7;7;7
+8;86767;98112;2022-07-12;PENDING;parse withdrawal cutting-edge;optical;ONLINE;8;8;8;8;8;8;8
+9;39846;5466;2022-07-12;APPROVED;Agent Village navigate;Agent navigate;OTHER;9;9;9;9;9;9;9
+10;7153;68594;2022-07-12;PENDING;Communications killer Hat;deposit West optimize;OTHER;10;10;10;10;10;10;10

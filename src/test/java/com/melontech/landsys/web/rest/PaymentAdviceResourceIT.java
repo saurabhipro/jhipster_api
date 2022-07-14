@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.melontech.landsys.IntegrationTest;
 import com.melontech.landsys.domain.Citizen;
+import com.melontech.landsys.domain.Khatedar;
 import com.melontech.landsys.domain.Land;
 import com.melontech.landsys.domain.LandCompensation;
 import com.melontech.landsys.domain.PaymentAdvice;
@@ -136,6 +137,16 @@ class PaymentAdviceResourceIT {
             .paymentStatus(DEFAULT_PAYMENT_STATUS)
             .hissaType(DEFAULT_HISSA_TYPE);
         // Add required entity
+        Khatedar khatedar;
+        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
+            khatedar = KhatedarResourceIT.createEntity(em);
+            em.persist(khatedar);
+            em.flush();
+        } else {
+            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
+        }
+        paymentAdvice.getKhatedars().add(khatedar);
+        // Add required entity
         LandCompensation landCompensation;
         if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
             landCompensation = LandCompensationResourceIT.createEntity(em);
@@ -198,6 +209,16 @@ class PaymentAdviceResourceIT {
             .referenceNumber(UPDATED_REFERENCE_NUMBER)
             .paymentStatus(UPDATED_PAYMENT_STATUS)
             .hissaType(UPDATED_HISSA_TYPE);
+        // Add required entity
+        Khatedar khatedar;
+        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
+            khatedar = KhatedarResourceIT.createUpdatedEntity(em);
+            em.persist(khatedar);
+            em.flush();
+        } else {
+            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
+        }
+        paymentAdvice.getKhatedars().add(khatedar);
         // Add required entity
         LandCompensation landCompensation;
         if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
@@ -1433,6 +1454,32 @@ class PaymentAdviceResourceIT {
 
     @Test
     @Transactional
+    void getAllPaymentAdvicesByKhatedarIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+        Khatedar khatedar;
+        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
+            khatedar = KhatedarResourceIT.createEntity(em);
+            em.persist(khatedar);
+            em.flush();
+        } else {
+            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
+        }
+        em.persist(khatedar);
+        em.flush();
+        paymentAdvice.addKhatedar(khatedar);
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+        Long khatedarId = khatedar.getId();
+
+        // Get all the paymentAdviceList where khatedar equals to khatedarId
+        defaultPaymentAdviceShouldBeFound("khatedarId.equals=" + khatedarId);
+
+        // Get all the paymentAdviceList where khatedar equals to (khatedarId + 1)
+        defaultPaymentAdviceShouldNotBeFound("khatedarId.equals=" + (khatedarId + 1));
+    }
+
+    @Test
+    @Transactional
     void getAllPaymentAdvicesByLandCompensationIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentAdviceRepository.saveAndFlush(paymentAdvice);
@@ -1537,32 +1584,6 @@ class PaymentAdviceResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentAdvicesByPaymentFileIsEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentAdviceRepository.saveAndFlush(paymentAdvice);
-        PaymentFile paymentFile;
-        if (TestUtil.findAll(em, PaymentFile.class).isEmpty()) {
-            paymentFile = PaymentFileResourceIT.createEntity(em);
-            em.persist(paymentFile);
-            em.flush();
-        } else {
-            paymentFile = TestUtil.findAll(em, PaymentFile.class).get(0);
-        }
-        em.persist(paymentFile);
-        em.flush();
-        paymentAdvice.setPaymentFile(paymentFile);
-        paymentAdviceRepository.saveAndFlush(paymentAdvice);
-        Long paymentFileId = paymentFile.getId();
-
-        // Get all the paymentAdviceList where paymentFile equals to paymentFileId
-        defaultPaymentAdviceShouldBeFound("paymentFileId.equals=" + paymentFileId);
-
-        // Get all the paymentAdviceList where paymentFile equals to (paymentFileId + 1)
-        defaultPaymentAdviceShouldNotBeFound("paymentFileId.equals=" + (paymentFileId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllPaymentAdvicesByPaymentFileReconIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentAdviceRepository.saveAndFlush(paymentAdvice);
@@ -1586,6 +1607,33 @@ class PaymentAdviceResourceIT {
 
         // Get all the paymentAdviceList where paymentFileRecon equals to (paymentFileReconId + 1)
         defaultPaymentAdviceShouldNotBeFound("paymentFileReconId.equals=" + (paymentFileReconId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentAdvicesByPaymentFileIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+        PaymentFile paymentFile;
+        if (TestUtil.findAll(em, PaymentFile.class).isEmpty()) {
+            paymentFile = PaymentFileResourceIT.createEntity(em);
+            em.persist(paymentFile);
+            em.flush();
+        } else {
+            paymentFile = TestUtil.findAll(em, PaymentFile.class).get(0);
+        }
+        em.persist(paymentFile);
+        em.flush();
+        paymentAdvice.setPaymentFile(paymentFile);
+        paymentFile.setPaymentAdvice(paymentAdvice);
+        paymentAdviceRepository.saveAndFlush(paymentAdvice);
+        Long paymentFileId = paymentFile.getId();
+
+        // Get all the paymentAdviceList where paymentFile equals to paymentFileId
+        defaultPaymentAdviceShouldBeFound("paymentFileId.equals=" + paymentFileId);
+
+        // Get all the paymentAdviceList where paymentFile equals to (paymentFileId + 1)
+        defaultPaymentAdviceShouldNotBeFound("paymentFileId.equals=" + (paymentFileId + 1));
     }
 
     @Test

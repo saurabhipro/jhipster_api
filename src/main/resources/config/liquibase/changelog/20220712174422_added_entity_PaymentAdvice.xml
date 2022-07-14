@@ -62,9 +62,6 @@
             <column name="citizen_id" type="bigint">
                 <constraints nullable="false" />
             </column>
-            <column name="payment_file_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
             <column name="land_id" type="bigint">
                 <constraints nullable="true" />
             </column>

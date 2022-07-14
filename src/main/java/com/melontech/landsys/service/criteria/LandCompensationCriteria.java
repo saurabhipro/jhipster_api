@@ -69,6 +69,8 @@ public class LandCompensationCriteria implements Serializable, Criteria {
 
     private DoubleFilter area;
 
+    private DoubleFilter sharePercentage;
+
     private DoubleFilter landMarketValue;
 
     private DoubleFilter structuralCompensation;
@@ -95,6 +97,8 @@ public class LandCompensationCriteria implements Serializable, Criteria {
 
     private LongFilter paymentAdviceId;
 
+    private LongFilter paymentFileId;
+
     private Boolean distinct;
 
     public LandCompensationCriteria() {}
@@ -103,6 +107,7 @@ public class LandCompensationCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.hissaType = other.hissaType == null ? null : other.hissaType.copy();
         this.area = other.area == null ? null : other.area.copy();
+        this.sharePercentage = other.sharePercentage == null ? null : other.sharePercentage.copy();
         this.landMarketValue = other.landMarketValue == null ? null : other.landMarketValue.copy();
         this.structuralCompensation = other.structuralCompensation == null ? null : other.structuralCompensation.copy();
         this.horticultureCompensation = other.horticultureCompensation == null ? null : other.horticultureCompensation.copy();
@@ -116,6 +121,7 @@ public class LandCompensationCriteria implements Serializable, Criteria {
         this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
         this.surveyId = other.surveyId == null ? null : other.surveyId.copy();
         this.paymentAdviceId = other.paymentAdviceId == null ? null : other.paymentAdviceId.copy();
+        this.paymentFileId = other.paymentFileId == null ? null : other.paymentFileId.copy();
         this.distinct = other.distinct;
     }
 
@@ -167,6 +173,21 @@ public class LandCompensationCriteria implements Serializable, Criteria {
 
     public void setArea(DoubleFilter area) {
         this.area = area;
+    }
+
+    public DoubleFilter getSharePercentage() {
+        return sharePercentage;
+    }
+
+    public DoubleFilter sharePercentage() {
+        if (sharePercentage == null) {
+            sharePercentage = new DoubleFilter();
+        }
+        return sharePercentage;
+    }
+
+    public void setSharePercentage(DoubleFilter sharePercentage) {
+        this.sharePercentage = sharePercentage;
     }
 
     public DoubleFilter getLandMarketValue() {
@@ -364,6 +385,21 @@ public class LandCompensationCriteria implements Serializable, Criteria {
         this.paymentAdviceId = paymentAdviceId;
     }
 
+    public LongFilter getPaymentFileId() {
+        return paymentFileId;
+    }
+
+    public LongFilter paymentFileId() {
+        if (paymentFileId == null) {
+            paymentFileId = new LongFilter();
+        }
+        return paymentFileId;
+    }
+
+    public void setPaymentFileId(LongFilter paymentFileId) {
+        this.paymentFileId = paymentFileId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -385,6 +421,7 @@ public class LandCompensationCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(hissaType, that.hissaType) &&
             Objects.equals(area, that.area) &&
+            Objects.equals(sharePercentage, that.sharePercentage) &&
             Objects.equals(landMarketValue, that.landMarketValue) &&
             Objects.equals(structuralCompensation, that.structuralCompensation) &&
             Objects.equals(horticultureCompensation, that.horticultureCompensation) &&
@@ -398,6 +435,7 @@ public class LandCompensationCriteria implements Serializable, Criteria {
             Objects.equals(projectLandId, that.projectLandId) &&
             Objects.equals(surveyId, that.surveyId) &&
             Objects.equals(paymentAdviceId, that.paymentAdviceId) &&
+            Objects.equals(paymentFileId, that.paymentFileId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -408,6 +446,7 @@ public class LandCompensationCriteria implements Serializable, Criteria {
             id,
             hissaType,
             area,
+            sharePercentage,
             landMarketValue,
             structuralCompensation,
             horticultureCompensation,
@@ -421,6 +460,7 @@ public class LandCompensationCriteria implements Serializable, Criteria {
             projectLandId,
             surveyId,
             paymentAdviceId,
+            paymentFileId,
             distinct
         );
     }
@@ -432,6 +472,7 @@ public class LandCompensationCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (hissaType != null ? "hissaType=" + hissaType + ", " : "") +
             (area != null ? "area=" + area + ", " : "") +
+            (sharePercentage != null ? "sharePercentage=" + sharePercentage + ", " : "") +
             (landMarketValue != null ? "landMarketValue=" + landMarketValue + ", " : "") +
             (structuralCompensation != null ? "structuralCompensation=" + structuralCompensation + ", " : "") +
             (horticultureCompensation != null ? "horticultureCompensation=" + horticultureCompensation + ", " : "") +
@@ -445,6 +486,7 @@ public class LandCompensationCriteria implements Serializable, Criteria {
             (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
             (surveyId != null ? "surveyId=" + surveyId + ", " : "") +
             (paymentAdviceId != null ? "paymentAdviceId=" + paymentAdviceId + ", " : "") +
+            (paymentFileId != null ? "paymentFileId=" + paymentFileId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

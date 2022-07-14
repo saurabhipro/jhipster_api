@@ -150,6 +150,15 @@ public class SurveyQueryService extends QueryService<Survey> {
                         )
                     );
             }
+            if (criteria.getPaymentFileId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPaymentFileId(),
+                            root -> root.join(Survey_.paymentFiles, JoinType.LEFT).get(PaymentFile_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

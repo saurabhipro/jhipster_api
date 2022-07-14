@@ -42,6 +42,14 @@ public interface PaymentFileService {
     Page<PaymentFileDTO> findAll(Pageable pageable);
 
     /**
+     * Get all the paymentFiles with eager load of many-to-many relationships.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<PaymentFileDTO> findAllWithEagerRelationships(Pageable pageable);
+
+    /**
      * Get the "id" paymentFile.
      *
      * @param id the id of the entity.

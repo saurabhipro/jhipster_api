@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.melontech.landsys.IntegrationTest;
 import com.melontech.landsys.domain.LandCompensation;
 import com.melontech.landsys.domain.PaymentAdvice;
+import com.melontech.landsys.domain.PaymentFile;
 import com.melontech.landsys.domain.ProjectLand;
 import com.melontech.landsys.domain.Survey;
 import com.melontech.landsys.domain.enumeration.HissaType;
@@ -1432,6 +1433,32 @@ class SurveyResourceIT {
 
         // Get all the surveyList where paymentAdvice equals to (paymentAdviceId + 1)
         defaultSurveyShouldNotBeFound("paymentAdviceId.equals=" + (paymentAdviceId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllSurveysByPaymentFileIsEqualToSomething() throws Exception {
+        // Initialize the database
+        surveyRepository.saveAndFlush(survey);
+        PaymentFile paymentFile;
+        if (TestUtil.findAll(em, PaymentFile.class).isEmpty()) {
+            paymentFile = PaymentFileResourceIT.createEntity(em);
+            em.persist(paymentFile);
+            em.flush();
+        } else {
+            paymentFile = TestUtil.findAll(em, PaymentFile.class).get(0);
+        }
+        em.persist(paymentFile);
+        em.flush();
+        survey.addPaymentFile(paymentFile);
+        surveyRepository.saveAndFlush(survey);
+        Long paymentFileId = paymentFile.getId();
+
+        // Get all the surveyList where paymentFile equals to paymentFileId
+        defaultSurveyShouldBeFound("paymentFileId.equals=" + paymentFileId);
+
+        // Get all the surveyList where paymentFile equals to (paymentFileId + 1)
+        defaultSurveyShouldNotBeFound("paymentFileId.equals=" + (paymentFileId + 1));
     }
 
     /**

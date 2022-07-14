@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.melontech.landsys.IntegrationTest;
 import com.melontech.landsys.domain.Citizen;
-import com.melontech.landsys.domain.NoticeStatusInfo;
 import com.melontech.landsys.domain.Project;
 import com.melontech.landsys.domain.ProjectLand;
 import com.melontech.landsys.domain.enumeration.HissaType;
@@ -114,16 +113,6 @@ class ProjectLandResourceIT {
             citizen = TestUtil.findAll(em, Citizen.class).get(0);
         }
         projectLand.setCitizen(citizen);
-        // Add required entity
-        NoticeStatusInfo noticeStatusInfo;
-        if (TestUtil.findAll(em, NoticeStatusInfo.class).isEmpty()) {
-            noticeStatusInfo = NoticeStatusInfoResourceIT.createEntity(em);
-            em.persist(noticeStatusInfo);
-            em.flush();
-        } else {
-            noticeStatusInfo = TestUtil.findAll(em, NoticeStatusInfo.class).get(0);
-        }
-        projectLand.setNoticeStatusInfo(noticeStatusInfo);
         return projectLand;
     }
 
@@ -159,16 +148,6 @@ class ProjectLandResourceIT {
             citizen = TestUtil.findAll(em, Citizen.class).get(0);
         }
         projectLand.setCitizen(citizen);
-        // Add required entity
-        NoticeStatusInfo noticeStatusInfo;
-        if (TestUtil.findAll(em, NoticeStatusInfo.class).isEmpty()) {
-            noticeStatusInfo = NoticeStatusInfoResourceIT.createUpdatedEntity(em);
-            em.persist(noticeStatusInfo);
-            em.flush();
-        } else {
-            noticeStatusInfo = TestUtil.findAll(em, NoticeStatusInfo.class).get(0);
-        }
-        projectLand.setNoticeStatusInfo(noticeStatusInfo);
         return projectLand;
     }
 

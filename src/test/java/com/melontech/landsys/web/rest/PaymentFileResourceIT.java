@@ -2,27 +2,42 @@ package com.melontech.landsys.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.melontech.landsys.IntegrationTest;
+import com.melontech.landsys.domain.Bank;
+import com.melontech.landsys.domain.BankBranch;
+import com.melontech.landsys.domain.Khatedar;
+import com.melontech.landsys.domain.LandCompensation;
 import com.melontech.landsys.domain.PaymentAdvice;
 import com.melontech.landsys.domain.PaymentFile;
+import com.melontech.landsys.domain.ProjectLand;
+import com.melontech.landsys.domain.Survey;
+import com.melontech.landsys.domain.enumeration.PaymentAdviceType;
 import com.melontech.landsys.domain.enumeration.PaymentStatus;
 import com.melontech.landsys.repository.PaymentFileRepository;
+import com.melontech.landsys.service.PaymentFileService;
 import com.melontech.landsys.service.criteria.PaymentFileCriteria;
 import com.melontech.landsys.service.dto.PaymentFileDTO;
 import com.melontech.landsys.service.mapper.PaymentFileMapper;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,6 +47,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link PaymentFileResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class PaymentFileResourceIT {
@@ -57,6 +73,9 @@ class PaymentFileResourceIT {
     private static final String DEFAULT_IFSC_CODE = "AAAAAAAAAA";
     private static final String UPDATED_IFSC_CODE = "BBBBBBBBBB";
 
+    private static final PaymentAdviceType DEFAULT_PAYMENT_MODE = PaymentAdviceType.ONLINE;
+    private static final PaymentAdviceType UPDATED_PAYMENT_MODE = PaymentAdviceType.CHECQUE;
+
     private static final String ENTITY_API_URL = "/api/payment-files";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -66,8 +85,14 @@ class PaymentFileResourceIT {
     @Autowired
     private PaymentFileRepository paymentFileRepository;
 
+    @Mock
+    private PaymentFileRepository paymentFileRepositoryMock;
+
     @Autowired
     private PaymentFileMapper paymentFileMapper;
+
+    @Mock
+    private PaymentFileService paymentFileServiceMock;
 
     @Autowired
     private EntityManager em;
@@ -90,7 +115,18 @@ class PaymentFileResourceIT {
             .paymentFileDate(DEFAULT_PAYMENT_FILE_DATE)
             .paymentStatus(DEFAULT_PAYMENT_STATUS)
             .bankName(DEFAULT_BANK_NAME)
-            .ifscCode(DEFAULT_IFSC_CODE);
+            .ifscCode(DEFAULT_IFSC_CODE)
+            .paymentMode(DEFAULT_PAYMENT_MODE);
+        // Add required entity
+        Khatedar khatedar;
+        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
+            khatedar = KhatedarResourceIT.createEntity(em);
+            em.persist(khatedar);
+            em.flush();
+        } else {
+            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
+        }
+        paymentFile.setKhatedar(khatedar);
         // Add required entity
         PaymentAdvice paymentAdvice;
         if (TestUtil.findAll(em, PaymentAdvice.class).isEmpty()) {
@@ -100,7 +136,57 @@ class PaymentFileResourceIT {
         } else {
             paymentAdvice = TestUtil.findAll(em, PaymentAdvice.class).get(0);
         }
-        paymentFile.getPaymentAdvices().add(paymentAdvice);
+        paymentFile.setPaymentAdvice(paymentAdvice);
+        // Add required entity
+        ProjectLand projectLand;
+        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
+            projectLand = ProjectLandResourceIT.createEntity(em);
+            em.persist(projectLand);
+            em.flush();
+        } else {
+            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
+        }
+        paymentFile.setProjectLand(projectLand);
+        // Add required entity
+        Survey survey;
+        if (TestUtil.findAll(em, Survey.class).isEmpty()) {
+            survey = SurveyResourceIT.createEntity(em);
+            em.persist(survey);
+            em.flush();
+        } else {
+            survey = TestUtil.findAll(em, Survey.class).get(0);
+        }
+        paymentFile.setSurvey(survey);
+        // Add required entity
+        Bank bank;
+        if (TestUtil.findAll(em, Bank.class).isEmpty()) {
+            bank = BankResourceIT.createEntity(em);
+            em.persist(bank);
+            em.flush();
+        } else {
+            bank = TestUtil.findAll(em, Bank.class).get(0);
+        }
+        paymentFile.setBank(bank);
+        // Add required entity
+        BankBranch bankBranch;
+        if (TestUtil.findAll(em, BankBranch.class).isEmpty()) {
+            bankBranch = BankBranchResourceIT.createEntity(em);
+            em.persist(bankBranch);
+            em.flush();
+        } else {
+            bankBranch = TestUtil.findAll(em, BankBranch.class).get(0);
+        }
+        paymentFile.setBankBranch(bankBranch);
+        // Add required entity
+        LandCompensation landCompensation;
+        if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
+            landCompensation = LandCompensationResourceIT.createEntity(em);
+            em.persist(landCompensation);
+            em.flush();
+        } else {
+            landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
+        }
+        paymentFile.setLandCompensation(landCompensation);
         return paymentFile;
     }
 
@@ -117,7 +203,18 @@ class PaymentFileResourceIT {
             .paymentFileDate(UPDATED_PAYMENT_FILE_DATE)
             .paymentStatus(UPDATED_PAYMENT_STATUS)
             .bankName(UPDATED_BANK_NAME)
-            .ifscCode(UPDATED_IFSC_CODE);
+            .ifscCode(UPDATED_IFSC_CODE)
+            .paymentMode(UPDATED_PAYMENT_MODE);
+        // Add required entity
+        Khatedar khatedar;
+        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
+            khatedar = KhatedarResourceIT.createUpdatedEntity(em);
+            em.persist(khatedar);
+            em.flush();
+        } else {
+            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
+        }
+        paymentFile.setKhatedar(khatedar);
         // Add required entity
         PaymentAdvice paymentAdvice;
         if (TestUtil.findAll(em, PaymentAdvice.class).isEmpty()) {
@@ -127,7 +224,57 @@ class PaymentFileResourceIT {
         } else {
             paymentAdvice = TestUtil.findAll(em, PaymentAdvice.class).get(0);
         }
-        paymentFile.getPaymentAdvices().add(paymentAdvice);
+        paymentFile.setPaymentAdvice(paymentAdvice);
+        // Add required entity
+        ProjectLand projectLand;
+        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
+            projectLand = ProjectLandResourceIT.createUpdatedEntity(em);
+            em.persist(projectLand);
+            em.flush();
+        } else {
+            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
+        }
+        paymentFile.setProjectLand(projectLand);
+        // Add required entity
+        Survey survey;
+        if (TestUtil.findAll(em, Survey.class).isEmpty()) {
+            survey = SurveyResourceIT.createUpdatedEntity(em);
+            em.persist(survey);
+            em.flush();
+        } else {
+            survey = TestUtil.findAll(em, Survey.class).get(0);
+        }
+        paymentFile.setSurvey(survey);
+        // Add required entity
+        Bank bank;
+        if (TestUtil.findAll(em, Bank.class).isEmpty()) {
+            bank = BankResourceIT.createUpdatedEntity(em);
+            em.persist(bank);
+            em.flush();
+        } else {
+            bank = TestUtil.findAll(em, Bank.class).get(0);
+        }
+        paymentFile.setBank(bank);
+        // Add required entity
+        BankBranch bankBranch;
+        if (TestUtil.findAll(em, BankBranch.class).isEmpty()) {
+            bankBranch = BankBranchResourceIT.createUpdatedEntity(em);
+            em.persist(bankBranch);
+            em.flush();
+        } else {
+            bankBranch = TestUtil.findAll(em, BankBranch.class).get(0);
+        }
+        paymentFile.setBankBranch(bankBranch);
+        // Add required entity
+        LandCompensation landCompensation;
+        if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
+            landCompensation = LandCompensationResourceIT.createUpdatedEntity(em);
+            em.persist(landCompensation);
+            em.flush();
+        } else {
+            landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
+        }
+        paymentFile.setLandCompensation(landCompensation);
         return paymentFile;
     }
 
@@ -158,6 +305,7 @@ class PaymentFileResourceIT {
         assertThat(testPaymentFile.getPaymentStatus()).isEqualTo(DEFAULT_PAYMENT_STATUS);
         assertThat(testPaymentFile.getBankName()).isEqualTo(DEFAULT_BANK_NAME);
         assertThat(testPaymentFile.getIfscCode()).isEqualTo(DEFAULT_IFSC_CODE);
+        assertThat(testPaymentFile.getPaymentMode()).isEqualTo(DEFAULT_PAYMENT_MODE);
     }
 
     @Test
@@ -258,7 +406,26 @@ class PaymentFileResourceIT {
             .andExpect(jsonPath("$.[*].paymentFileDate").value(hasItem(DEFAULT_PAYMENT_FILE_DATE.toString())))
             .andExpect(jsonPath("$.[*].paymentStatus").value(hasItem(DEFAULT_PAYMENT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].bankName").value(hasItem(DEFAULT_BANK_NAME)))
-            .andExpect(jsonPath("$.[*].ifscCode").value(hasItem(DEFAULT_IFSC_CODE)));
+            .andExpect(jsonPath("$.[*].ifscCode").value(hasItem(DEFAULT_IFSC_CODE)))
+            .andExpect(jsonPath("$.[*].paymentMode").value(hasItem(DEFAULT_PAYMENT_MODE.toString())));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllPaymentFilesWithEagerRelationshipsIsEnabled() throws Exception {
+        when(paymentFileServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restPaymentFileMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(paymentFileServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllPaymentFilesWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(paymentFileServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restPaymentFileMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(paymentFileServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -278,7 +445,8 @@ class PaymentFileResourceIT {
             .andExpect(jsonPath("$.paymentFileDate").value(DEFAULT_PAYMENT_FILE_DATE.toString()))
             .andExpect(jsonPath("$.paymentStatus").value(DEFAULT_PAYMENT_STATUS.toString()))
             .andExpect(jsonPath("$.bankName").value(DEFAULT_BANK_NAME))
-            .andExpect(jsonPath("$.ifscCode").value(DEFAULT_IFSC_CODE));
+            .andExpect(jsonPath("$.ifscCode").value(DEFAULT_IFSC_CODE))
+            .andExpect(jsonPath("$.paymentMode").value(DEFAULT_PAYMENT_MODE.toString()));
     }
 
     @Test
@@ -821,20 +989,76 @@ class PaymentFileResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentFilesByPaymentAdviceIsEqualToSomething() throws Exception {
+    void getAllPaymentFilesByPaymentModeIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentFileRepository.saveAndFlush(paymentFile);
-        PaymentAdvice paymentAdvice;
-        if (TestUtil.findAll(em, PaymentAdvice.class).isEmpty()) {
-            paymentAdvice = PaymentAdviceResourceIT.createEntity(em);
-            em.persist(paymentAdvice);
-            em.flush();
-        } else {
-            paymentAdvice = TestUtil.findAll(em, PaymentAdvice.class).get(0);
-        }
-        em.persist(paymentAdvice);
-        em.flush();
-        paymentFile.addPaymentAdvice(paymentAdvice);
+
+        // Get all the paymentFileList where paymentMode equals to DEFAULT_PAYMENT_MODE
+        defaultPaymentFileShouldBeFound("paymentMode.equals=" + DEFAULT_PAYMENT_MODE);
+
+        // Get all the paymentFileList where paymentMode equals to UPDATED_PAYMENT_MODE
+        defaultPaymentFileShouldNotBeFound("paymentMode.equals=" + UPDATED_PAYMENT_MODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentFilesByPaymentModeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentFileRepository.saveAndFlush(paymentFile);
+
+        // Get all the paymentFileList where paymentMode not equals to DEFAULT_PAYMENT_MODE
+        defaultPaymentFileShouldNotBeFound("paymentMode.notEquals=" + DEFAULT_PAYMENT_MODE);
+
+        // Get all the paymentFileList where paymentMode not equals to UPDATED_PAYMENT_MODE
+        defaultPaymentFileShouldBeFound("paymentMode.notEquals=" + UPDATED_PAYMENT_MODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentFilesByPaymentModeIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentFileRepository.saveAndFlush(paymentFile);
+
+        // Get all the paymentFileList where paymentMode in DEFAULT_PAYMENT_MODE or UPDATED_PAYMENT_MODE
+        defaultPaymentFileShouldBeFound("paymentMode.in=" + DEFAULT_PAYMENT_MODE + "," + UPDATED_PAYMENT_MODE);
+
+        // Get all the paymentFileList where paymentMode equals to UPDATED_PAYMENT_MODE
+        defaultPaymentFileShouldNotBeFound("paymentMode.in=" + UPDATED_PAYMENT_MODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentFilesByPaymentModeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentFileRepository.saveAndFlush(paymentFile);
+
+        // Get all the paymentFileList where paymentMode is not null
+        defaultPaymentFileShouldBeFound("paymentMode.specified=true");
+
+        // Get all the paymentFileList where paymentMode is null
+        defaultPaymentFileShouldNotBeFound("paymentMode.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentFilesByKhatedarIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        Khatedar khatedar = paymentFile.getKhatedar();
+        paymentFileRepository.saveAndFlush(paymentFile);
+        Long khatedarId = khatedar.getId();
+
+        // Get all the paymentFileList where khatedar equals to khatedarId
+        defaultPaymentFileShouldBeFound("khatedarId.equals=" + khatedarId);
+
+        // Get all the paymentFileList where khatedar equals to (khatedarId + 1)
+        defaultPaymentFileShouldNotBeFound("khatedarId.equals=" + (khatedarId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentFilesByPaymentAdviceIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        PaymentAdvice paymentAdvice = paymentFile.getPaymentAdvice();
         paymentFileRepository.saveAndFlush(paymentFile);
         Long paymentAdviceId = paymentAdvice.getId();
 
@@ -843,6 +1067,136 @@ class PaymentFileResourceIT {
 
         // Get all the paymentFileList where paymentAdvice equals to (paymentAdviceId + 1)
         defaultPaymentFileShouldNotBeFound("paymentAdviceId.equals=" + (paymentAdviceId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentFilesByProjectLandIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentFileRepository.saveAndFlush(paymentFile);
+        ProjectLand projectLand;
+        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
+            projectLand = ProjectLandResourceIT.createEntity(em);
+            em.persist(projectLand);
+            em.flush();
+        } else {
+            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
+        }
+        em.persist(projectLand);
+        em.flush();
+        paymentFile.setProjectLand(projectLand);
+        paymentFileRepository.saveAndFlush(paymentFile);
+        Long projectLandId = projectLand.getId();
+
+        // Get all the paymentFileList where projectLand equals to projectLandId
+        defaultPaymentFileShouldBeFound("projectLandId.equals=" + projectLandId);
+
+        // Get all the paymentFileList where projectLand equals to (projectLandId + 1)
+        defaultPaymentFileShouldNotBeFound("projectLandId.equals=" + (projectLandId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentFilesBySurveyIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentFileRepository.saveAndFlush(paymentFile);
+        Survey survey;
+        if (TestUtil.findAll(em, Survey.class).isEmpty()) {
+            survey = SurveyResourceIT.createEntity(em);
+            em.persist(survey);
+            em.flush();
+        } else {
+            survey = TestUtil.findAll(em, Survey.class).get(0);
+        }
+        em.persist(survey);
+        em.flush();
+        paymentFile.setSurvey(survey);
+        paymentFileRepository.saveAndFlush(paymentFile);
+        Long surveyId = survey.getId();
+
+        // Get all the paymentFileList where survey equals to surveyId
+        defaultPaymentFileShouldBeFound("surveyId.equals=" + surveyId);
+
+        // Get all the paymentFileList where survey equals to (surveyId + 1)
+        defaultPaymentFileShouldNotBeFound("surveyId.equals=" + (surveyId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentFilesByBankIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentFileRepository.saveAndFlush(paymentFile);
+        Bank bank;
+        if (TestUtil.findAll(em, Bank.class).isEmpty()) {
+            bank = BankResourceIT.createEntity(em);
+            em.persist(bank);
+            em.flush();
+        } else {
+            bank = TestUtil.findAll(em, Bank.class).get(0);
+        }
+        em.persist(bank);
+        em.flush();
+        paymentFile.setBank(bank);
+        paymentFileRepository.saveAndFlush(paymentFile);
+        Long bankId = bank.getId();
+
+        // Get all the paymentFileList where bank equals to bankId
+        defaultPaymentFileShouldBeFound("bankId.equals=" + bankId);
+
+        // Get all the paymentFileList where bank equals to (bankId + 1)
+        defaultPaymentFileShouldNotBeFound("bankId.equals=" + (bankId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentFilesByBankBranchIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentFileRepository.saveAndFlush(paymentFile);
+        BankBranch bankBranch;
+        if (TestUtil.findAll(em, BankBranch.class).isEmpty()) {
+            bankBranch = BankBranchResourceIT.createEntity(em);
+            em.persist(bankBranch);
+            em.flush();
+        } else {
+            bankBranch = TestUtil.findAll(em, BankBranch.class).get(0);
+        }
+        em.persist(bankBranch);
+        em.flush();
+        paymentFile.setBankBranch(bankBranch);
+        paymentFileRepository.saveAndFlush(paymentFile);
+        Long bankBranchId = bankBranch.getId();
+
+        // Get all the paymentFileList where bankBranch equals to bankBranchId
+        defaultPaymentFileShouldBeFound("bankBranchId.equals=" + bankBranchId);
+
+        // Get all the paymentFileList where bankBranch equals to (bankBranchId + 1)
+        defaultPaymentFileShouldNotBeFound("bankBranchId.equals=" + (bankBranchId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentFilesByLandCompensationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentFileRepository.saveAndFlush(paymentFile);
+        LandCompensation landCompensation;
+        if (TestUtil.findAll(em, LandCompensation.class).isEmpty()) {
+            landCompensation = LandCompensationResourceIT.createEntity(em);
+            em.persist(landCompensation);
+            em.flush();
+        } else {
+            landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
+        }
+        em.persist(landCompensation);
+        em.flush();
+        paymentFile.setLandCompensation(landCompensation);
+        paymentFileRepository.saveAndFlush(paymentFile);
+        Long landCompensationId = landCompensation.getId();
+
+        // Get all the paymentFileList where landCompensation equals to landCompensationId
+        defaultPaymentFileShouldBeFound("landCompensationId.equals=" + landCompensationId);
+
+        // Get all the paymentFileList where landCompensation equals to (landCompensationId + 1)
+        defaultPaymentFileShouldNotBeFound("landCompensationId.equals=" + (landCompensationId + 1));
     }
 
     /**
@@ -859,7 +1213,8 @@ class PaymentFileResourceIT {
             .andExpect(jsonPath("$.[*].paymentFileDate").value(hasItem(DEFAULT_PAYMENT_FILE_DATE.toString())))
             .andExpect(jsonPath("$.[*].paymentStatus").value(hasItem(DEFAULT_PAYMENT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].bankName").value(hasItem(DEFAULT_BANK_NAME)))
-            .andExpect(jsonPath("$.[*].ifscCode").value(hasItem(DEFAULT_IFSC_CODE)));
+            .andExpect(jsonPath("$.[*].ifscCode").value(hasItem(DEFAULT_IFSC_CODE)))
+            .andExpect(jsonPath("$.[*].paymentMode").value(hasItem(DEFAULT_PAYMENT_MODE.toString())));
 
         // Check, that the count call also returns 1
         restPaymentFileMockMvc
@@ -913,7 +1268,8 @@ class PaymentFileResourceIT {
             .paymentFileDate(UPDATED_PAYMENT_FILE_DATE)
             .paymentStatus(UPDATED_PAYMENT_STATUS)
             .bankName(UPDATED_BANK_NAME)
-            .ifscCode(UPDATED_IFSC_CODE);
+            .ifscCode(UPDATED_IFSC_CODE)
+            .paymentMode(UPDATED_PAYMENT_MODE);
         PaymentFileDTO paymentFileDTO = paymentFileMapper.toDto(updatedPaymentFile);
 
         restPaymentFileMockMvc
@@ -934,6 +1290,7 @@ class PaymentFileResourceIT {
         assertThat(testPaymentFile.getPaymentStatus()).isEqualTo(UPDATED_PAYMENT_STATUS);
         assertThat(testPaymentFile.getBankName()).isEqualTo(UPDATED_BANK_NAME);
         assertThat(testPaymentFile.getIfscCode()).isEqualTo(UPDATED_IFSC_CODE);
+        assertThat(testPaymentFile.getPaymentMode()).isEqualTo(UPDATED_PAYMENT_MODE);
     }
 
     @Test
@@ -1013,7 +1370,7 @@ class PaymentFileResourceIT {
         PaymentFile partialUpdatedPaymentFile = new PaymentFile();
         partialUpdatedPaymentFile.setId(paymentFile.getId());
 
-        partialUpdatedPaymentFile.bankName(UPDATED_BANK_NAME);
+        partialUpdatedPaymentFile.bankName(UPDATED_BANK_NAME).paymentMode(UPDATED_PAYMENT_MODE);
 
         restPaymentFileMockMvc
             .perform(
@@ -1033,6 +1390,7 @@ class PaymentFileResourceIT {
         assertThat(testPaymentFile.getPaymentStatus()).isEqualTo(DEFAULT_PAYMENT_STATUS);
         assertThat(testPaymentFile.getBankName()).isEqualTo(UPDATED_BANK_NAME);
         assertThat(testPaymentFile.getIfscCode()).isEqualTo(DEFAULT_IFSC_CODE);
+        assertThat(testPaymentFile.getPaymentMode()).isEqualTo(UPDATED_PAYMENT_MODE);
     }
 
     @Test
@@ -1053,7 +1411,8 @@ class PaymentFileResourceIT {
             .paymentFileDate(UPDATED_PAYMENT_FILE_DATE)
             .paymentStatus(UPDATED_PAYMENT_STATUS)
             .bankName(UPDATED_BANK_NAME)
-            .ifscCode(UPDATED_IFSC_CODE);
+            .ifscCode(UPDATED_IFSC_CODE)
+            .paymentMode(UPDATED_PAYMENT_MODE);
 
         restPaymentFileMockMvc
             .perform(
@@ -1073,6 +1432,7 @@ class PaymentFileResourceIT {
         assertThat(testPaymentFile.getPaymentStatus()).isEqualTo(UPDATED_PAYMENT_STATUS);
         assertThat(testPaymentFile.getBankName()).isEqualTo(UPDATED_BANK_NAME);
         assertThat(testPaymentFile.getIfscCode()).isEqualTo(UPDATED_IFSC_CODE);
+        assertThat(testPaymentFile.getPaymentMode()).isEqualTo(UPDATED_PAYMENT_MODE);
     }
 
     @Test

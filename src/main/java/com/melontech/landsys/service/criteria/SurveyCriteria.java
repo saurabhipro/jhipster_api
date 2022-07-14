@@ -92,6 +92,8 @@ public class SurveyCriteria implements Serializable, Criteria {
 
     private LongFilter paymentAdviceId;
 
+    private LongFilter paymentFileId;
+
     private Boolean distinct;
 
     public SurveyCriteria() {}
@@ -112,6 +114,7 @@ public class SurveyCriteria implements Serializable, Criteria {
         this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
         this.landCompensationId = other.landCompensationId == null ? null : other.landCompensationId.copy();
         this.paymentAdviceId = other.paymentAdviceId == null ? null : other.paymentAdviceId.copy();
+        this.paymentFileId = other.paymentFileId == null ? null : other.paymentFileId.copy();
         this.distinct = other.distinct;
     }
 
@@ -345,6 +348,21 @@ public class SurveyCriteria implements Serializable, Criteria {
         this.paymentAdviceId = paymentAdviceId;
     }
 
+    public LongFilter getPaymentFileId() {
+        return paymentFileId;
+    }
+
+    public LongFilter paymentFileId() {
+        if (paymentFileId == null) {
+            paymentFileId = new LongFilter();
+        }
+        return paymentFileId;
+    }
+
+    public void setPaymentFileId(LongFilter paymentFileId) {
+        this.paymentFileId = paymentFileId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -378,6 +396,7 @@ public class SurveyCriteria implements Serializable, Criteria {
             Objects.equals(projectLandId, that.projectLandId) &&
             Objects.equals(landCompensationId, that.landCompensationId) &&
             Objects.equals(paymentAdviceId, that.paymentAdviceId) &&
+            Objects.equals(paymentFileId, that.paymentFileId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -400,6 +419,7 @@ public class SurveyCriteria implements Serializable, Criteria {
             projectLandId,
             landCompensationId,
             paymentAdviceId,
+            paymentFileId,
             distinct
         );
     }
@@ -423,6 +443,7 @@ public class SurveyCriteria implements Serializable, Criteria {
             (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
             (landCompensationId != null ? "landCompensationId=" + landCompensationId + ", " : "") +
             (paymentAdviceId != null ? "paymentAdviceId=" + paymentAdviceId + ", " : "") +
+            (paymentFileId != null ? "paymentFileId=" + paymentFileId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

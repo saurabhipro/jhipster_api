@@ -4,14 +4,12 @@ import com.melontech.landsys.domain.Citizen;
 import com.melontech.landsys.domain.Land;
 import com.melontech.landsys.domain.LandCompensation;
 import com.melontech.landsys.domain.PaymentAdvice;
-import com.melontech.landsys.domain.PaymentFile;
 import com.melontech.landsys.domain.ProjectLand;
 import com.melontech.landsys.domain.Survey;
 import com.melontech.landsys.service.dto.CitizenDTO;
 import com.melontech.landsys.service.dto.LandCompensationDTO;
 import com.melontech.landsys.service.dto.LandDTO;
 import com.melontech.landsys.service.dto.PaymentAdviceDTO;
-import com.melontech.landsys.service.dto.PaymentFileDTO;
 import com.melontech.landsys.service.dto.ProjectLandDTO;
 import com.melontech.landsys.service.dto.SurveyDTO;
 import org.mapstruct.*;
@@ -25,7 +23,6 @@ public interface PaymentAdviceMapper extends EntityMapper<PaymentAdviceDTO, Paym
     @Mapping(target = "projectLand", source = "projectLand", qualifiedByName = "projectLandId")
     @Mapping(target = "survey", source = "survey", qualifiedByName = "surveyId")
     @Mapping(target = "citizen", source = "citizen", qualifiedByName = "citizenId")
-    @Mapping(target = "paymentFile", source = "paymentFile", qualifiedByName = "paymentFileId")
     @Mapping(target = "land", source = "land", qualifiedByName = "landKhasraNumber")
     PaymentAdviceDTO toDto(PaymentAdvice s);
 
@@ -48,11 +45,6 @@ public interface PaymentAdviceMapper extends EntityMapper<PaymentAdviceDTO, Paym
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     CitizenDTO toDtoCitizenId(Citizen citizen);
-
-    @Named("paymentFileId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    PaymentFileDTO toDtoPaymentFileId(PaymentFile paymentFile);
 
     @Named("landKhasraNumber")
     @BeanMapping(ignoreByDefault = true)

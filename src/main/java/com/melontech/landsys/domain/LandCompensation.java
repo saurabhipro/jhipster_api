@@ -35,6 +35,10 @@ public class LandCompensation implements Serializable {
     private Double area;
 
     @NotNull
+    @Column(name = "share_percentage", nullable = false)
+    private Double sharePercentage;
+
+    @NotNull
     @Column(name = "land_market_value", nullable = false)
     private Double landMarketValue;
 
@@ -68,7 +72,16 @@ public class LandCompensation implements Serializable {
 
     @JsonIgnoreProperties(
         value = {
-            "land", "project", "citizen", "noticeStatusInfo", "survey", "landCompensation", "paymentAdvices", "paymentAdviceDetails",
+            "land",
+            "project",
+            "citizen",
+            "noticeStatusInfo",
+            "survey",
+            "landCompensation",
+            "paymentAdvices",
+            "paymentAdviceDetails",
+            "paymentFiles",
+            "khatedars",
         },
         allowSetters = true
     )
@@ -77,7 +90,7 @@ public class LandCompensation implements Serializable {
     @JoinColumn(unique = true)
     private ProjectLand projectLand;
 
-    @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentAdvices" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentAdvices", "paymentFiles" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
     private Survey survey;
@@ -85,11 +98,26 @@ public class LandCompensation implements Serializable {
     @OneToMany(mappedBy = "landCompensation")
     @JsonIgnoreProperties(
         value = {
-            "landCompensation", "projectLand", "survey", "citizen", "paymentFile", "paymentFileRecon", "land", "paymentAdviceDetails",
+            "khatedars",
+            "landCompensation",
+            "projectLand",
+            "survey",
+            "citizen",
+            "paymentFileRecon",
+            "paymentFile",
+            "land",
+            "paymentAdviceDetails",
         },
         allowSetters = true
     )
     private Set<PaymentAdvice> paymentAdvices = new HashSet<>();
+
+    @OneToMany(mappedBy = "landCompensation")
+    @JsonIgnoreProperties(
+        value = { "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation" },
+        allowSetters = true
+    )
+    private Set<PaymentFile> paymentFiles = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -130,6 +158,19 @@ public class LandCompensation implements Serializable {
 
     public void setArea(Double area) {
         this.area = area;
+    }
+
+    public Double getSharePercentage() {
+        return this.sharePercentage;
+    }
+
+    public LandCompensation sharePercentage(Double sharePercentage) {
+        this.setSharePercentage(sharePercentage);
+        return this;
+    }
+
+    public void setSharePercentage(Double sharePercentage) {
+        this.sharePercentage = sharePercentage;
     }
 
     public Double getLandMarketValue() {
@@ -319,6 +360,37 @@ public class LandCompensation implements Serializable {
         return this;
     }
 
+    public Set<PaymentFile> getPaymentFiles() {
+        return this.paymentFiles;
+    }
+
+    public void setPaymentFiles(Set<PaymentFile> paymentFiles) {
+        if (this.paymentFiles != null) {
+            this.paymentFiles.forEach(i -> i.setLandCompensation(null));
+        }
+        if (paymentFiles != null) {
+            paymentFiles.forEach(i -> i.setLandCompensation(this));
+        }
+        this.paymentFiles = paymentFiles;
+    }
+
+    public LandCompensation paymentFiles(Set<PaymentFile> paymentFiles) {
+        this.setPaymentFiles(paymentFiles);
+        return this;
+    }
+
+    public LandCompensation addPaymentFile(PaymentFile paymentFile) {
+        this.paymentFiles.add(paymentFile);
+        paymentFile.setLandCompensation(this);
+        return this;
+    }
+
+    public LandCompensation removePaymentFile(PaymentFile paymentFile) {
+        this.paymentFiles.remove(paymentFile);
+        paymentFile.setLandCompensation(null);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -345,6 +417,7 @@ public class LandCompensation implements Serializable {
             "id=" + getId() +
             ", hissaType='" + getHissaType() + "'" +
             ", area=" + getArea() +
+            ", sharePercentage=" + getSharePercentage() +
             ", landMarketValue=" + getLandMarketValue() +
             ", structuralCompensation=" + getStructuralCompensation() +
             ", horticultureCompensation=" + getHorticultureCompensation() +

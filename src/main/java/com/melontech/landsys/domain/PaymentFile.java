@@ -1,11 +1,10 @@
 package com.melontech.landsys.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.melontech.landsys.domain.enumeration.PaymentAdviceType;
 import com.melontech.landsys.domain.enumeration.PaymentStatus;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
@@ -46,14 +45,73 @@ public class PaymentFile implements Serializable {
     @Column(name = "ifsc_code")
     private String ifscCode;
 
-    @OneToMany(mappedBy = "paymentFile")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_mode")
+    private PaymentAdviceType paymentMode;
+
+    @JsonIgnoreProperties(value = { "projectLand", "citizen", "paymentFile", "paymentAdvice" }, allowSetters = true)
+    @OneToOne(optional = false)
+    @NotNull
+    @JoinColumn(unique = true)
+    private Khatedar khatedar;
+
     @JsonIgnoreProperties(
         value = {
-            "landCompensation", "projectLand", "survey", "citizen", "paymentFile", "paymentFileRecon", "land", "paymentAdviceDetails",
+            "khatedars",
+            "landCompensation",
+            "projectLand",
+            "survey",
+            "citizen",
+            "paymentFileRecon",
+            "paymentFile",
+            "land",
+            "paymentAdviceDetails",
         },
         allowSetters = true
     )
-    private Set<PaymentAdvice> paymentAdvices = new HashSet<>();
+    @OneToOne(optional = false)
+    @NotNull
+    @JoinColumn(unique = true)
+    private PaymentAdvice paymentAdvice;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(
+        value = {
+            "land",
+            "project",
+            "citizen",
+            "noticeStatusInfo",
+            "survey",
+            "landCompensation",
+            "paymentAdvices",
+            "paymentAdviceDetails",
+            "paymentFiles",
+            "khatedars",
+        },
+        allowSetters = true
+    )
+    private ProjectLand projectLand;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentAdvices", "paymentFiles" }, allowSetters = true)
+    private Survey survey;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "bankBranches", "paymentFiles" }, allowSetters = true)
+    private Bank bank;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "bank", "citizens", "paymentFiles" }, allowSetters = true)
+    private BankBranch bankBranch;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "projectLand", "survey", "paymentAdvices", "paymentFiles" }, allowSetters = true)
+    private LandCompensation landCompensation;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -148,34 +206,107 @@ public class PaymentFile implements Serializable {
         this.ifscCode = ifscCode;
     }
 
-    public Set<PaymentAdvice> getPaymentAdvices() {
-        return this.paymentAdvices;
+    public PaymentAdviceType getPaymentMode() {
+        return this.paymentMode;
     }
 
-    public void setPaymentAdvices(Set<PaymentAdvice> paymentAdvices) {
-        if (this.paymentAdvices != null) {
-            this.paymentAdvices.forEach(i -> i.setPaymentFile(null));
-        }
-        if (paymentAdvices != null) {
-            paymentAdvices.forEach(i -> i.setPaymentFile(this));
-        }
-        this.paymentAdvices = paymentAdvices;
-    }
-
-    public PaymentFile paymentAdvices(Set<PaymentAdvice> paymentAdvices) {
-        this.setPaymentAdvices(paymentAdvices);
+    public PaymentFile paymentMode(PaymentAdviceType paymentMode) {
+        this.setPaymentMode(paymentMode);
         return this;
     }
 
-    public PaymentFile addPaymentAdvice(PaymentAdvice paymentAdvice) {
-        this.paymentAdvices.add(paymentAdvice);
-        paymentAdvice.setPaymentFile(this);
+    public void setPaymentMode(PaymentAdviceType paymentMode) {
+        this.paymentMode = paymentMode;
+    }
+
+    public Khatedar getKhatedar() {
+        return this.khatedar;
+    }
+
+    public void setKhatedar(Khatedar khatedar) {
+        this.khatedar = khatedar;
+    }
+
+    public PaymentFile khatedar(Khatedar khatedar) {
+        this.setKhatedar(khatedar);
         return this;
     }
 
-    public PaymentFile removePaymentAdvice(PaymentAdvice paymentAdvice) {
-        this.paymentAdvices.remove(paymentAdvice);
-        paymentAdvice.setPaymentFile(null);
+    public PaymentAdvice getPaymentAdvice() {
+        return this.paymentAdvice;
+    }
+
+    public void setPaymentAdvice(PaymentAdvice paymentAdvice) {
+        this.paymentAdvice = paymentAdvice;
+    }
+
+    public PaymentFile paymentAdvice(PaymentAdvice paymentAdvice) {
+        this.setPaymentAdvice(paymentAdvice);
+        return this;
+    }
+
+    public ProjectLand getProjectLand() {
+        return this.projectLand;
+    }
+
+    public void setProjectLand(ProjectLand projectLand) {
+        this.projectLand = projectLand;
+    }
+
+    public PaymentFile projectLand(ProjectLand projectLand) {
+        this.setProjectLand(projectLand);
+        return this;
+    }
+
+    public Survey getSurvey() {
+        return this.survey;
+    }
+
+    public void setSurvey(Survey survey) {
+        this.survey = survey;
+    }
+
+    public PaymentFile survey(Survey survey) {
+        this.setSurvey(survey);
+        return this;
+    }
+
+    public Bank getBank() {
+        return this.bank;
+    }
+
+    public void setBank(Bank bank) {
+        this.bank = bank;
+    }
+
+    public PaymentFile bank(Bank bank) {
+        this.setBank(bank);
+        return this;
+    }
+
+    public BankBranch getBankBranch() {
+        return this.bankBranch;
+    }
+
+    public void setBankBranch(BankBranch bankBranch) {
+        this.bankBranch = bankBranch;
+    }
+
+    public PaymentFile bankBranch(BankBranch bankBranch) {
+        this.setBankBranch(bankBranch);
+        return this;
+    }
+
+    public LandCompensation getLandCompensation() {
+        return this.landCompensation;
+    }
+
+    public void setLandCompensation(LandCompensation landCompensation) {
+        this.landCompensation = landCompensation;
+    }
+
+    public PaymentFile landCompensation(LandCompensation landCompensation) {
+        this.setLandCompensation(landCompensation);
         return this;
     }
 
@@ -209,6 +340,7 @@ public class PaymentFile implements Serializable {
             ", paymentStatus='" + getPaymentStatus() + "'" +
             ", bankName='" + getBankName() + "'" +
             ", ifscCode='" + getIfscCode() + "'" +
+            ", paymentMode='" + getPaymentMode() + "'" +
             "}";
     }
 }

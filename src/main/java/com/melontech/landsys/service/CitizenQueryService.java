@@ -156,6 +156,12 @@ public class CitizenQueryService extends QueryService<Citizen> {
                         )
                     );
             }
+            if (criteria.getKhatedarId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getKhatedarId(), root -> root.join(Citizen_.khatedars, JoinType.LEFT).get(Khatedar_.id))
+                    );
+            }
         }
         return specification;
     }

@@ -91,6 +91,20 @@ public class PaymentAdviceServiceImpl implements PaymentAdviceService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
+    /**
+     *  Get all the paymentAdvices where PaymentFile is {@code null}.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<PaymentAdviceDTO> findAllWherePaymentFileIsNull() {
+        log.debug("Request to get all paymentAdvices where PaymentFile is null");
+        return StreamSupport
+            .stream(paymentAdviceRepository.findAll().spliterator(), false)
+            .filter(paymentAdvice -> paymentAdvice.getPaymentFile() == null)
+            .map(paymentAdviceMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<PaymentAdviceDTO> findOne(Long id) {

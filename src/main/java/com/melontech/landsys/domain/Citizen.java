@@ -95,15 +95,23 @@ public class Citizen implements Serializable {
     )
     private Set<Land> lands = new HashSet<>();
 
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties(value = { "bank", "citizens" }, allowSetters = true)
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "bank", "citizens", "paymentFiles" }, allowSetters = true)
     private BankBranch bankBranch;
 
     @OneToMany(mappedBy = "citizen")
     @JsonIgnoreProperties(
         value = {
-            "land", "project", "citizen", "noticeStatusInfo", "survey", "landCompensation", "paymentAdvices", "paymentAdviceDetails",
+            "land",
+            "project",
+            "citizen",
+            "noticeStatusInfo",
+            "survey",
+            "landCompensation",
+            "paymentAdvices",
+            "paymentAdviceDetails",
+            "paymentFiles",
+            "khatedars",
         },
         allowSetters = true
     )
@@ -112,11 +120,23 @@ public class Citizen implements Serializable {
     @OneToMany(mappedBy = "citizen")
     @JsonIgnoreProperties(
         value = {
-            "landCompensation", "projectLand", "survey", "citizen", "paymentFile", "paymentFileRecon", "land", "paymentAdviceDetails",
+            "khatedars",
+            "landCompensation",
+            "projectLand",
+            "survey",
+            "citizen",
+            "paymentFileRecon",
+            "paymentFile",
+            "land",
+            "paymentAdviceDetails",
         },
         allowSetters = true
     )
     private Set<PaymentAdvice> paymentAdvices = new HashSet<>();
+
+    @OneToMany(mappedBy = "citizen")
+    @JsonIgnoreProperties(value = { "projectLand", "citizen", "paymentFile", "paymentAdvice" }, allowSetters = true)
+    private Set<Khatedar> khatedars = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -483,6 +503,37 @@ public class Citizen implements Serializable {
     public Citizen removePaymentAdvice(PaymentAdvice paymentAdvice) {
         this.paymentAdvices.remove(paymentAdvice);
         paymentAdvice.setCitizen(null);
+        return this;
+    }
+
+    public Set<Khatedar> getKhatedars() {
+        return this.khatedars;
+    }
+
+    public void setKhatedars(Set<Khatedar> khatedars) {
+        if (this.khatedars != null) {
+            this.khatedars.forEach(i -> i.setCitizen(null));
+        }
+        if (khatedars != null) {
+            khatedars.forEach(i -> i.setCitizen(this));
+        }
+        this.khatedars = khatedars;
+    }
+
+    public Citizen khatedars(Set<Khatedar> khatedars) {
+        this.setKhatedars(khatedars);
+        return this;
+    }
+
+    public Citizen addKhatedar(Khatedar khatedar) {
+        this.khatedars.add(khatedar);
+        khatedar.setCitizen(this);
+        return this;
+    }
+
+    public Citizen removeKhatedar(Khatedar khatedar) {
+        this.khatedars.remove(khatedar);
+        khatedar.setCitizen(null);
         return this;
     }
 

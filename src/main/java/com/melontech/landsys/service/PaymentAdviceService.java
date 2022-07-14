@@ -47,6 +47,12 @@ public interface PaymentAdviceService {
      * @return the {@link List} of entities.
      */
     List<PaymentAdviceDTO> findAllWherePaymentFileReconIsNull();
+    /**
+     * Get all the PaymentAdviceDTO where PaymentFile is {@code null}.
+     *
+     * @return the {@link List} of entities.
+     */
+    List<PaymentAdviceDTO> findAllWherePaymentFileIsNull();
 
     /**
      * Get all the paymentAdvices with eager load of many-to-many relationships.

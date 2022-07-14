@@ -128,6 +128,15 @@ public class PaymentAdviceQueryService extends QueryService<PaymentAdvice> {
             if (criteria.getHissaType() != null) {
                 specification = specification.and(buildSpecification(criteria.getHissaType(), PaymentAdvice_.hissaType));
             }
+            if (criteria.getKhatedarId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getKhatedarId(),
+                            root -> root.join(PaymentAdvice_.khatedars, JoinType.LEFT).get(Khatedar_.id)
+                        )
+                    );
+            }
             if (criteria.getLandCompensationId() != null) {
                 specification =
                     specification.and(
@@ -161,21 +170,21 @@ public class PaymentAdviceQueryService extends QueryService<PaymentAdvice> {
                         )
                     );
             }
-            if (criteria.getPaymentFileId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getPaymentFileId(),
-                            root -> root.join(PaymentAdvice_.paymentFile, JoinType.LEFT).get(PaymentFile_.id)
-                        )
-                    );
-            }
             if (criteria.getPaymentFileReconId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
                             criteria.getPaymentFileReconId(),
                             root -> root.join(PaymentAdvice_.paymentFileRecon, JoinType.LEFT).get(PaymentFileRecon_.id)
+                        )
+                    );
+            }
+            if (criteria.getPaymentFileId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPaymentFileId(),
+                            root -> root.join(PaymentAdvice_.paymentFile, JoinType.LEFT).get(PaymentFile_.id)
                         )
                     );
             }

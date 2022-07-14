@@ -59,6 +59,8 @@ public class CitizenCriteria implements Serializable, Criteria {
 
     private LongFilter paymentAdviceId;
 
+    private LongFilter khatedarId;
+
     private Boolean distinct;
 
     public CitizenCriteria() {}
@@ -80,6 +82,7 @@ public class CitizenCriteria implements Serializable, Criteria {
         this.bankBranchId = other.bankBranchId == null ? null : other.bankBranchId.copy();
         this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
         this.paymentAdviceId = other.paymentAdviceId == null ? null : other.paymentAdviceId.copy();
+        this.khatedarId = other.khatedarId == null ? null : other.khatedarId.copy();
         this.distinct = other.distinct;
     }
 
@@ -328,6 +331,21 @@ public class CitizenCriteria implements Serializable, Criteria {
         this.paymentAdviceId = paymentAdviceId;
     }
 
+    public LongFilter getKhatedarId() {
+        return khatedarId;
+    }
+
+    public LongFilter khatedarId() {
+        if (khatedarId == null) {
+            khatedarId = new LongFilter();
+        }
+        return khatedarId;
+    }
+
+    public void setKhatedarId(LongFilter khatedarId) {
+        this.khatedarId = khatedarId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -362,6 +380,7 @@ public class CitizenCriteria implements Serializable, Criteria {
             Objects.equals(bankBranchId, that.bankBranchId) &&
             Objects.equals(projectLandId, that.projectLandId) &&
             Objects.equals(paymentAdviceId, that.paymentAdviceId) &&
+            Objects.equals(khatedarId, that.khatedarId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -385,6 +404,7 @@ public class CitizenCriteria implements Serializable, Criteria {
             bankBranchId,
             projectLandId,
             paymentAdviceId,
+            khatedarId,
             distinct
         );
     }
@@ -409,6 +429,7 @@ public class CitizenCriteria implements Serializable, Criteria {
             (bankBranchId != null ? "bankBranchId=" + bankBranchId + ", " : "") +
             (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
             (paymentAdviceId != null ? "paymentAdviceId=" + paymentAdviceId + ", " : "") +
+            (khatedarId != null ? "khatedarId=" + khatedarId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

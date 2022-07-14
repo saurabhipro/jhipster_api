@@ -26,7 +26,7 @@ public class Land implements Serializable {
     private String ulpin;
 
     @NotNull
-    @Column(name = "khasra_number", nullable = false)
+    @Column(name = "khasra_number", nullable = false, unique = true)
     private String khasraNumber;
 
     @Column(name = "kahtauni_khata")
@@ -56,7 +56,15 @@ public class Land implements Serializable {
     @OneToMany(mappedBy = "land")
     @JsonIgnoreProperties(
         value = {
-            "landCompensation", "projectLand", "survey", "citizen", "paymentFile", "paymentFileRecon", "land", "paymentAdviceDetails",
+            "khatedars",
+            "landCompensation",
+            "projectLand",
+            "survey",
+            "citizen",
+            "paymentFileRecon",
+            "paymentFile",
+            "land",
+            "paymentAdviceDetails",
         },
         allowSetters = true
     )
@@ -83,7 +91,7 @@ public class Land implements Serializable {
     private State state;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "lands", "bankBranch", "projectLands", "paymentAdvices" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "lands", "bankBranch", "projectLands", "paymentAdvices", "khatedars" }, allowSetters = true)
     private Citizen citizen;
 
     @ManyToOne
@@ -93,7 +101,16 @@ public class Land implements Serializable {
     @OneToMany(mappedBy = "land")
     @JsonIgnoreProperties(
         value = {
-            "land", "project", "citizen", "noticeStatusInfo", "survey", "landCompensation", "paymentAdvices", "paymentAdviceDetails",
+            "land",
+            "project",
+            "citizen",
+            "noticeStatusInfo",
+            "survey",
+            "landCompensation",
+            "paymentAdvices",
+            "paymentAdviceDetails",
+            "paymentFiles",
+            "khatedars",
         },
         allowSetters = true
     )
