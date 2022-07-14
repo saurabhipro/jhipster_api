@@ -33,7 +33,7 @@ public class CitizenCriteria implements Serializable, Criteria {
 
     private StringFilter address;
 
-    private StringFilter mobileNo;
+    private StringFilter mobileNumber;
 
     private LocalDateFilter dob;
 
@@ -55,8 +55,6 @@ public class CitizenCriteria implements Serializable, Criteria {
 
     private LongFilter bankBranchId;
 
-    private LongFilter projectLandId;
-
     private LongFilter paymentAdviceId;
 
     private LongFilter khatedarId;
@@ -69,7 +67,7 @@ public class CitizenCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.address = other.address == null ? null : other.address.copy();
-        this.mobileNo = other.mobileNo == null ? null : other.mobileNo.copy();
+        this.mobileNumber = other.mobileNumber == null ? null : other.mobileNumber.copy();
         this.dob = other.dob == null ? null : other.dob.copy();
         this.accountNumber = other.accountNumber == null ? null : other.accountNumber.copy();
         this.fatherName = other.fatherName == null ? null : other.fatherName.copy();
@@ -80,7 +78,6 @@ public class CitizenCriteria implements Serializable, Criteria {
         this.accountNo = other.accountNo == null ? null : other.accountNo.copy();
         this.landId = other.landId == null ? null : other.landId.copy();
         this.bankBranchId = other.bankBranchId == null ? null : other.bankBranchId.copy();
-        this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
         this.paymentAdviceId = other.paymentAdviceId == null ? null : other.paymentAdviceId.copy();
         this.khatedarId = other.khatedarId == null ? null : other.khatedarId.copy();
         this.distinct = other.distinct;
@@ -136,19 +133,19 @@ public class CitizenCriteria implements Serializable, Criteria {
         this.address = address;
     }
 
-    public StringFilter getMobileNo() {
-        return mobileNo;
+    public StringFilter getMobileNumber() {
+        return mobileNumber;
     }
 
-    public StringFilter mobileNo() {
-        if (mobileNo == null) {
-            mobileNo = new StringFilter();
+    public StringFilter mobileNumber() {
+        if (mobileNumber == null) {
+            mobileNumber = new StringFilter();
         }
-        return mobileNo;
+        return mobileNumber;
     }
 
-    public void setMobileNo(StringFilter mobileNo) {
-        this.mobileNo = mobileNo;
+    public void setMobileNumber(StringFilter mobileNumber) {
+        this.mobileNumber = mobileNumber;
     }
 
     public LocalDateFilter getDob() {
@@ -301,21 +298,6 @@ public class CitizenCriteria implements Serializable, Criteria {
         this.bankBranchId = bankBranchId;
     }
 
-    public LongFilter getProjectLandId() {
-        return projectLandId;
-    }
-
-    public LongFilter projectLandId() {
-        if (projectLandId == null) {
-            projectLandId = new LongFilter();
-        }
-        return projectLandId;
-    }
-
-    public void setProjectLandId(LongFilter projectLandId) {
-        this.projectLandId = projectLandId;
-    }
-
     public LongFilter getPaymentAdviceId() {
         return paymentAdviceId;
     }
@@ -367,7 +349,7 @@ public class CitizenCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(name, that.name) &&
             Objects.equals(address, that.address) &&
-            Objects.equals(mobileNo, that.mobileNo) &&
+            Objects.equals(mobileNumber, that.mobileNumber) &&
             Objects.equals(dob, that.dob) &&
             Objects.equals(accountNumber, that.accountNumber) &&
             Objects.equals(fatherName, that.fatherName) &&
@@ -378,7 +360,6 @@ public class CitizenCriteria implements Serializable, Criteria {
             Objects.equals(accountNo, that.accountNo) &&
             Objects.equals(landId, that.landId) &&
             Objects.equals(bankBranchId, that.bankBranchId) &&
-            Objects.equals(projectLandId, that.projectLandId) &&
             Objects.equals(paymentAdviceId, that.paymentAdviceId) &&
             Objects.equals(khatedarId, that.khatedarId) &&
             Objects.equals(distinct, that.distinct)
@@ -391,7 +372,7 @@ public class CitizenCriteria implements Serializable, Criteria {
             id,
             name,
             address,
-            mobileNo,
+            mobileNumber,
             dob,
             accountNumber,
             fatherName,
@@ -402,7 +383,6 @@ public class CitizenCriteria implements Serializable, Criteria {
             accountNo,
             landId,
             bankBranchId,
-            projectLandId,
             paymentAdviceId,
             khatedarId,
             distinct
@@ -416,7 +396,7 @@ public class CitizenCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (name != null ? "name=" + name + ", " : "") +
             (address != null ? "address=" + address + ", " : "") +
-            (mobileNo != null ? "mobileNo=" + mobileNo + ", " : "") +
+            (mobileNumber != null ? "mobileNumber=" + mobileNumber + ", " : "") +
             (dob != null ? "dob=" + dob + ", " : "") +
             (accountNumber != null ? "accountNumber=" + accountNumber + ", " : "") +
             (fatherName != null ? "fatherName=" + fatherName + ", " : "") +
@@ -427,7 +407,6 @@ public class CitizenCriteria implements Serializable, Criteria {
             (accountNo != null ? "accountNo=" + accountNo + ", " : "") +
             (landId != null ? "landId=" + landId + ", " : "") +
             (bankBranchId != null ? "bankBranchId=" + bankBranchId + ", " : "") +
-            (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
             (paymentAdviceId != null ? "paymentAdviceId=" + paymentAdviceId + ", " : "") +
             (khatedarId != null ? "khatedarId=" + khatedarId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

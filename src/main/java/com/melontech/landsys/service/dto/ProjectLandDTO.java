@@ -25,8 +25,6 @@ public class ProjectLandDTO implements Serializable {
 
     private ProjectDTO project;
 
-    private CitizenDTO citizen;
-
     private NoticeStatusInfoDTO noticeStatusInfo;
 
     public Long getId() {
@@ -85,14 +83,6 @@ public class ProjectLandDTO implements Serializable {
         this.project = project;
     }
 
-    public CitizenDTO getCitizen() {
-        return citizen;
-    }
-
-    public void setCitizen(CitizenDTO citizen) {
-        this.citizen = citizen;
-    }
-
     public NoticeStatusInfoDTO getNoticeStatusInfo() {
         return noticeStatusInfo;
     }
@@ -132,7 +122,6 @@ public class ProjectLandDTO implements Serializable {
             ", hissaType='" + getHissaType() + "'" +
             ", land=" + getLand() +
             ", project=" + getProject() +
-            ", citizen=" + getCitizen() +
             ", noticeStatusInfo=" + getNoticeStatusInfo() +
             "}";
     }

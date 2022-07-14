@@ -12,7 +12,6 @@ import com.melontech.landsys.domain.Citizen;
 import com.melontech.landsys.domain.Khatedar;
 import com.melontech.landsys.domain.Land;
 import com.melontech.landsys.domain.PaymentAdvice;
-import com.melontech.landsys.domain.ProjectLand;
 import com.melontech.landsys.repository.CitizenRepository;
 import com.melontech.landsys.service.CitizenService;
 import com.melontech.landsys.service.criteria.CitizenCriteria;
@@ -60,8 +59,8 @@ class CitizenResourceIT {
     private static final String DEFAULT_ADDRESS = "AAAAAAAAAA";
     private static final String UPDATED_ADDRESS = "BBBBBBBBBB";
 
-    private static final String DEFAULT_MOBILE_NO = "AAAAAAAAAA";
-    private static final String UPDATED_MOBILE_NO = "BBBBBBBBBB";
+    private static final String DEFAULT_MOBILE_NUMBER = "AAAAAAAAAA";
+    private static final String UPDATED_MOBILE_NUMBER = "BBBBBBBBBB";
 
     private static final LocalDate DEFAULT_DOB = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_DOB = LocalDate.now(ZoneId.systemDefault());
@@ -141,7 +140,7 @@ class CitizenResourceIT {
             .photoContentType(DEFAULT_PHOTO_CONTENT_TYPE)
             .name(DEFAULT_NAME)
             .address(DEFAULT_ADDRESS)
-            .mobileNo(DEFAULT_MOBILE_NO)
+            .mobileNumber(DEFAULT_MOBILE_NUMBER)
             .dob(DEFAULT_DOB)
             .accountNumber(DEFAULT_ACCOUNT_NUMBER)
             .fatherName(DEFAULT_FATHER_NAME)
@@ -171,7 +170,7 @@ class CitizenResourceIT {
             .photoContentType(UPDATED_PHOTO_CONTENT_TYPE)
             .name(UPDATED_NAME)
             .address(UPDATED_ADDRESS)
-            .mobileNo(UPDATED_MOBILE_NO)
+            .mobileNumber(UPDATED_MOBILE_NUMBER)
             .dob(UPDATED_DOB)
             .accountNumber(UPDATED_ACCOUNT_NUMBER)
             .fatherName(UPDATED_FATHER_NAME)
@@ -212,7 +211,7 @@ class CitizenResourceIT {
         assertThat(testCitizen.getPhotoContentType()).isEqualTo(DEFAULT_PHOTO_CONTENT_TYPE);
         assertThat(testCitizen.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCitizen.getAddress()).isEqualTo(DEFAULT_ADDRESS);
-        assertThat(testCitizen.getMobileNo()).isEqualTo(DEFAULT_MOBILE_NO);
+        assertThat(testCitizen.getMobileNumber()).isEqualTo(DEFAULT_MOBILE_NUMBER);
         assertThat(testCitizen.getDob()).isEqualTo(DEFAULT_DOB);
         assertThat(testCitizen.getAccountNumber()).isEqualTo(DEFAULT_ACCOUNT_NUMBER);
         assertThat(testCitizen.getFatherName()).isEqualTo(DEFAULT_FATHER_NAME);
@@ -336,7 +335,7 @@ class CitizenResourceIT {
             .andExpect(jsonPath("$.[*].photo").value(hasItem(Base64Utils.encodeToString(DEFAULT_PHOTO))))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
-            .andExpect(jsonPath("$.[*].mobileNo").value(hasItem(DEFAULT_MOBILE_NO)))
+            .andExpect(jsonPath("$.[*].mobileNumber").value(hasItem(DEFAULT_MOBILE_NUMBER)))
             .andExpect(jsonPath("$.[*].dob").value(hasItem(DEFAULT_DOB.toString())))
             .andExpect(jsonPath("$.[*].accountNumber").value(hasItem(DEFAULT_ACCOUNT_NUMBER)))
             .andExpect(jsonPath("$.[*].fatherName").value(hasItem(DEFAULT_FATHER_NAME)))
@@ -387,7 +386,7 @@ class CitizenResourceIT {
             .andExpect(jsonPath("$.photo").value(Base64Utils.encodeToString(DEFAULT_PHOTO)))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS))
-            .andExpect(jsonPath("$.mobileNo").value(DEFAULT_MOBILE_NO))
+            .andExpect(jsonPath("$.mobileNumber").value(DEFAULT_MOBILE_NUMBER))
             .andExpect(jsonPath("$.dob").value(DEFAULT_DOB.toString()))
             .andExpect(jsonPath("$.accountNumber").value(DEFAULT_ACCOUNT_NUMBER))
             .andExpect(jsonPath("$.fatherName").value(DEFAULT_FATHER_NAME))
@@ -580,80 +579,80 @@ class CitizenResourceIT {
 
     @Test
     @Transactional
-    void getAllCitizensByMobileNoIsEqualToSomething() throws Exception {
+    void getAllCitizensByMobileNumberIsEqualToSomething() throws Exception {
         // Initialize the database
         citizenRepository.saveAndFlush(citizen);
 
-        // Get all the citizenList where mobileNo equals to DEFAULT_MOBILE_NO
-        defaultCitizenShouldBeFound("mobileNo.equals=" + DEFAULT_MOBILE_NO);
+        // Get all the citizenList where mobileNumber equals to DEFAULT_MOBILE_NUMBER
+        defaultCitizenShouldBeFound("mobileNumber.equals=" + DEFAULT_MOBILE_NUMBER);
 
-        // Get all the citizenList where mobileNo equals to UPDATED_MOBILE_NO
-        defaultCitizenShouldNotBeFound("mobileNo.equals=" + UPDATED_MOBILE_NO);
+        // Get all the citizenList where mobileNumber equals to UPDATED_MOBILE_NUMBER
+        defaultCitizenShouldNotBeFound("mobileNumber.equals=" + UPDATED_MOBILE_NUMBER);
     }
 
     @Test
     @Transactional
-    void getAllCitizensByMobileNoIsNotEqualToSomething() throws Exception {
+    void getAllCitizensByMobileNumberIsNotEqualToSomething() throws Exception {
         // Initialize the database
         citizenRepository.saveAndFlush(citizen);
 
-        // Get all the citizenList where mobileNo not equals to DEFAULT_MOBILE_NO
-        defaultCitizenShouldNotBeFound("mobileNo.notEquals=" + DEFAULT_MOBILE_NO);
+        // Get all the citizenList where mobileNumber not equals to DEFAULT_MOBILE_NUMBER
+        defaultCitizenShouldNotBeFound("mobileNumber.notEquals=" + DEFAULT_MOBILE_NUMBER);
 
-        // Get all the citizenList where mobileNo not equals to UPDATED_MOBILE_NO
-        defaultCitizenShouldBeFound("mobileNo.notEquals=" + UPDATED_MOBILE_NO);
+        // Get all the citizenList where mobileNumber not equals to UPDATED_MOBILE_NUMBER
+        defaultCitizenShouldBeFound("mobileNumber.notEquals=" + UPDATED_MOBILE_NUMBER);
     }
 
     @Test
     @Transactional
-    void getAllCitizensByMobileNoIsInShouldWork() throws Exception {
+    void getAllCitizensByMobileNumberIsInShouldWork() throws Exception {
         // Initialize the database
         citizenRepository.saveAndFlush(citizen);
 
-        // Get all the citizenList where mobileNo in DEFAULT_MOBILE_NO or UPDATED_MOBILE_NO
-        defaultCitizenShouldBeFound("mobileNo.in=" + DEFAULT_MOBILE_NO + "," + UPDATED_MOBILE_NO);
+        // Get all the citizenList where mobileNumber in DEFAULT_MOBILE_NUMBER or UPDATED_MOBILE_NUMBER
+        defaultCitizenShouldBeFound("mobileNumber.in=" + DEFAULT_MOBILE_NUMBER + "," + UPDATED_MOBILE_NUMBER);
 
-        // Get all the citizenList where mobileNo equals to UPDATED_MOBILE_NO
-        defaultCitizenShouldNotBeFound("mobileNo.in=" + UPDATED_MOBILE_NO);
+        // Get all the citizenList where mobileNumber equals to UPDATED_MOBILE_NUMBER
+        defaultCitizenShouldNotBeFound("mobileNumber.in=" + UPDATED_MOBILE_NUMBER);
     }
 
     @Test
     @Transactional
-    void getAllCitizensByMobileNoIsNullOrNotNull() throws Exception {
+    void getAllCitizensByMobileNumberIsNullOrNotNull() throws Exception {
         // Initialize the database
         citizenRepository.saveAndFlush(citizen);
 
-        // Get all the citizenList where mobileNo is not null
-        defaultCitizenShouldBeFound("mobileNo.specified=true");
+        // Get all the citizenList where mobileNumber is not null
+        defaultCitizenShouldBeFound("mobileNumber.specified=true");
 
-        // Get all the citizenList where mobileNo is null
-        defaultCitizenShouldNotBeFound("mobileNo.specified=false");
+        // Get all the citizenList where mobileNumber is null
+        defaultCitizenShouldNotBeFound("mobileNumber.specified=false");
     }
 
     @Test
     @Transactional
-    void getAllCitizensByMobileNoContainsSomething() throws Exception {
+    void getAllCitizensByMobileNumberContainsSomething() throws Exception {
         // Initialize the database
         citizenRepository.saveAndFlush(citizen);
 
-        // Get all the citizenList where mobileNo contains DEFAULT_MOBILE_NO
-        defaultCitizenShouldBeFound("mobileNo.contains=" + DEFAULT_MOBILE_NO);
+        // Get all the citizenList where mobileNumber contains DEFAULT_MOBILE_NUMBER
+        defaultCitizenShouldBeFound("mobileNumber.contains=" + DEFAULT_MOBILE_NUMBER);
 
-        // Get all the citizenList where mobileNo contains UPDATED_MOBILE_NO
-        defaultCitizenShouldNotBeFound("mobileNo.contains=" + UPDATED_MOBILE_NO);
+        // Get all the citizenList where mobileNumber contains UPDATED_MOBILE_NUMBER
+        defaultCitizenShouldNotBeFound("mobileNumber.contains=" + UPDATED_MOBILE_NUMBER);
     }
 
     @Test
     @Transactional
-    void getAllCitizensByMobileNoNotContainsSomething() throws Exception {
+    void getAllCitizensByMobileNumberNotContainsSomething() throws Exception {
         // Initialize the database
         citizenRepository.saveAndFlush(citizen);
 
-        // Get all the citizenList where mobileNo does not contain DEFAULT_MOBILE_NO
-        defaultCitizenShouldNotBeFound("mobileNo.doesNotContain=" + DEFAULT_MOBILE_NO);
+        // Get all the citizenList where mobileNumber does not contain DEFAULT_MOBILE_NUMBER
+        defaultCitizenShouldNotBeFound("mobileNumber.doesNotContain=" + DEFAULT_MOBILE_NUMBER);
 
-        // Get all the citizenList where mobileNo does not contain UPDATED_MOBILE_NO
-        defaultCitizenShouldBeFound("mobileNo.doesNotContain=" + UPDATED_MOBILE_NO);
+        // Get all the citizenList where mobileNumber does not contain UPDATED_MOBILE_NUMBER
+        defaultCitizenShouldBeFound("mobileNumber.doesNotContain=" + UPDATED_MOBILE_NUMBER);
     }
 
     @Test
@@ -1360,32 +1359,6 @@ class CitizenResourceIT {
 
     @Test
     @Transactional
-    void getAllCitizensByProjectLandIsEqualToSomething() throws Exception {
-        // Initialize the database
-        citizenRepository.saveAndFlush(citizen);
-        ProjectLand projectLand;
-        if (TestUtil.findAll(em, ProjectLand.class).isEmpty()) {
-            projectLand = ProjectLandResourceIT.createEntity(em);
-            em.persist(projectLand);
-            em.flush();
-        } else {
-            projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
-        }
-        em.persist(projectLand);
-        em.flush();
-        citizen.addProjectLand(projectLand);
-        citizenRepository.saveAndFlush(citizen);
-        Long projectLandId = projectLand.getId();
-
-        // Get all the citizenList where projectLand equals to projectLandId
-        defaultCitizenShouldBeFound("projectLandId.equals=" + projectLandId);
-
-        // Get all the citizenList where projectLand equals to (projectLandId + 1)
-        defaultCitizenShouldNotBeFound("projectLandId.equals=" + (projectLandId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllCitizensByPaymentAdviceIsEqualToSomething() throws Exception {
         // Initialize the database
         citizenRepository.saveAndFlush(citizen);
@@ -1449,7 +1422,7 @@ class CitizenResourceIT {
             .andExpect(jsonPath("$.[*].photo").value(hasItem(Base64Utils.encodeToString(DEFAULT_PHOTO))))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
-            .andExpect(jsonPath("$.[*].mobileNo").value(hasItem(DEFAULT_MOBILE_NO)))
+            .andExpect(jsonPath("$.[*].mobileNumber").value(hasItem(DEFAULT_MOBILE_NUMBER)))
             .andExpect(jsonPath("$.[*].dob").value(hasItem(DEFAULT_DOB.toString())))
             .andExpect(jsonPath("$.[*].accountNumber").value(hasItem(DEFAULT_ACCOUNT_NUMBER)))
             .andExpect(jsonPath("$.[*].fatherName").value(hasItem(DEFAULT_FATHER_NAME)))
@@ -1516,7 +1489,7 @@ class CitizenResourceIT {
             .photoContentType(UPDATED_PHOTO_CONTENT_TYPE)
             .name(UPDATED_NAME)
             .address(UPDATED_ADDRESS)
-            .mobileNo(UPDATED_MOBILE_NO)
+            .mobileNumber(UPDATED_MOBILE_NUMBER)
             .dob(UPDATED_DOB)
             .accountNumber(UPDATED_ACCOUNT_NUMBER)
             .fatherName(UPDATED_FATHER_NAME)
@@ -1549,7 +1522,7 @@ class CitizenResourceIT {
         assertThat(testCitizen.getPhotoContentType()).isEqualTo(UPDATED_PHOTO_CONTENT_TYPE);
         assertThat(testCitizen.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCitizen.getAddress()).isEqualTo(UPDATED_ADDRESS);
-        assertThat(testCitizen.getMobileNo()).isEqualTo(UPDATED_MOBILE_NO);
+        assertThat(testCitizen.getMobileNumber()).isEqualTo(UPDATED_MOBILE_NUMBER);
         assertThat(testCitizen.getDob()).isEqualTo(UPDATED_DOB);
         assertThat(testCitizen.getAccountNumber()).isEqualTo(UPDATED_ACCOUNT_NUMBER);
         assertThat(testCitizen.getFatherName()).isEqualTo(UPDATED_FATHER_NAME);
@@ -1667,7 +1640,7 @@ class CitizenResourceIT {
         assertThat(testCitizen.getPhotoContentType()).isEqualTo(DEFAULT_PHOTO_CONTENT_TYPE);
         assertThat(testCitizen.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCitizen.getAddress()).isEqualTo(UPDATED_ADDRESS);
-        assertThat(testCitizen.getMobileNo()).isEqualTo(DEFAULT_MOBILE_NO);
+        assertThat(testCitizen.getMobileNumber()).isEqualTo(DEFAULT_MOBILE_NUMBER);
         assertThat(testCitizen.getDob()).isEqualTo(DEFAULT_DOB);
         assertThat(testCitizen.getAccountNumber()).isEqualTo(DEFAULT_ACCOUNT_NUMBER);
         assertThat(testCitizen.getFatherName()).isEqualTo(DEFAULT_FATHER_NAME);
@@ -1701,7 +1674,7 @@ class CitizenResourceIT {
             .photoContentType(UPDATED_PHOTO_CONTENT_TYPE)
             .name(UPDATED_NAME)
             .address(UPDATED_ADDRESS)
-            .mobileNo(UPDATED_MOBILE_NO)
+            .mobileNumber(UPDATED_MOBILE_NUMBER)
             .dob(UPDATED_DOB)
             .accountNumber(UPDATED_ACCOUNT_NUMBER)
             .fatherName(UPDATED_FATHER_NAME)
@@ -1733,7 +1706,7 @@ class CitizenResourceIT {
         assertThat(testCitizen.getPhotoContentType()).isEqualTo(UPDATED_PHOTO_CONTENT_TYPE);
         assertThat(testCitizen.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCitizen.getAddress()).isEqualTo(UPDATED_ADDRESS);
-        assertThat(testCitizen.getMobileNo()).isEqualTo(UPDATED_MOBILE_NO);
+        assertThat(testCitizen.getMobileNumber()).isEqualTo(UPDATED_MOBILE_NUMBER);
         assertThat(testCitizen.getDob()).isEqualTo(UPDATED_DOB);
         assertThat(testCitizen.getAccountNumber()).isEqualTo(UPDATED_ACCOUNT_NUMBER);
         assertThat(testCitizen.getFatherName()).isEqualTo(UPDATED_FATHER_NAME);

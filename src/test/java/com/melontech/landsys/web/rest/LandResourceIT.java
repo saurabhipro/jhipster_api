@@ -51,8 +51,8 @@ class LandResourceIT {
     private static final String DEFAULT_KHASRA_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_KHASRA_NUMBER = "BBBBBBBBBB";
 
-    private static final String DEFAULT_KAHTAUNI_KHATA = "AAAAAAAAAA";
-    private static final String UPDATED_KAHTAUNI_KHATA = "BBBBBBBBBB";
+    private static final String DEFAULT_KHATAUNI = "AAAAAAAAAA";
+    private static final String UPDATED_KHATAUNI = "BBBBBBBBBB";
 
     private static final Double DEFAULT_AREA = 1D;
     private static final Double UPDATED_AREA = 2D;
@@ -111,7 +111,7 @@ class LandResourceIT {
         Land land = new Land()
             .ulpin(DEFAULT_ULPIN)
             .khasraNumber(DEFAULT_KHASRA_NUMBER)
-            .kahtauniKhata(DEFAULT_KAHTAUNI_KHATA)
+            .khatauni(DEFAULT_KHATAUNI)
             .area(DEFAULT_AREA)
             .landMarketValue(DEFAULT_LAND_MARKET_VALUE)
             .structuralValue(DEFAULT_STRUCTURAL_VALUE)
@@ -182,7 +182,7 @@ class LandResourceIT {
         Land land = new Land()
             .ulpin(UPDATED_ULPIN)
             .khasraNumber(UPDATED_KHASRA_NUMBER)
-            .kahtauniKhata(UPDATED_KAHTAUNI_KHATA)
+            .khatauni(UPDATED_KHATAUNI)
             .area(UPDATED_AREA)
             .landMarketValue(UPDATED_LAND_MARKET_VALUE)
             .structuralValue(UPDATED_STRUCTURAL_VALUE)
@@ -264,7 +264,7 @@ class LandResourceIT {
         Land testLand = landList.get(landList.size() - 1);
         assertThat(testLand.getUlpin()).isEqualTo(DEFAULT_ULPIN);
         assertThat(testLand.getKhasraNumber()).isEqualTo(DEFAULT_KHASRA_NUMBER);
-        assertThat(testLand.getKahtauniKhata()).isEqualTo(DEFAULT_KAHTAUNI_KHATA);
+        assertThat(testLand.getKhatauni()).isEqualTo(DEFAULT_KHATAUNI);
         assertThat(testLand.getArea()).isEqualTo(DEFAULT_AREA);
         assertThat(testLand.getLandMarketValue()).isEqualTo(DEFAULT_LAND_MARKET_VALUE);
         assertThat(testLand.getStructuralValue()).isEqualTo(DEFAULT_STRUCTURAL_VALUE);
@@ -325,7 +325,7 @@ class LandResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(land.getId().intValue())))
             .andExpect(jsonPath("$.[*].ulpin").value(hasItem(DEFAULT_ULPIN)))
             .andExpect(jsonPath("$.[*].khasraNumber").value(hasItem(DEFAULT_KHASRA_NUMBER)))
-            .andExpect(jsonPath("$.[*].kahtauniKhata").value(hasItem(DEFAULT_KAHTAUNI_KHATA)))
+            .andExpect(jsonPath("$.[*].khatauni").value(hasItem(DEFAULT_KHATAUNI)))
             .andExpect(jsonPath("$.[*].area").value(hasItem(DEFAULT_AREA.doubleValue())))
             .andExpect(jsonPath("$.[*].landMarketValue").value(hasItem(DEFAULT_LAND_MARKET_VALUE.doubleValue())))
             .andExpect(jsonPath("$.[*].structuralValue").value(hasItem(DEFAULT_STRUCTURAL_VALUE.doubleValue())))
@@ -367,7 +367,7 @@ class LandResourceIT {
             .andExpect(jsonPath("$.id").value(land.getId().intValue()))
             .andExpect(jsonPath("$.ulpin").value(DEFAULT_ULPIN))
             .andExpect(jsonPath("$.khasraNumber").value(DEFAULT_KHASRA_NUMBER))
-            .andExpect(jsonPath("$.kahtauniKhata").value(DEFAULT_KAHTAUNI_KHATA))
+            .andExpect(jsonPath("$.khatauni").value(DEFAULT_KHATAUNI))
             .andExpect(jsonPath("$.area").value(DEFAULT_AREA.doubleValue()))
             .andExpect(jsonPath("$.landMarketValue").value(DEFAULT_LAND_MARKET_VALUE.doubleValue()))
             .andExpect(jsonPath("$.structuralValue").value(DEFAULT_STRUCTURAL_VALUE.doubleValue()))
@@ -399,7 +399,7 @@ class LandResourceIT {
         updatedLand
             .ulpin(UPDATED_ULPIN)
             .khasraNumber(UPDATED_KHASRA_NUMBER)
-            .kahtauniKhata(UPDATED_KAHTAUNI_KHATA)
+            .khatauni(UPDATED_KHATAUNI)
             .area(UPDATED_AREA)
             .landMarketValue(UPDATED_LAND_MARKET_VALUE)
             .structuralValue(UPDATED_STRUCTURAL_VALUE)
@@ -423,7 +423,7 @@ class LandResourceIT {
         Land testLand = landList.get(landList.size() - 1);
         assertThat(testLand.getUlpin()).isEqualTo(UPDATED_ULPIN);
         assertThat(testLand.getKhasraNumber()).isEqualTo(UPDATED_KHASRA_NUMBER);
-        assertThat(testLand.getKahtauniKhata()).isEqualTo(UPDATED_KAHTAUNI_KHATA);
+        assertThat(testLand.getKhatauni()).isEqualTo(UPDATED_KHATAUNI);
         assertThat(testLand.getArea()).isEqualTo(UPDATED_AREA);
         assertThat(testLand.getLandMarketValue()).isEqualTo(UPDATED_LAND_MARKET_VALUE);
         assertThat(testLand.getStructuralValue()).isEqualTo(UPDATED_STRUCTURAL_VALUE);
@@ -511,7 +511,7 @@ class LandResourceIT {
         partialUpdatedLand.setId(land.getId());
 
         partialUpdatedLand
-            .kahtauniKhata(UPDATED_KAHTAUNI_KHATA)
+            .khatauni(UPDATED_KHATAUNI)
             .area(UPDATED_AREA)
             .landMarketValue(UPDATED_LAND_MARKET_VALUE)
             .structuralValue(UPDATED_STRUCTURAL_VALUE)
@@ -533,7 +533,7 @@ class LandResourceIT {
         Land testLand = landList.get(landList.size() - 1);
         assertThat(testLand.getUlpin()).isEqualTo(DEFAULT_ULPIN);
         assertThat(testLand.getKhasraNumber()).isEqualTo(DEFAULT_KHASRA_NUMBER);
-        assertThat(testLand.getKahtauniKhata()).isEqualTo(UPDATED_KAHTAUNI_KHATA);
+        assertThat(testLand.getKhatauni()).isEqualTo(UPDATED_KHATAUNI);
         assertThat(testLand.getArea()).isEqualTo(UPDATED_AREA);
         assertThat(testLand.getLandMarketValue()).isEqualTo(UPDATED_LAND_MARKET_VALUE);
         assertThat(testLand.getStructuralValue()).isEqualTo(UPDATED_STRUCTURAL_VALUE);
@@ -558,7 +558,7 @@ class LandResourceIT {
         partialUpdatedLand
             .ulpin(UPDATED_ULPIN)
             .khasraNumber(UPDATED_KHASRA_NUMBER)
-            .kahtauniKhata(UPDATED_KAHTAUNI_KHATA)
+            .khatauni(UPDATED_KHATAUNI)
             .area(UPDATED_AREA)
             .landMarketValue(UPDATED_LAND_MARKET_VALUE)
             .structuralValue(UPDATED_STRUCTURAL_VALUE)
@@ -581,7 +581,7 @@ class LandResourceIT {
         Land testLand = landList.get(landList.size() - 1);
         assertThat(testLand.getUlpin()).isEqualTo(UPDATED_ULPIN);
         assertThat(testLand.getKhasraNumber()).isEqualTo(UPDATED_KHASRA_NUMBER);
-        assertThat(testLand.getKahtauniKhata()).isEqualTo(UPDATED_KAHTAUNI_KHATA);
+        assertThat(testLand.getKhatauni()).isEqualTo(UPDATED_KHATAUNI);
         assertThat(testLand.getArea()).isEqualTo(UPDATED_AREA);
         assertThat(testLand.getLandMarketValue()).isEqualTo(UPDATED_LAND_MARKET_VALUE);
         assertThat(testLand.getStructuralValue()).isEqualTo(UPDATED_STRUCTURAL_VALUE);

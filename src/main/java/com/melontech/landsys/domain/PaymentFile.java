@@ -80,7 +80,6 @@ public class PaymentFile implements Serializable {
         value = {
             "land",
             "project",
-            "citizen",
             "noticeStatusInfo",
             "survey",
             "landCompensation",

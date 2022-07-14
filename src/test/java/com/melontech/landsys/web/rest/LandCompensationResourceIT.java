@@ -86,6 +86,14 @@ class LandCompensationResourceIT {
     private static final Double UPDATED_PAYMENT_AMOUNT = 2D;
     private static final Double SMALLER_PAYMENT_AMOUNT = 1D - 1D;
 
+    private static final Double DEFAULT_INTEREST_RATE = 1D;
+    private static final Double UPDATED_INTEREST_RATE = 2D;
+    private static final Double SMALLER_INTEREST_RATE = 1D - 1D;
+
+    private static final Double DEFAULT_INTEREST_DAYS = 1D;
+    private static final Double UPDATED_INTEREST_DAYS = 2D;
+    private static final Double SMALLER_INTEREST_DAYS = 1D - 1D;
+
     private static final String DEFAULT_TRANSACTION_ID = "AAAAAAAAAA";
     private static final String UPDATED_TRANSACTION_ID = "BBBBBBBBBB";
 
@@ -129,6 +137,8 @@ class LandCompensationResourceIT {
             .status(DEFAULT_STATUS)
             .orderDate(DEFAULT_ORDER_DATE)
             .paymentAmount(DEFAULT_PAYMENT_AMOUNT)
+            .interestRate(DEFAULT_INTEREST_RATE)
+            .interestDays(DEFAULT_INTEREST_DAYS)
             .transactionId(DEFAULT_TRANSACTION_ID);
         // Add required entity
         ProjectLand projectLand;
@@ -163,6 +173,8 @@ class LandCompensationResourceIT {
             .status(UPDATED_STATUS)
             .orderDate(UPDATED_ORDER_DATE)
             .paymentAmount(UPDATED_PAYMENT_AMOUNT)
+            .interestRate(UPDATED_INTEREST_RATE)
+            .interestDays(UPDATED_INTEREST_DAYS)
             .transactionId(UPDATED_TRANSACTION_ID);
         // Add required entity
         ProjectLand projectLand;
@@ -210,6 +222,8 @@ class LandCompensationResourceIT {
         assertThat(testLandCompensation.getStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testLandCompensation.getOrderDate()).isEqualTo(DEFAULT_ORDER_DATE);
         assertThat(testLandCompensation.getPaymentAmount()).isEqualTo(DEFAULT_PAYMENT_AMOUNT);
+        assertThat(testLandCompensation.getInterestRate()).isEqualTo(DEFAULT_INTEREST_RATE);
+        assertThat(testLandCompensation.getInterestDays()).isEqualTo(DEFAULT_INTEREST_DAYS);
         assertThat(testLandCompensation.getTransactionId()).isEqualTo(DEFAULT_TRANSACTION_ID);
     }
 
@@ -338,6 +352,8 @@ class LandCompensationResourceIT {
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].orderDate").value(hasItem(DEFAULT_ORDER_DATE.toString())))
             .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.doubleValue())))
+            .andExpect(jsonPath("$.[*].interestRate").value(hasItem(DEFAULT_INTEREST_RATE.doubleValue())))
+            .andExpect(jsonPath("$.[*].interestDays").value(hasItem(DEFAULT_INTEREST_DAYS.doubleValue())))
             .andExpect(jsonPath("$.[*].transactionId").value(hasItem(DEFAULT_TRANSACTION_ID)));
     }
 
@@ -365,6 +381,8 @@ class LandCompensationResourceIT {
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
             .andExpect(jsonPath("$.orderDate").value(DEFAULT_ORDER_DATE.toString()))
             .andExpect(jsonPath("$.paymentAmount").value(DEFAULT_PAYMENT_AMOUNT.doubleValue()))
+            .andExpect(jsonPath("$.interestRate").value(DEFAULT_INTEREST_RATE.doubleValue()))
+            .andExpect(jsonPath("$.interestDays").value(DEFAULT_INTEREST_DAYS.doubleValue()))
             .andExpect(jsonPath("$.transactionId").value(DEFAULT_TRANSACTION_ID));
     }
 
@@ -1538,6 +1556,214 @@ class LandCompensationResourceIT {
 
     @Test
     @Transactional
+    void getAllLandCompensationsByInterestRateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where interestRate equals to DEFAULT_INTEREST_RATE
+        defaultLandCompensationShouldBeFound("interestRate.equals=" + DEFAULT_INTEREST_RATE);
+
+        // Get all the landCompensationList where interestRate equals to UPDATED_INTEREST_RATE
+        defaultLandCompensationShouldNotBeFound("interestRate.equals=" + UPDATED_INTEREST_RATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsByInterestRateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where interestRate not equals to DEFAULT_INTEREST_RATE
+        defaultLandCompensationShouldNotBeFound("interestRate.notEquals=" + DEFAULT_INTEREST_RATE);
+
+        // Get all the landCompensationList where interestRate not equals to UPDATED_INTEREST_RATE
+        defaultLandCompensationShouldBeFound("interestRate.notEquals=" + UPDATED_INTEREST_RATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsByInterestRateIsInShouldWork() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where interestRate in DEFAULT_INTEREST_RATE or UPDATED_INTEREST_RATE
+        defaultLandCompensationShouldBeFound("interestRate.in=" + DEFAULT_INTEREST_RATE + "," + UPDATED_INTEREST_RATE);
+
+        // Get all the landCompensationList where interestRate equals to UPDATED_INTEREST_RATE
+        defaultLandCompensationShouldNotBeFound("interestRate.in=" + UPDATED_INTEREST_RATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsByInterestRateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where interestRate is not null
+        defaultLandCompensationShouldBeFound("interestRate.specified=true");
+
+        // Get all the landCompensationList where interestRate is null
+        defaultLandCompensationShouldNotBeFound("interestRate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsByInterestRateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where interestRate is greater than or equal to DEFAULT_INTEREST_RATE
+        defaultLandCompensationShouldBeFound("interestRate.greaterThanOrEqual=" + DEFAULT_INTEREST_RATE);
+
+        // Get all the landCompensationList where interestRate is greater than or equal to UPDATED_INTEREST_RATE
+        defaultLandCompensationShouldNotBeFound("interestRate.greaterThanOrEqual=" + UPDATED_INTEREST_RATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsByInterestRateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where interestRate is less than or equal to DEFAULT_INTEREST_RATE
+        defaultLandCompensationShouldBeFound("interestRate.lessThanOrEqual=" + DEFAULT_INTEREST_RATE);
+
+        // Get all the landCompensationList where interestRate is less than or equal to SMALLER_INTEREST_RATE
+        defaultLandCompensationShouldNotBeFound("interestRate.lessThanOrEqual=" + SMALLER_INTEREST_RATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsByInterestRateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where interestRate is less than DEFAULT_INTEREST_RATE
+        defaultLandCompensationShouldNotBeFound("interestRate.lessThan=" + DEFAULT_INTEREST_RATE);
+
+        // Get all the landCompensationList where interestRate is less than UPDATED_INTEREST_RATE
+        defaultLandCompensationShouldBeFound("interestRate.lessThan=" + UPDATED_INTEREST_RATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsByInterestRateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where interestRate is greater than DEFAULT_INTEREST_RATE
+        defaultLandCompensationShouldNotBeFound("interestRate.greaterThan=" + DEFAULT_INTEREST_RATE);
+
+        // Get all the landCompensationList where interestRate is greater than SMALLER_INTEREST_RATE
+        defaultLandCompensationShouldBeFound("interestRate.greaterThan=" + SMALLER_INTEREST_RATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsByInterestDaysIsEqualToSomething() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where interestDays equals to DEFAULT_INTEREST_DAYS
+        defaultLandCompensationShouldBeFound("interestDays.equals=" + DEFAULT_INTEREST_DAYS);
+
+        // Get all the landCompensationList where interestDays equals to UPDATED_INTEREST_DAYS
+        defaultLandCompensationShouldNotBeFound("interestDays.equals=" + UPDATED_INTEREST_DAYS);
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsByInterestDaysIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where interestDays not equals to DEFAULT_INTEREST_DAYS
+        defaultLandCompensationShouldNotBeFound("interestDays.notEquals=" + DEFAULT_INTEREST_DAYS);
+
+        // Get all the landCompensationList where interestDays not equals to UPDATED_INTEREST_DAYS
+        defaultLandCompensationShouldBeFound("interestDays.notEquals=" + UPDATED_INTEREST_DAYS);
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsByInterestDaysIsInShouldWork() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where interestDays in DEFAULT_INTEREST_DAYS or UPDATED_INTEREST_DAYS
+        defaultLandCompensationShouldBeFound("interestDays.in=" + DEFAULT_INTEREST_DAYS + "," + UPDATED_INTEREST_DAYS);
+
+        // Get all the landCompensationList where interestDays equals to UPDATED_INTEREST_DAYS
+        defaultLandCompensationShouldNotBeFound("interestDays.in=" + UPDATED_INTEREST_DAYS);
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsByInterestDaysIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where interestDays is not null
+        defaultLandCompensationShouldBeFound("interestDays.specified=true");
+
+        // Get all the landCompensationList where interestDays is null
+        defaultLandCompensationShouldNotBeFound("interestDays.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsByInterestDaysIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where interestDays is greater than or equal to DEFAULT_INTEREST_DAYS
+        defaultLandCompensationShouldBeFound("interestDays.greaterThanOrEqual=" + DEFAULT_INTEREST_DAYS);
+
+        // Get all the landCompensationList where interestDays is greater than or equal to UPDATED_INTEREST_DAYS
+        defaultLandCompensationShouldNotBeFound("interestDays.greaterThanOrEqual=" + UPDATED_INTEREST_DAYS);
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsByInterestDaysIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where interestDays is less than or equal to DEFAULT_INTEREST_DAYS
+        defaultLandCompensationShouldBeFound("interestDays.lessThanOrEqual=" + DEFAULT_INTEREST_DAYS);
+
+        // Get all the landCompensationList where interestDays is less than or equal to SMALLER_INTEREST_DAYS
+        defaultLandCompensationShouldNotBeFound("interestDays.lessThanOrEqual=" + SMALLER_INTEREST_DAYS);
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsByInterestDaysIsLessThanSomething() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where interestDays is less than DEFAULT_INTEREST_DAYS
+        defaultLandCompensationShouldNotBeFound("interestDays.lessThan=" + DEFAULT_INTEREST_DAYS);
+
+        // Get all the landCompensationList where interestDays is less than UPDATED_INTEREST_DAYS
+        defaultLandCompensationShouldBeFound("interestDays.lessThan=" + UPDATED_INTEREST_DAYS);
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsByInterestDaysIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+
+        // Get all the landCompensationList where interestDays is greater than DEFAULT_INTEREST_DAYS
+        defaultLandCompensationShouldNotBeFound("interestDays.greaterThan=" + DEFAULT_INTEREST_DAYS);
+
+        // Get all the landCompensationList where interestDays is greater than SMALLER_INTEREST_DAYS
+        defaultLandCompensationShouldBeFound("interestDays.greaterThan=" + SMALLER_INTEREST_DAYS);
+    }
+
+    @Test
+    @Transactional
     void getAllLandCompensationsByTransactionIdIsEqualToSomething() throws Exception {
         // Initialize the database
         landCompensationRepository.saveAndFlush(landCompensation);
@@ -1728,6 +1954,8 @@ class LandCompensationResourceIT {
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].orderDate").value(hasItem(DEFAULT_ORDER_DATE.toString())))
             .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.doubleValue())))
+            .andExpect(jsonPath("$.[*].interestRate").value(hasItem(DEFAULT_INTEREST_RATE.doubleValue())))
+            .andExpect(jsonPath("$.[*].interestDays").value(hasItem(DEFAULT_INTEREST_DAYS.doubleValue())))
             .andExpect(jsonPath("$.[*].transactionId").value(hasItem(DEFAULT_TRANSACTION_ID)));
 
         // Check, that the count call also returns 1
@@ -1789,6 +2017,8 @@ class LandCompensationResourceIT {
             .status(UPDATED_STATUS)
             .orderDate(UPDATED_ORDER_DATE)
             .paymentAmount(UPDATED_PAYMENT_AMOUNT)
+            .interestRate(UPDATED_INTEREST_RATE)
+            .interestDays(UPDATED_INTEREST_DAYS)
             .transactionId(UPDATED_TRANSACTION_ID);
         LandCompensationDTO landCompensationDTO = landCompensationMapper.toDto(updatedLandCompensation);
 
@@ -1816,6 +2046,8 @@ class LandCompensationResourceIT {
         assertThat(testLandCompensation.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testLandCompensation.getOrderDate()).isEqualTo(UPDATED_ORDER_DATE);
         assertThat(testLandCompensation.getPaymentAmount()).isEqualTo(UPDATED_PAYMENT_AMOUNT);
+        assertThat(testLandCompensation.getInterestRate()).isEqualTo(UPDATED_INTEREST_RATE);
+        assertThat(testLandCompensation.getInterestDays()).isEqualTo(UPDATED_INTEREST_DAYS);
         assertThat(testLandCompensation.getTransactionId()).isEqualTo(UPDATED_TRANSACTION_ID);
     }
 
@@ -1909,7 +2141,8 @@ class LandCompensationResourceIT {
             .additionalCompensation(UPDATED_ADDITIONAL_COMPENSATION)
             .status(UPDATED_STATUS)
             .orderDate(UPDATED_ORDER_DATE)
-            .transactionId(UPDATED_TRANSACTION_ID);
+            .interestRate(UPDATED_INTEREST_RATE)
+            .interestDays(UPDATED_INTEREST_DAYS);
 
         restLandCompensationMockMvc
             .perform(
@@ -1935,7 +2168,9 @@ class LandCompensationResourceIT {
         assertThat(testLandCompensation.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testLandCompensation.getOrderDate()).isEqualTo(UPDATED_ORDER_DATE);
         assertThat(testLandCompensation.getPaymentAmount()).isEqualTo(DEFAULT_PAYMENT_AMOUNT);
-        assertThat(testLandCompensation.getTransactionId()).isEqualTo(UPDATED_TRANSACTION_ID);
+        assertThat(testLandCompensation.getInterestRate()).isEqualTo(UPDATED_INTEREST_RATE);
+        assertThat(testLandCompensation.getInterestDays()).isEqualTo(UPDATED_INTEREST_DAYS);
+        assertThat(testLandCompensation.getTransactionId()).isEqualTo(DEFAULT_TRANSACTION_ID);
     }
 
     @Test
@@ -1963,6 +2198,8 @@ class LandCompensationResourceIT {
             .status(UPDATED_STATUS)
             .orderDate(UPDATED_ORDER_DATE)
             .paymentAmount(UPDATED_PAYMENT_AMOUNT)
+            .interestRate(UPDATED_INTEREST_RATE)
+            .interestDays(UPDATED_INTEREST_DAYS)
             .transactionId(UPDATED_TRANSACTION_ID);
 
         restLandCompensationMockMvc
@@ -1989,6 +2226,8 @@ class LandCompensationResourceIT {
         assertThat(testLandCompensation.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testLandCompensation.getOrderDate()).isEqualTo(UPDATED_ORDER_DATE);
         assertThat(testLandCompensation.getPaymentAmount()).isEqualTo(UPDATED_PAYMENT_AMOUNT);
+        assertThat(testLandCompensation.getInterestRate()).isEqualTo(UPDATED_INTEREST_RATE);
+        assertThat(testLandCompensation.getInterestDays()).isEqualTo(UPDATED_INTEREST_DAYS);
         assertThat(testLandCompensation.getTransactionId()).isEqualTo(UPDATED_TRANSACTION_ID);
     }
 

@@ -42,14 +42,6 @@
       "relationshipValidateRules": "required"
     },
     {
-      "otherEntityField": "name",
-      "otherEntityName": "citizen",
-      "otherEntityRelationshipName": "projectLand",
-      "relationshipName": "citizen",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": "required"
-    },
-    {
       "otherEntityName": "noticeStatusInfo",
       "otherEntityRelationshipName": "projectLand",
       "relationshipName": "noticeStatusInfo",

@@ -60,6 +60,14 @@
       "fieldType": "Double"
     },
     {
+      "fieldName": "interestRate",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "interestDays",
+      "fieldType": "Double"
+    },
+    {
       "fieldName": "transactionId",
       "fieldType": "String"
     }

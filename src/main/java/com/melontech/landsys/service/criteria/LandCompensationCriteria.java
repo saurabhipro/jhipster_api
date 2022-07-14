@@ -89,6 +89,10 @@ public class LandCompensationCriteria implements Serializable, Criteria {
 
     private DoubleFilter paymentAmount;
 
+    private DoubleFilter interestRate;
+
+    private DoubleFilter interestDays;
+
     private StringFilter transactionId;
 
     private LongFilter projectLandId;
@@ -117,6 +121,8 @@ public class LandCompensationCriteria implements Serializable, Criteria {
         this.status = other.status == null ? null : other.status.copy();
         this.orderDate = other.orderDate == null ? null : other.orderDate.copy();
         this.paymentAmount = other.paymentAmount == null ? null : other.paymentAmount.copy();
+        this.interestRate = other.interestRate == null ? null : other.interestRate.copy();
+        this.interestDays = other.interestDays == null ? null : other.interestDays.copy();
         this.transactionId = other.transactionId == null ? null : other.transactionId.copy();
         this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
         this.surveyId = other.surveyId == null ? null : other.surveyId.copy();
@@ -325,6 +331,36 @@ public class LandCompensationCriteria implements Serializable, Criteria {
         this.paymentAmount = paymentAmount;
     }
 
+    public DoubleFilter getInterestRate() {
+        return interestRate;
+    }
+
+    public DoubleFilter interestRate() {
+        if (interestRate == null) {
+            interestRate = new DoubleFilter();
+        }
+        return interestRate;
+    }
+
+    public void setInterestRate(DoubleFilter interestRate) {
+        this.interestRate = interestRate;
+    }
+
+    public DoubleFilter getInterestDays() {
+        return interestDays;
+    }
+
+    public DoubleFilter interestDays() {
+        if (interestDays == null) {
+            interestDays = new DoubleFilter();
+        }
+        return interestDays;
+    }
+
+    public void setInterestDays(DoubleFilter interestDays) {
+        this.interestDays = interestDays;
+    }
+
     public StringFilter getTransactionId() {
         return transactionId;
     }
@@ -431,6 +467,8 @@ public class LandCompensationCriteria implements Serializable, Criteria {
             Objects.equals(status, that.status) &&
             Objects.equals(orderDate, that.orderDate) &&
             Objects.equals(paymentAmount, that.paymentAmount) &&
+            Objects.equals(interestRate, that.interestRate) &&
+            Objects.equals(interestDays, that.interestDays) &&
             Objects.equals(transactionId, that.transactionId) &&
             Objects.equals(projectLandId, that.projectLandId) &&
             Objects.equals(surveyId, that.surveyId) &&
@@ -456,6 +494,8 @@ public class LandCompensationCriteria implements Serializable, Criteria {
             status,
             orderDate,
             paymentAmount,
+            interestRate,
+            interestDays,
             transactionId,
             projectLandId,
             surveyId,
@@ -482,6 +522,8 @@ public class LandCompensationCriteria implements Serializable, Criteria {
             (status != null ? "status=" + status + ", " : "") +
             (orderDate != null ? "orderDate=" + orderDate + ", " : "") +
             (paymentAmount != null ? "paymentAmount=" + paymentAmount + ", " : "") +
+            (interestRate != null ? "interestRate=" + interestRate + ", " : "") +
+            (interestDays != null ? "interestDays=" + interestDays + ", " : "") +
             (transactionId != null ? "transactionId=" + transactionId + ", " : "") +
             (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
             (surveyId != null ? "surveyId=" + surveyId + ", " : "") +

@@ -67,6 +67,12 @@ public class LandCompensation implements Serializable {
     @Column(name = "payment_amount")
     private Double paymentAmount;
 
+    @Column(name = "interest_rate")
+    private Double interestRate;
+
+    @Column(name = "interest_days")
+    private Double interestDays;
+
     @Column(name = "transaction_id")
     private String transactionId;
 
@@ -74,7 +80,6 @@ public class LandCompensation implements Serializable {
         value = {
             "land",
             "project",
-            "citizen",
             "noticeStatusInfo",
             "survey",
             "landCompensation",
@@ -290,6 +295,32 @@ public class LandCompensation implements Serializable {
         this.paymentAmount = paymentAmount;
     }
 
+    public Double getInterestRate() {
+        return this.interestRate;
+    }
+
+    public LandCompensation interestRate(Double interestRate) {
+        this.setInterestRate(interestRate);
+        return this;
+    }
+
+    public void setInterestRate(Double interestRate) {
+        this.interestRate = interestRate;
+    }
+
+    public Double getInterestDays() {
+        return this.interestDays;
+    }
+
+    public LandCompensation interestDays(Double interestDays) {
+        this.setInterestDays(interestDays);
+        return this;
+    }
+
+    public void setInterestDays(Double interestDays) {
+        this.interestDays = interestDays;
+    }
+
     public String getTransactionId() {
         return this.transactionId;
     }
@@ -427,6 +458,8 @@ public class LandCompensation implements Serializable {
             ", status='" + getStatus() + "'" +
             ", orderDate='" + getOrderDate() + "'" +
             ", paymentAmount=" + getPaymentAmount() +
+            ", interestRate=" + getInterestRate() +
+            ", interestDays=" + getInterestDays() +
             ", transactionId='" + getTransactionId() + "'" +
             "}";
     }

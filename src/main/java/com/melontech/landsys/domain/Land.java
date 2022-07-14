@@ -29,8 +29,8 @@ public class Land implements Serializable {
     @Column(name = "khasra_number", nullable = false, unique = true)
     private String khasraNumber;
 
-    @Column(name = "kahtauni_khata")
-    private String kahtauniKhata;
+    @Column(name = "khatauni")
+    private String khatauni;
 
     @Column(name = "area")
     private Double area;
@@ -91,7 +91,7 @@ public class Land implements Serializable {
     private State state;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "lands", "bankBranch", "projectLands", "paymentAdvices", "khatedars" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "lands", "bankBranch", "paymentAdvices", "khatedars" }, allowSetters = true)
     private Citizen citizen;
 
     @ManyToOne
@@ -103,7 +103,6 @@ public class Land implements Serializable {
         value = {
             "land",
             "project",
-            "citizen",
             "noticeStatusInfo",
             "survey",
             "landCompensation",
@@ -157,17 +156,17 @@ public class Land implements Serializable {
         this.khasraNumber = khasraNumber;
     }
 
-    public String getKahtauniKhata() {
-        return this.kahtauniKhata;
+    public String getKhatauni() {
+        return this.khatauni;
     }
 
-    public Land kahtauniKhata(String kahtauniKhata) {
-        this.setKahtauniKhata(kahtauniKhata);
+    public Land khatauni(String khatauni) {
+        this.setKhatauni(khatauni);
         return this;
     }
 
-    public void setKahtauniKhata(String kahtauniKhata) {
-        this.kahtauniKhata = kahtauniKhata;
+    public void setKhatauni(String khatauni) {
+        this.khatauni = khatauni;
     }
 
     public Double getArea() {
@@ -427,7 +426,7 @@ public class Land implements Serializable {
             "id=" + getId() +
             ", ulpin='" + getUlpin() + "'" +
             ", khasraNumber='" + getKhasraNumber() + "'" +
-            ", kahtauniKhata='" + getKahtauniKhata() + "'" +
+            ", khatauni='" + getKhatauni() + "'" +
             ", area=" + getArea() +
             ", landMarketValue=" + getLandMarketValue() +
             ", structuralValue=" + getStructuralValue() +

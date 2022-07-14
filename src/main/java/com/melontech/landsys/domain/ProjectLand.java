@@ -49,11 +49,6 @@ public class ProjectLand implements Serializable {
     @JsonIgnoreProperties(value = { "lands", "projectLands" }, allowSetters = true)
     private Project project;
 
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties(value = { "lands", "bankBranch", "projectLands", "paymentAdvices", "khatedars" }, allowSetters = true)
-    private Citizen citizen;
-
     @ManyToOne
     @JsonIgnoreProperties(value = { "projectLands" }, allowSetters = true)
     private NoticeStatusInfo noticeStatusInfo;
@@ -188,19 +183,6 @@ public class ProjectLand implements Serializable {
 
     public ProjectLand project(Project project) {
         this.setProject(project);
-        return this;
-    }
-
-    public Citizen getCitizen() {
-        return this.citizen;
-    }
-
-    public void setCitizen(Citizen citizen) {
-        this.citizen = citizen;
-    }
-
-    public ProjectLand citizen(Citizen citizen) {
-        this.setCitizen(citizen);
         return this;
     }
 

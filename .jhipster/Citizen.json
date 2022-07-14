@@ -21,7 +21,7 @@
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "mobileNo",
+      "fieldName": "mobileNumber",
       "fieldType": "String"
     },
     {
@@ -95,12 +95,6 @@
       "otherEntityRelationshipName": "citizen",
       "relationshipName": "bankBranch",
       "relationshipType": "many-to-one"
-    },
-    {
-      "otherEntityName": "projectLand",
-      "otherEntityRelationshipName": "citizen",
-      "relationshipName": "projectLand",
-      "relationshipType": "one-to-many"
     },
     {
       "otherEntityName": "paymentAdvice",

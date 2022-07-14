@@ -38,8 +38,8 @@ public class Citizen implements Serializable {
     @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "mobile_no")
-    private String mobileNo;
+    @Column(name = "mobile_number")
+    private String mobileNumber;
 
     @Column(name = "dob")
     private LocalDate dob;
@@ -98,24 +98,6 @@ public class Citizen implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties(value = { "bank", "citizens", "paymentFiles" }, allowSetters = true)
     private BankBranch bankBranch;
-
-    @OneToMany(mappedBy = "citizen")
-    @JsonIgnoreProperties(
-        value = {
-            "land",
-            "project",
-            "citizen",
-            "noticeStatusInfo",
-            "survey",
-            "landCompensation",
-            "paymentAdvices",
-            "paymentAdviceDetails",
-            "paymentFiles",
-            "khatedars",
-        },
-        allowSetters = true
-    )
-    private Set<ProjectLand> projectLands = new HashSet<>();
 
     @OneToMany(mappedBy = "citizen")
     @JsonIgnoreProperties(
@@ -205,17 +187,17 @@ public class Citizen implements Serializable {
         this.address = address;
     }
 
-    public String getMobileNo() {
-        return this.mobileNo;
+    public String getMobileNumber() {
+        return this.mobileNumber;
     }
 
-    public Citizen mobileNo(String mobileNo) {
-        this.setMobileNo(mobileNo);
+    public Citizen mobileNumber(String mobileNumber) {
+        this.setMobileNumber(mobileNumber);
         return this;
     }
 
-    public void setMobileNo(String mobileNo) {
-        this.mobileNo = mobileNo;
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
     }
 
     public LocalDate getDob() {
@@ -444,37 +426,6 @@ public class Citizen implements Serializable {
         return this;
     }
 
-    public Set<ProjectLand> getProjectLands() {
-        return this.projectLands;
-    }
-
-    public void setProjectLands(Set<ProjectLand> projectLands) {
-        if (this.projectLands != null) {
-            this.projectLands.forEach(i -> i.setCitizen(null));
-        }
-        if (projectLands != null) {
-            projectLands.forEach(i -> i.setCitizen(this));
-        }
-        this.projectLands = projectLands;
-    }
-
-    public Citizen projectLands(Set<ProjectLand> projectLands) {
-        this.setProjectLands(projectLands);
-        return this;
-    }
-
-    public Citizen addProjectLand(ProjectLand projectLand) {
-        this.projectLands.add(projectLand);
-        projectLand.setCitizen(this);
-        return this;
-    }
-
-    public Citizen removeProjectLand(ProjectLand projectLand) {
-        this.projectLands.remove(projectLand);
-        projectLand.setCitizen(null);
-        return this;
-    }
-
     public Set<PaymentAdvice> getPaymentAdvices() {
         return this.paymentAdvices;
     }
@@ -565,7 +516,7 @@ public class Citizen implements Serializable {
             ", photoContentType='" + getPhotoContentType() + "'" +
             ", name='" + getName() + "'" +
             ", address='" + getAddress() + "'" +
-            ", mobileNo='" + getMobileNo() + "'" +
+            ", mobileNumber='" + getMobileNumber() + "'" +
             ", dob='" + getDob() + "'" +
             ", accountNumber='" + getAccountNumber() + "'" +
             ", fatherName='" + getFatherName() + "'" +

@@ -35,7 +35,7 @@ entity LandType(landsys_land_type) {
 entity Land(landsys_land) {
    ulpin String
    khasraNumber String unique required
-   kahtauniKhata String
+   khatauni String
    area  Double
    landMarketValue  Double
    structuralValue  Double
@@ -100,7 +100,7 @@ entity Citizen(landsys_citizen) {
     photo  ImageBlob
     name String required
     address String required
-    mobileNo String
+    mobileNumber String
     dob LocalDate
     accountNumber String
     fatherName String required
@@ -128,6 +128,8 @@ entity LandCompensation(land_Compensation) {
 	status			 		 CompensationStatus
 	orderDate              	 LocalDate
 	paymentAmount			 Double
+    interestRate             Double
+    interestDays             Double
 	transactionId			 String
 }
 
@@ -223,7 +225,6 @@ relationship OneToOne {
 relationship ManyToOne {
     ProjectLand{land(khasraNumber) } to Land{projectLand required}
     ProjectLand{project(name) required} to Project{projectLand}
-    ProjectLand{citizen(name) required}  to Citizen{ProjectLand}
     Land{village(name) required} to Village{land(khasraNumber)}
 	Land{unit(name) required} to  Unit{land(khasraNumber)}
 	Land{LandType(name) required} to LandType{land(khasraNumber)}

@@ -24,7 +24,7 @@ public class CitizenDTO implements Serializable {
     @NotNull
     private String address;
 
-    private String mobileNo;
+    private String mobileNumber;
 
     private LocalDate dob;
 
@@ -100,12 +100,12 @@ public class CitizenDTO implements Serializable {
         this.address = address;
     }
 
-    public String getMobileNo() {
-        return mobileNo;
+    public String getMobileNumber() {
+        return mobileNumber;
     }
 
-    public void setMobileNo(String mobileNo) {
-        this.mobileNo = mobileNo;
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
     }
 
     public LocalDate getDob() {
@@ -257,7 +257,7 @@ public class CitizenDTO implements Serializable {
             ", photo='" + getPhoto() + "'" +
             ", name='" + getName() + "'" +
             ", address='" + getAddress() + "'" +
-            ", mobileNo='" + getMobileNo() + "'" +
+            ", mobileNumber='" + getMobileNumber() + "'" +
             ", dob='" + getDob() + "'" +
             ", accountNumber='" + getAccountNumber() + "'" +
             ", fatherName='" + getFatherName() + "'" +

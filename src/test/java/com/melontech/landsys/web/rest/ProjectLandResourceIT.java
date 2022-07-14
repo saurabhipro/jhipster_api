@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.melontech.landsys.IntegrationTest;
-import com.melontech.landsys.domain.Citizen;
 import com.melontech.landsys.domain.Project;
 import com.melontech.landsys.domain.ProjectLand;
 import com.melontech.landsys.domain.enumeration.HissaType;
@@ -103,16 +102,6 @@ class ProjectLandResourceIT {
             project = TestUtil.findAll(em, Project.class).get(0);
         }
         projectLand.setProject(project);
-        // Add required entity
-        Citizen citizen;
-        if (TestUtil.findAll(em, Citizen.class).isEmpty()) {
-            citizen = CitizenResourceIT.createEntity(em);
-            em.persist(citizen);
-            em.flush();
-        } else {
-            citizen = TestUtil.findAll(em, Citizen.class).get(0);
-        }
-        projectLand.setCitizen(citizen);
         return projectLand;
     }
 
@@ -138,16 +127,6 @@ class ProjectLandResourceIT {
             project = TestUtil.findAll(em, Project.class).get(0);
         }
         projectLand.setProject(project);
-        // Add required entity
-        Citizen citizen;
-        if (TestUtil.findAll(em, Citizen.class).isEmpty()) {
-            citizen = CitizenResourceIT.createUpdatedEntity(em);
-            em.persist(citizen);
-            em.flush();
-        } else {
-            citizen = TestUtil.findAll(em, Citizen.class).get(0);
-        }
-        projectLand.setCitizen(citizen);
         return projectLand;
     }
 

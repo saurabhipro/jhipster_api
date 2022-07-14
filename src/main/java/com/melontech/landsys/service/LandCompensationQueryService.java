@@ -141,6 +141,12 @@ public class LandCompensationQueryService extends QueryService<LandCompensation>
             if (criteria.getPaymentAmount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getPaymentAmount(), LandCompensation_.paymentAmount));
             }
+            if (criteria.getInterestRate() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getInterestRate(), LandCompensation_.interestRate));
+            }
+            if (criteria.getInterestDays() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getInterestDays(), LandCompensation_.interestDays));
+            }
             if (criteria.getTransactionId() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getTransactionId(), LandCompensation_.transactionId));
             }

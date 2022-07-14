@@ -54,7 +54,6 @@ public class PaymentAdviceDetails implements Serializable {
         value = {
             "land",
             "project",
-            "citizen",
             "noticeStatusInfo",
             "survey",
             "landCompensation",

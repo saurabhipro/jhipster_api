@@ -42,6 +42,10 @@ public class LandCompensationDTO implements Serializable {
 
     private Double paymentAmount;
 
+    private Double interestRate;
+
+    private Double interestDays;
+
     private String transactionId;
 
     private ProjectLandDTO projectLand;
@@ -152,6 +156,22 @@ public class LandCompensationDTO implements Serializable {
         this.paymentAmount = paymentAmount;
     }
 
+    public Double getInterestRate() {
+        return interestRate;
+    }
+
+    public void setInterestRate(Double interestRate) {
+        this.interestRate = interestRate;
+    }
+
+    public Double getInterestDays() {
+        return interestDays;
+    }
+
+    public void setInterestDays(Double interestDays) {
+        this.interestDays = interestDays;
+    }
+
     public String getTransactionId() {
         return transactionId;
     }
@@ -214,6 +234,8 @@ public class LandCompensationDTO implements Serializable {
             ", status='" + getStatus() + "'" +
             ", orderDate='" + getOrderDate() + "'" +
             ", paymentAmount=" + getPaymentAmount() +
+            ", interestRate=" + getInterestRate() +
+            ", interestDays=" + getInterestDays() +
             ", transactionId='" + getTransactionId() + "'" +
             ", projectLand=" + getProjectLand() +
             ", survey=" + getSurvey() +

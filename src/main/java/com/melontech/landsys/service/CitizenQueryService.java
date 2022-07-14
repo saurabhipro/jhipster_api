@@ -96,8 +96,8 @@ public class CitizenQueryService extends QueryService<Citizen> {
             if (criteria.getAddress() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getAddress(), Citizen_.address));
             }
-            if (criteria.getMobileNo() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getMobileNo(), Citizen_.mobileNo));
+            if (criteria.getMobileNumber() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getMobileNumber(), Citizen_.mobileNumber));
             }
             if (criteria.getDob() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDob(), Citizen_.dob));
@@ -135,15 +135,6 @@ public class CitizenQueryService extends QueryService<Citizen> {
                         buildSpecification(
                             criteria.getBankBranchId(),
                             root -> root.join(Citizen_.bankBranch, JoinType.LEFT).get(BankBranch_.id)
-                        )
-                    );
-            }
-            if (criteria.getProjectLandId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getProjectLandId(),
-                            root -> root.join(Citizen_.projectLands, JoinType.LEFT).get(ProjectLand_.id)
                         )
                     );
             }

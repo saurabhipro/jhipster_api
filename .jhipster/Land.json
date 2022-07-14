@@ -15,7 +15,7 @@
       "fieldValidateRules": ["unique", "required"]
     },
     {
-      "fieldName": "kahtauniKhata",
+      "fieldName": "khatauni",
       "fieldType": "String"
     },
     {

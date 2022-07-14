@@ -87,7 +87,6 @@ public class PaymentAdvice implements Serializable {
         value = {
             "land",
             "project",
-            "citizen",
             "noticeStatusInfo",
             "survey",
             "landCompensation",
@@ -107,7 +106,7 @@ public class PaymentAdvice implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "lands", "bankBranch", "projectLands", "paymentAdvices", "khatedars" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "lands", "bankBranch", "paymentAdvices", "khatedars" }, allowSetters = true)
     private Citizen citizen;
 
     @JsonIgnoreProperties(value = { "paymentAdvice" }, allowSetters = true)

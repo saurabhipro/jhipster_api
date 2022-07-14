@@ -16,7 +16,7 @@ public class LandDTO implements Serializable {
     @NotNull
     private String khasraNumber;
 
-    private String kahtauniKhata;
+    private String khatauni;
 
     private Double area;
 
@@ -68,12 +68,12 @@ public class LandDTO implements Serializable {
         this.khasraNumber = khasraNumber;
     }
 
-    public String getKahtauniKhata() {
-        return kahtauniKhata;
+    public String getKhatauni() {
+        return khatauni;
     }
 
-    public void setKahtauniKhata(String kahtauniKhata) {
-        this.kahtauniKhata = kahtauniKhata;
+    public void setKhatauni(String khatauni) {
+        this.khatauni = khatauni;
     }
 
     public Double getArea() {
@@ -208,7 +208,7 @@ public class LandDTO implements Serializable {
             "id=" + getId() +
             ", ulpin='" + getUlpin() + "'" +
             ", khasraNumber='" + getKhasraNumber() + "'" +
-            ", kahtauniKhata='" + getKahtauniKhata() + "'" +
+            ", khatauni='" + getKhatauni() + "'" +
             ", area=" + getArea() +
             ", landMarketValue=" + getLandMarketValue() +
             ", structuralValue=" + getStructuralValue() +
