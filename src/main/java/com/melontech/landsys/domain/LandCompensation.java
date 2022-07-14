@@ -35,10 +35,6 @@ public class LandCompensation implements Serializable {
     private Double area;
 
     @NotNull
-    @Column(name = "share_percentage", nullable = false)
-    private Double sharePercentage;
-
-    @NotNull
     @Column(name = "land_market_value", nullable = false)
     private Double landMarketValue;
 
@@ -134,19 +130,6 @@ public class LandCompensation implements Serializable {
 
     public void setArea(Double area) {
         this.area = area;
-    }
-
-    public Double getSharePercentage() {
-        return this.sharePercentage;
-    }
-
-    public LandCompensation sharePercentage(Double sharePercentage) {
-        this.setSharePercentage(sharePercentage);
-        return this;
-    }
-
-    public void setSharePercentage(Double sharePercentage) {
-        this.sharePercentage = sharePercentage;
     }
 
     public Double getLandMarketValue() {
@@ -362,7 +345,6 @@ public class LandCompensation implements Serializable {
             "id=" + getId() +
             ", hissaType='" + getHissaType() + "'" +
             ", area=" + getArea() +
-            ", sharePercentage=" + getSharePercentage() +
             ", landMarketValue=" + getLandMarketValue() +
             ", structuralCompensation=" + getStructuralCompensation() +
             ", horticultureCompensation=" + getHorticultureCompensation() +

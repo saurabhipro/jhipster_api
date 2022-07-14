@@ -93,7 +93,7 @@ entity Citizen(landsys_citizen) {
     photo  ImageBlob
     name String required
     address String required
-    mobileNo String 
+    mobileNo String
     dob LocalDate
     accountNumber String
     fatherName String required
@@ -105,7 +105,7 @@ entity Citizen(landsys_citizen) {
     panImage  AnyBlob
     accountNo String unique
     accNoImage  ImageBlob
-    
+
  }
 
 entity LandCompensation(land_Compensation) {
@@ -202,40 +202,40 @@ entity TransactionHistory(landsys_transaction_history)
     approver3 String
 }
 
-relationship OneToOne {    
-	Survey{projectLand required} to ProjectLand{survey}   
-    LandCompensation{projectLand required} to  ProjectLand{landCompensation}    
-    PaymentFileRecon{paymentAdvice required} to PaymentAdvice{paymentFileRecon}    
-    LandCompensation{survey} to Survey{landCompensation required}   
+relationship OneToOne {
+	Survey{projectLand required} to ProjectLand{survey}
+    LandCompensation{projectLand required} to  ProjectLand{landCompensation}
+    PaymentFileRecon{paymentAdvice required} to PaymentAdvice{paymentFileRecon}
+    LandCompensation{survey} to Survey{landCompensation required}
     }
 
 relationship ManyToOne {
     ProjectLand{land(khasraNumber) } to Land{projectLand required}
-    ProjectLand{project(name) required} to Project{projectLand}    
-    ProjectLand{citizen(name) required}  to Citizen{ProjectLand}    
-    Land{village(name) required} to Village{land(khasraNumber)}    
+    ProjectLand{project(name) required} to Project{projectLand}
+    ProjectLand{citizen(name) required}  to Citizen{ProjectLand}
+    Land{village(name) required} to Village{land(khasraNumber)}
 	Land{unit(name) required} to  Unit{land(khasraNumber)}
-	Land{LandType(name) required} to LandType{land(khasraNumber)}	
+	Land{LandType(name) required} to LandType{land(khasraNumber)}
     SubDistrict{district(name) required} to District{subDistrict}
 	BankBranch{bank(name) required} to Bank{bankBranch}
 	District{state(name) required} to State{district(name)}
     Village{subDistrict(name) required} to SubDistrict{village}
-    Citizen{bankBranch(name) required}  to BankBranch{citizen}  
-    Land{state(name) required} to State{land(khasraNumber)}    
-    PaymentAdvice{landCompensation required} to LandCompensation{paymentAdvice}    
-    PaymentAdvice{projectLand required} to ProjectLand{paymentAdvice}        
+    Citizen{bankBranch(name)}  to BankBranch{citizen}
+    Land{state(name) required} to State{land(khasraNumber)}
+    PaymentAdvice{landCompensation required} to LandCompensation{paymentAdvice}
+    PaymentAdvice{projectLand required} to ProjectLand{paymentAdvice}
     PaymentAdvice{survey required} to Survey{paymentAdvice}
-    PaymentAdvice{citizen required} to Citizen{paymentAdvice}    
+    PaymentAdvice{citizen required} to Citizen{paymentAdvice}
     PaymentAdviceDetails{paymentAdvice required} to PaymentAdvice{paymentAdviceDetails}
-    PaymentAdviceDetails{projectLand required} to ProjectLand{paymentAdviceDetails}       
-	ProjectLand{noticeStatusInfo required} to NoticeStatusInfo{projectLand}
+    PaymentAdviceDetails{projectLand required} to ProjectLand{paymentAdviceDetails}
+	ProjectLand{noticeStatusInfo} to NoticeStatusInfo{projectLand}
     PaymentAdvice{paymentFile} to PaymentFile{paymentAdvice required}
 }
 
 relationship OneToMany{
    Citizen{land(khasraNumber)} to Land{citizen(name)}
    Project{land(khasraNumber)} to Land{project(name)}
-   Land{PaymentAdvice} to PaymentAdvice{Land(khasraNumber)}  
+   Land{PaymentAdvice} to PaymentAdvice{Land(khasraNumber)}
 }
 
 enum EventStatus {

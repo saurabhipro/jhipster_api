@@ -69,8 +69,6 @@ public class LandCompensationCriteria implements Serializable, Criteria {
 
     private DoubleFilter area;
 
-    private DoubleFilter sharePercentage;
-
     private DoubleFilter landMarketValue;
 
     private DoubleFilter structuralCompensation;
@@ -105,7 +103,6 @@ public class LandCompensationCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.hissaType = other.hissaType == null ? null : other.hissaType.copy();
         this.area = other.area == null ? null : other.area.copy();
-        this.sharePercentage = other.sharePercentage == null ? null : other.sharePercentage.copy();
         this.landMarketValue = other.landMarketValue == null ? null : other.landMarketValue.copy();
         this.structuralCompensation = other.structuralCompensation == null ? null : other.structuralCompensation.copy();
         this.horticultureCompensation = other.horticultureCompensation == null ? null : other.horticultureCompensation.copy();
@@ -170,21 +167,6 @@ public class LandCompensationCriteria implements Serializable, Criteria {
 
     public void setArea(DoubleFilter area) {
         this.area = area;
-    }
-
-    public DoubleFilter getSharePercentage() {
-        return sharePercentage;
-    }
-
-    public DoubleFilter sharePercentage() {
-        if (sharePercentage == null) {
-            sharePercentage = new DoubleFilter();
-        }
-        return sharePercentage;
-    }
-
-    public void setSharePercentage(DoubleFilter sharePercentage) {
-        this.sharePercentage = sharePercentage;
     }
 
     public DoubleFilter getLandMarketValue() {
@@ -403,7 +385,6 @@ public class LandCompensationCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(hissaType, that.hissaType) &&
             Objects.equals(area, that.area) &&
-            Objects.equals(sharePercentage, that.sharePercentage) &&
             Objects.equals(landMarketValue, that.landMarketValue) &&
             Objects.equals(structuralCompensation, that.structuralCompensation) &&
             Objects.equals(horticultureCompensation, that.horticultureCompensation) &&
@@ -427,7 +408,6 @@ public class LandCompensationCriteria implements Serializable, Criteria {
             id,
             hissaType,
             area,
-            sharePercentage,
             landMarketValue,
             structuralCompensation,
             horticultureCompensation,
@@ -452,7 +432,6 @@ public class LandCompensationCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (hissaType != null ? "hissaType=" + hissaType + ", " : "") +
             (area != null ? "area=" + area + ", " : "") +
-            (sharePercentage != null ? "sharePercentage=" + sharePercentage + ", " : "") +
             (landMarketValue != null ? "landMarketValue=" + landMarketValue + ", " : "") +
             (structuralCompensation != null ? "structuralCompensation=" + structuralCompensation + ", " : "") +
             (horticultureCompensation != null ? "horticultureCompensation=" + horticultureCompensation + ", " : "") +

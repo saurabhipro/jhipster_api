@@ -20,9 +20,6 @@
             <column name="area" type="double">
                 <constraints nullable="false" />
             </column>
-            <column name="share_percentage" type="double">
-                <constraints nullable="false" />
-            </column>
             <column name="land_market_value" type="double">
                 <constraints nullable="false" />
             </column>
@@ -82,7 +79,6 @@
             <column name="id" type="numeric"/>
             <column name="hissa_type" type="string"/>
             <column name="area" type="numeric"/>
-            <column name="share_percentage" type="numeric"/>
             <column name="land_market_value" type="numeric"/>
             <column name="structural_compensation" type="numeric"/>
             <column name="horticulture_compensation" type="numeric"/>

@@ -99,10 +99,6 @@ public class LandCompensationQueryService extends QueryService<LandCompensation>
             if (criteria.getArea() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getArea(), LandCompensation_.area));
             }
-            if (criteria.getSharePercentage() != null) {
-                specification =
-                    specification.and(buildRangeSpecification(criteria.getSharePercentage(), LandCompensation_.sharePercentage));
-            }
             if (criteria.getLandMarketValue() != null) {
                 specification =
                     specification.and(buildRangeSpecification(criteria.getLandMarketValue(), LandCompensation_.landMarketValue));
