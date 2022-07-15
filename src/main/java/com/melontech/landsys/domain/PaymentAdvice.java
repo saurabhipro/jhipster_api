@@ -7,6 +7,7 @@ import com.melontech.landsys.domain.enumeration.PaymentStatus;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
@@ -59,8 +60,8 @@ public class PaymentAdvice implements Serializable {
     @Column(name = "payment_advice_type")
     private PaymentAdviceType paymentAdviceType;
 
-    @Column(name = "reference_number", unique = true)
-    private String referenceNumber;
+    @Column(name = "reference_number")
+    private UUID referenceNumber;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -253,16 +254,16 @@ public class PaymentAdvice implements Serializable {
         this.paymentAdviceType = paymentAdviceType;
     }
 
-    public String getReferenceNumber() {
+    public UUID getReferenceNumber() {
         return this.referenceNumber;
     }
 
-    public PaymentAdvice referenceNumber(String referenceNumber) {
+    public PaymentAdvice referenceNumber(UUID referenceNumber) {
         this.setReferenceNumber(referenceNumber);
         return this;
     }
 
-    public void setReferenceNumber(String referenceNumber) {
+    public void setReferenceNumber(UUID referenceNumber) {
         this.referenceNumber = referenceNumber;
     }
 

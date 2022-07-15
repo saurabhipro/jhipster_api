@@ -14,6 +14,7 @@ import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
+import tech.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link com.melontech.landsys.domain.PaymentAdvice} entity. This class is used
@@ -100,7 +101,7 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
 
     private PaymentAdviceTypeFilter paymentAdviceType;
 
-    private StringFilter referenceNumber;
+    private UUIDFilter referenceNumber;
 
     private PaymentStatusFilter paymentStatus;
 
@@ -303,18 +304,18 @@ public class PaymentAdviceCriteria implements Serializable, Criteria {
         this.paymentAdviceType = paymentAdviceType;
     }
 
-    public StringFilter getReferenceNumber() {
+    public UUIDFilter getReferenceNumber() {
         return referenceNumber;
     }
 
-    public StringFilter referenceNumber() {
+    public UUIDFilter referenceNumber() {
         if (referenceNumber == null) {
-            referenceNumber = new StringFilter();
+            referenceNumber = new UUIDFilter();
         }
         return referenceNumber;
     }
 
-    public void setReferenceNumber(StringFilter referenceNumber) {
+    public void setReferenceNumber(UUIDFilter referenceNumber) {
         this.referenceNumber = referenceNumber;
     }
 

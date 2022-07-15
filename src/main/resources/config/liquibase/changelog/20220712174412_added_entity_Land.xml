@@ -18,7 +18,7 @@
                 <constraints nullable="true" />
             </column>
             <column name="khasra_number" type="varchar(255)">
-                <constraints nullable="false" unique="true" uniqueConstraintName="ux_landsys_land__khasra_number" />
+                <constraints nullable="false" />
             </column>
             <column name="khatauni" type="varchar(255)">
                 <constraints nullable="true" />

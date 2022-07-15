@@ -120,7 +120,7 @@ public class PaymentAdviceQueryService extends QueryService<PaymentAdvice> {
                 specification = specification.and(buildSpecification(criteria.getPaymentAdviceType(), PaymentAdvice_.paymentAdviceType));
             }
             if (criteria.getReferenceNumber() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getReferenceNumber(), PaymentAdvice_.referenceNumber));
+                specification = specification.and(buildSpecification(criteria.getReferenceNumber(), PaymentAdvice_.referenceNumber));
             }
             if (criteria.getPaymentStatus() != null) {
                 specification = specification.and(buildSpecification(criteria.getPaymentStatus(), PaymentAdvice_.paymentStatus));

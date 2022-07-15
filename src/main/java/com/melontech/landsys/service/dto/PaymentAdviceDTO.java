@@ -5,6 +5,7 @@ import com.melontech.landsys.domain.enumeration.PaymentAdviceType;
 import com.melontech.landsys.domain.enumeration.PaymentStatus;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 import javax.validation.constraints.*;
 
 /**
@@ -38,7 +39,7 @@ public class PaymentAdviceDTO implements Serializable {
 
     private PaymentAdviceType paymentAdviceType;
 
-    private String referenceNumber;
+    private UUID referenceNumber;
 
     @NotNull
     private PaymentStatus paymentStatus;
@@ -134,11 +135,11 @@ public class PaymentAdviceDTO implements Serializable {
         this.paymentAdviceType = paymentAdviceType;
     }
 
-    public String getReferenceNumber() {
+    public UUID getReferenceNumber() {
         return referenceNumber;
     }
 
-    public void setReferenceNumber(String referenceNumber) {
+    public void setReferenceNumber(UUID referenceNumber) {
         this.referenceNumber = referenceNumber;
     }
 

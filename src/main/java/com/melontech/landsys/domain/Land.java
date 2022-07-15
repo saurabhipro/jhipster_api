@@ -26,7 +26,7 @@ public class Land implements Serializable {
     private String ulpin;
 
     @NotNull
-    @Column(name = "khasra_number", nullable = false, unique = true)
+    @Column(name = "khasra_number", nullable = false)
     private String khasraNumber;
 
     @Column(name = "khatauni")

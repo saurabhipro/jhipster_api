@@ -41,8 +41,8 @@
             <column name="payment_advice_type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="reference_number" type="varchar(255)">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_landsys_payment_advice__reference_number" />
+            <column name="reference_number" type="${uuidType}">
+                <constraints nullable="true" />
             </column>
             <column name="payment_status" type="varchar(255)">
                 <constraints nullable="false" />
@@ -92,7 +92,7 @@
             <column name="check_number" type="string"/>
             <column name="micr_code" type="string"/>
             <column name="payment_advice_type" type="string"/>
-            <column name="reference_number" type="string"/>
+            <column name="reference_number" type="${uuidType}"/>
             <column name="payment_status" type="string"/>
             <column name="hissa_type" type="string"/>
             <column name="khatedar_id" type="numeric"/>

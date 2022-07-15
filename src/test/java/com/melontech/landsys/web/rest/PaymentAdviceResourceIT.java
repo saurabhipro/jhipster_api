@@ -23,6 +23,7 @@ import com.melontech.landsys.service.dto.PaymentAdviceDTO;
 import com.melontech.landsys.service.mapper.PaymentAdviceMapper;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -70,8 +71,8 @@ class PaymentAdviceResourceIT {
     private static final PaymentAdviceType DEFAULT_PAYMENT_ADVICE_TYPE = PaymentAdviceType.ONLINE;
     private static final PaymentAdviceType UPDATED_PAYMENT_ADVICE_TYPE = PaymentAdviceType.CHECQUE;
 
-    private static final String DEFAULT_REFERENCE_NUMBER = "AAAAAAAAAA";
-    private static final String UPDATED_REFERENCE_NUMBER = "BBBBBBBBBB";
+    private static final UUID DEFAULT_REFERENCE_NUMBER = UUID.randomUUID();
+    private static final UUID UPDATED_REFERENCE_NUMBER = UUID.randomUUID();
 
     private static final PaymentStatus DEFAULT_PAYMENT_STATUS = PaymentStatus.PENDING;
     private static final PaymentStatus UPDATED_PAYMENT_STATUS = PaymentStatus.APPROVED;
@@ -462,7 +463,7 @@ class PaymentAdviceResourceIT {
             .andExpect(jsonPath("$.[*].checkNumber").value(hasItem(DEFAULT_CHECK_NUMBER)))
             .andExpect(jsonPath("$.[*].micrCode").value(hasItem(DEFAULT_MICR_CODE)))
             .andExpect(jsonPath("$.[*].paymentAdviceType").value(hasItem(DEFAULT_PAYMENT_ADVICE_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].referenceNumber").value(hasItem(DEFAULT_REFERENCE_NUMBER)))
+            .andExpect(jsonPath("$.[*].referenceNumber").value(hasItem(DEFAULT_REFERENCE_NUMBER.toString())))
             .andExpect(jsonPath("$.[*].paymentStatus").value(hasItem(DEFAULT_PAYMENT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].hissaType").value(hasItem(DEFAULT_HISSA_TYPE.toString())));
     }
@@ -488,7 +489,7 @@ class PaymentAdviceResourceIT {
             .andExpect(jsonPath("$.checkNumber").value(DEFAULT_CHECK_NUMBER))
             .andExpect(jsonPath("$.micrCode").value(DEFAULT_MICR_CODE))
             .andExpect(jsonPath("$.paymentAdviceType").value(DEFAULT_PAYMENT_ADVICE_TYPE.toString()))
-            .andExpect(jsonPath("$.referenceNumber").value(DEFAULT_REFERENCE_NUMBER))
+            .andExpect(jsonPath("$.referenceNumber").value(DEFAULT_REFERENCE_NUMBER.toString()))
             .andExpect(jsonPath("$.paymentStatus").value(DEFAULT_PAYMENT_STATUS.toString()))
             .andExpect(jsonPath("$.hissaType").value(DEFAULT_HISSA_TYPE.toString()));
     }
@@ -1269,32 +1270,6 @@ class PaymentAdviceResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentAdvicesByReferenceNumberContainsSomething() throws Exception {
-        // Initialize the database
-        paymentAdviceRepository.saveAndFlush(paymentAdvice);
-
-        // Get all the paymentAdviceList where referenceNumber contains DEFAULT_REFERENCE_NUMBER
-        defaultPaymentAdviceShouldBeFound("referenceNumber.contains=" + DEFAULT_REFERENCE_NUMBER);
-
-        // Get all the paymentAdviceList where referenceNumber contains UPDATED_REFERENCE_NUMBER
-        defaultPaymentAdviceShouldNotBeFound("referenceNumber.contains=" + UPDATED_REFERENCE_NUMBER);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentAdvicesByReferenceNumberNotContainsSomething() throws Exception {
-        // Initialize the database
-        paymentAdviceRepository.saveAndFlush(paymentAdvice);
-
-        // Get all the paymentAdviceList where referenceNumber does not contain DEFAULT_REFERENCE_NUMBER
-        defaultPaymentAdviceShouldNotBeFound("referenceNumber.doesNotContain=" + DEFAULT_REFERENCE_NUMBER);
-
-        // Get all the paymentAdviceList where referenceNumber does not contain UPDATED_REFERENCE_NUMBER
-        defaultPaymentAdviceShouldBeFound("referenceNumber.doesNotContain=" + UPDATED_REFERENCE_NUMBER);
-    }
-
-    @Test
-    @Transactional
     void getAllPaymentAdvicesByPaymentStatusIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentAdviceRepository.saveAndFlush(paymentAdvice);
@@ -1588,7 +1563,7 @@ class PaymentAdviceResourceIT {
             .andExpect(jsonPath("$.[*].checkNumber").value(hasItem(DEFAULT_CHECK_NUMBER)))
             .andExpect(jsonPath("$.[*].micrCode").value(hasItem(DEFAULT_MICR_CODE)))
             .andExpect(jsonPath("$.[*].paymentAdviceType").value(hasItem(DEFAULT_PAYMENT_ADVICE_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].referenceNumber").value(hasItem(DEFAULT_REFERENCE_NUMBER)))
+            .andExpect(jsonPath("$.[*].referenceNumber").value(hasItem(DEFAULT_REFERENCE_NUMBER.toString())))
             .andExpect(jsonPath("$.[*].paymentStatus").value(hasItem(DEFAULT_PAYMENT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].hissaType").value(hasItem(DEFAULT_HISSA_TYPE.toString())));
 
