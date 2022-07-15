@@ -2,6 +2,7 @@ package com.melontech.landsys.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -11,20 +12,28 @@ import com.melontech.landsys.domain.PaymentAdvice;
 import com.melontech.landsys.domain.PaymentFile;
 import com.melontech.landsys.domain.ProjectLand;
 import com.melontech.landsys.domain.Survey;
+import com.melontech.landsys.domain.Village;
 import com.melontech.landsys.domain.enumeration.HissaType;
 import com.melontech.landsys.domain.enumeration.SurveyStatus;
 import com.melontech.landsys.repository.SurveyRepository;
+import com.melontech.landsys.service.SurveyService;
 import com.melontech.landsys.service.criteria.SurveyCriteria;
 import com.melontech.landsys.service.dto.SurveyDTO;
 import com.melontech.landsys.service.mapper.SurveyMapper;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,6 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link SurveyResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class SurveyResourceIT {
@@ -87,8 +97,14 @@ class SurveyResourceIT {
     @Autowired
     private SurveyRepository surveyRepository;
 
+    @Mock
+    private SurveyRepository surveyRepositoryMock;
+
     @Autowired
     private SurveyMapper surveyMapper;
+
+    @Mock
+    private SurveyService surveyServiceMock;
 
     @Autowired
     private EntityManager em;
@@ -127,6 +143,16 @@ class SurveyResourceIT {
             projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
         }
         survey.setProjectLand(projectLand);
+        // Add required entity
+        Village village;
+        if (TestUtil.findAll(em, Village.class).isEmpty()) {
+            village = VillageResourceIT.createEntity(em);
+            em.persist(village);
+            em.flush();
+        } else {
+            village = TestUtil.findAll(em, Village.class).get(0);
+        }
+        survey.setVillage(village);
         return survey;
     }
 
@@ -159,6 +185,16 @@ class SurveyResourceIT {
             projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
         }
         survey.setProjectLand(projectLand);
+        // Add required entity
+        Village village;
+        if (TestUtil.findAll(em, Village.class).isEmpty()) {
+            village = VillageResourceIT.createUpdatedEntity(em);
+            em.persist(village);
+            em.flush();
+        } else {
+            village = TestUtil.findAll(em, Village.class).get(0);
+        }
+        survey.setVillage(village);
         return survey;
     }
 
@@ -326,6 +362,24 @@ class SurveyResourceIT {
             .andExpect(jsonPath("$.[*].distanceFromCity").value(hasItem(DEFAULT_DISTANCE_FROM_CITY.doubleValue())))
             .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS)))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllSurveysWithEagerRelationshipsIsEnabled() throws Exception {
+        when(surveyServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restSurveyMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(surveyServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllSurveysWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(surveyServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restSurveyMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(surveyServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -1372,6 +1426,32 @@ class SurveyResourceIT {
 
         // Get all the surveyList where projectLand equals to (projectLandId + 1)
         defaultSurveyShouldNotBeFound("projectLandId.equals=" + (projectLandId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllSurveysByVillageIsEqualToSomething() throws Exception {
+        // Initialize the database
+        surveyRepository.saveAndFlush(survey);
+        Village village;
+        if (TestUtil.findAll(em, Village.class).isEmpty()) {
+            village = VillageResourceIT.createEntity(em);
+            em.persist(village);
+            em.flush();
+        } else {
+            village = TestUtil.findAll(em, Village.class).get(0);
+        }
+        em.persist(village);
+        em.flush();
+        survey.setVillage(village);
+        surveyRepository.saveAndFlush(survey);
+        Long villageId = village.getId();
+
+        // Get all the surveyList where village equals to villageId
+        defaultSurveyShouldBeFound("villageId.equals=" + villageId);
+
+        // Get all the surveyList where village equals to (villageId + 1)
+        defaultSurveyShouldNotBeFound("villageId.equals=" + (villageId + 1));
     }
 
     @Test

@@ -102,6 +102,9 @@ public class CitizenQueryService extends QueryService<Citizen> {
             if (criteria.getDob() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDob(), Citizen_.dob));
             }
+            if (criteria.getAccountName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getAccountName(), Citizen_.accountName));
+            }
             if (criteria.getAccountNumber() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getAccountNumber(), Citizen_.accountNumber));
             }

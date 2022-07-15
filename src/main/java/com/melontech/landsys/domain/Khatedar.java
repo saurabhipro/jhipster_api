@@ -37,6 +37,7 @@ public class Khatedar implements Serializable {
         value = {
             "land",
             "project",
+            "village",
             "noticeStatusInfo",
             "survey",
             "landCompensation",
@@ -62,7 +63,9 @@ public class Khatedar implements Serializable {
     private PaymentAdvice paymentAdvice;
 
     @JsonIgnoreProperties(
-        value = { "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation" },
+        value = {
+            "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation", "paymentFileHeader", "project",
+        },
         allowSetters = true
     )
     @OneToOne(mappedBy = "khatedar")

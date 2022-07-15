@@ -37,6 +37,8 @@ public class CitizenCriteria implements Serializable, Criteria {
 
     private LocalDateFilter dob;
 
+    private StringFilter accountName;
+
     private StringFilter accountNumber;
 
     private StringFilter fatherName;
@@ -65,6 +67,7 @@ public class CitizenCriteria implements Serializable, Criteria {
         this.address = other.address == null ? null : other.address.copy();
         this.mobileNumber = other.mobileNumber == null ? null : other.mobileNumber.copy();
         this.dob = other.dob == null ? null : other.dob.copy();
+        this.accountName = other.accountName == null ? null : other.accountName.copy();
         this.accountNumber = other.accountNumber == null ? null : other.accountNumber.copy();
         this.fatherName = other.fatherName == null ? null : other.fatherName.copy();
         this.spouseName = other.spouseName == null ? null : other.spouseName.copy();
@@ -155,6 +158,21 @@ public class CitizenCriteria implements Serializable, Criteria {
 
     public void setDob(LocalDateFilter dob) {
         this.dob = dob;
+    }
+
+    public StringFilter getAccountName() {
+        return accountName;
+    }
+
+    public StringFilter accountName() {
+        if (accountName == null) {
+            accountName = new StringFilter();
+        }
+        return accountName;
+    }
+
+    public void setAccountName(StringFilter accountName) {
+        this.accountName = accountName;
     }
 
     public StringFilter getAccountNumber() {
@@ -315,6 +333,7 @@ public class CitizenCriteria implements Serializable, Criteria {
             Objects.equals(address, that.address) &&
             Objects.equals(mobileNumber, that.mobileNumber) &&
             Objects.equals(dob, that.dob) &&
+            Objects.equals(accountName, that.accountName) &&
             Objects.equals(accountNumber, that.accountNumber) &&
             Objects.equals(fatherName, that.fatherName) &&
             Objects.equals(spouseName, that.spouseName) &&
@@ -336,6 +355,7 @@ public class CitizenCriteria implements Serializable, Criteria {
             address,
             mobileNumber,
             dob,
+            accountName,
             accountNumber,
             fatherName,
             spouseName,
@@ -358,6 +378,7 @@ public class CitizenCriteria implements Serializable, Criteria {
             (address != null ? "address=" + address + ", " : "") +
             (mobileNumber != null ? "mobileNumber=" + mobileNumber + ", " : "") +
             (dob != null ? "dob=" + dob + ", " : "") +
+            (accountName != null ? "accountName=" + accountName + ", " : "") +
             (accountNumber != null ? "accountNumber=" + accountNumber + ", " : "") +
             (fatherName != null ? "fatherName=" + fatherName + ", " : "") +
             (spouseName != null ? "spouseName=" + spouseName + ", " : "") +

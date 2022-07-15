@@ -80,6 +80,7 @@ public class LandCompensation implements Serializable {
         value = {
             "land",
             "project",
+            "village",
             "noticeStatusInfo",
             "survey",
             "landCompensation",
@@ -95,11 +96,16 @@ public class LandCompensation implements Serializable {
     @JoinColumn(unique = true)
     private ProjectLand projectLand;
 
-    @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentAdvices", "paymentFiles" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "projectLand", "village", "landCompensation", "paymentAdvices", "paymentFiles" }, allowSetters = true)
     @OneToOne(optional = false)
     @NotNull
     @JoinColumn(unique = true)
     private Survey survey;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "subDistrict", "lands", "surveys", "landCompensations", "projectLands" }, allowSetters = true)
+    private Village village;
 
     @OneToMany(mappedBy = "landCompensation")
     @JsonIgnoreProperties(
@@ -110,7 +116,9 @@ public class LandCompensation implements Serializable {
 
     @OneToMany(mappedBy = "landCompensation")
     @JsonIgnoreProperties(
-        value = { "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation" },
+        value = {
+            "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation", "paymentFileHeader", "project",
+        },
         allowSetters = true
     )
     private Set<PaymentFile> paymentFiles = new HashSet<>();
@@ -348,6 +356,19 @@ public class LandCompensation implements Serializable {
 
     public LandCompensation survey(Survey survey) {
         this.setSurvey(survey);
+        return this;
+    }
+
+    public Village getVillage() {
+        return this.village;
+    }
+
+    public void setVillage(Village village) {
+        this.village = village;
+    }
+
+    public LandCompensation village(Village village) {
+        this.setVillage(village);
         return this;
     }
 

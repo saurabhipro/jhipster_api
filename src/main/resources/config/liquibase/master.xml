@@ -39,6 +39,7 @@
     <include file="config/liquibase/changelog/20220712174427_added_entity_NoticeStatusInfo.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220712174428_added_entity_TransactionHistory.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220714125037_added_entity_Khatedar.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220715174715_added_entity_PaymentFileHeader.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20220712174407_added_entity_constraints_District.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220712174408_added_entity_constraints_SubDistrict.xml" relativeToChangelogFile="false"/>
@@ -54,6 +55,7 @@
     <include file="config/liquibase/changelog/20220712174426_added_entity_constraints_Survey.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220712174424_added_entity_constraints_PaymentFile.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220714125037_added_entity_constraints_Khatedar.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20220715174715_added_entity_constraints_PaymentFileHeader.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

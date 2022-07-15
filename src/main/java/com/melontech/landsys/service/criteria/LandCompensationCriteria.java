@@ -99,6 +99,8 @@ public class LandCompensationCriteria implements Serializable, Criteria {
 
     private LongFilter surveyId;
 
+    private LongFilter villageId;
+
     private LongFilter paymentAdviceId;
 
     private LongFilter paymentFileId;
@@ -126,6 +128,7 @@ public class LandCompensationCriteria implements Serializable, Criteria {
         this.transactionId = other.transactionId == null ? null : other.transactionId.copy();
         this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
         this.surveyId = other.surveyId == null ? null : other.surveyId.copy();
+        this.villageId = other.villageId == null ? null : other.villageId.copy();
         this.paymentAdviceId = other.paymentAdviceId == null ? null : other.paymentAdviceId.copy();
         this.paymentFileId = other.paymentFileId == null ? null : other.paymentFileId.copy();
         this.distinct = other.distinct;
@@ -406,6 +409,21 @@ public class LandCompensationCriteria implements Serializable, Criteria {
         this.surveyId = surveyId;
     }
 
+    public LongFilter getVillageId() {
+        return villageId;
+    }
+
+    public LongFilter villageId() {
+        if (villageId == null) {
+            villageId = new LongFilter();
+        }
+        return villageId;
+    }
+
+    public void setVillageId(LongFilter villageId) {
+        this.villageId = villageId;
+    }
+
     public LongFilter getPaymentAdviceId() {
         return paymentAdviceId;
     }
@@ -472,6 +490,7 @@ public class LandCompensationCriteria implements Serializable, Criteria {
             Objects.equals(transactionId, that.transactionId) &&
             Objects.equals(projectLandId, that.projectLandId) &&
             Objects.equals(surveyId, that.surveyId) &&
+            Objects.equals(villageId, that.villageId) &&
             Objects.equals(paymentAdviceId, that.paymentAdviceId) &&
             Objects.equals(paymentFileId, that.paymentFileId) &&
             Objects.equals(distinct, that.distinct)
@@ -499,6 +518,7 @@ public class LandCompensationCriteria implements Serializable, Criteria {
             transactionId,
             projectLandId,
             surveyId,
+            villageId,
             paymentAdviceId,
             paymentFileId,
             distinct
@@ -527,6 +547,7 @@ public class LandCompensationCriteria implements Serializable, Criteria {
             (transactionId != null ? "transactionId=" + transactionId + ", " : "") +
             (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
             (surveyId != null ? "surveyId=" + surveyId + ", " : "") +
+            (villageId != null ? "villageId=" + villageId + ", " : "") +
             (paymentAdviceId != null ? "paymentAdviceId=" + paymentAdviceId + ", " : "") +
             (paymentFileId != null ? "paymentFileId=" + paymentFileId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

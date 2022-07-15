@@ -47,15 +47,20 @@ public class ProjectLand implements Serializable {
     @JsonIgnoreProperties(value = { "projectLands" }, allowSetters = true)
     private Project project;
 
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "subDistrict", "lands", "surveys", "landCompensations", "projectLands" }, allowSetters = true)
+    private Village village;
+
     @ManyToOne
     @JsonIgnoreProperties(value = { "projectLands" }, allowSetters = true)
     private NoticeStatusInfo noticeStatusInfo;
 
-    @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentAdvices", "paymentFiles" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "projectLand", "village", "landCompensation", "paymentAdvices", "paymentFiles" }, allowSetters = true)
     @OneToOne(mappedBy = "projectLand")
     private Survey survey;
 
-    @JsonIgnoreProperties(value = { "projectLand", "survey", "paymentAdvices", "paymentFiles" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "projectLand", "survey", "village", "paymentAdvices", "paymentFiles" }, allowSetters = true)
     @OneToOne(mappedBy = "projectLand")
     private LandCompensation landCompensation;
 
@@ -72,7 +77,9 @@ public class ProjectLand implements Serializable {
 
     @OneToMany(mappedBy = "projectLand")
     @JsonIgnoreProperties(
-        value = { "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation" },
+        value = {
+            "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation", "paymentFileHeader", "project",
+        },
         allowSetters = true
     )
     private Set<PaymentFile> paymentFiles = new HashSet<>();
@@ -171,6 +178,19 @@ public class ProjectLand implements Serializable {
 
     public ProjectLand project(Project project) {
         this.setProject(project);
+        return this;
+    }
+
+    public Village getVillage() {
+        return this.village;
+    }
+
+    public void setVillage(Village village) {
+        this.village = village;
+    }
+
+    public ProjectLand village(Village village) {
+        this.setVillage(village);
         return this;
     }
 

@@ -42,6 +42,8 @@ public class SurveyDTO implements Serializable {
 
     private ProjectLandDTO projectLand;
 
+    private VillageDTO village;
+
     public Long getId() {
         return id;
     }
@@ -146,6 +148,14 @@ public class SurveyDTO implements Serializable {
         this.projectLand = projectLand;
     }
 
+    public VillageDTO getVillage() {
+        return village;
+    }
+
+    public void setVillage(VillageDTO village) {
+        this.village = village;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -184,6 +194,7 @@ public class SurveyDTO implements Serializable {
             ", remarks='" + getRemarks() + "'" +
             ", status='" + getStatus() + "'" +
             ", projectLand=" + getProjectLand() +
+            ", village=" + getVillage() +
             "}";
     }
 }

@@ -36,17 +36,15 @@ public class PaymentFile implements Serializable {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "payment_status", nullable = false)
-    private PaymentStatus paymentStatus;
+    @Column(name = "payment_file_status", nullable = false)
+    private PaymentStatus paymentFileStatus;
 
-    @Column(name = "bank_name")
-    private String bankName;
+    @Column(name = "khatedar_ifsc_code")
+    private String khatedarIfscCode;
 
-    @Column(name = "ifsc_code")
-    private String ifscCode;
-
+    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "payment_mode")
+    @Column(name = "payment_mode", nullable = false)
     private PaymentAdviceType paymentMode;
 
     @JsonIgnoreProperties(value = { "projectLand", "citizen", "paymentAdvice", "paymentFile" }, allowSetters = true)
@@ -70,6 +68,7 @@ public class PaymentFile implements Serializable {
         value = {
             "land",
             "project",
+            "village",
             "noticeStatusInfo",
             "survey",
             "landCompensation",
@@ -84,7 +83,7 @@ public class PaymentFile implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentAdvices", "paymentFiles" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "projectLand", "village", "landCompensation", "paymentAdvices", "paymentFiles" }, allowSetters = true)
     private Survey survey;
 
     @ManyToOne(optional = false)
@@ -99,8 +98,18 @@ public class PaymentFile implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "projectLand", "survey", "paymentAdvices", "paymentFiles" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "projectLand", "survey", "village", "paymentAdvices", "paymentFiles" }, allowSetters = true)
     private LandCompensation landCompensation;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "project", "paymentFiles" }, allowSetters = true)
+    private PaymentFileHeader paymentFileHeader;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "projectLands" }, allowSetters = true)
+    private Project project;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -156,43 +165,30 @@ public class PaymentFile implements Serializable {
         this.paymentFileDate = paymentFileDate;
     }
 
-    public PaymentStatus getPaymentStatus() {
-        return this.paymentStatus;
+    public PaymentStatus getPaymentFileStatus() {
+        return this.paymentFileStatus;
     }
 
-    public PaymentFile paymentStatus(PaymentStatus paymentStatus) {
-        this.setPaymentStatus(paymentStatus);
+    public PaymentFile paymentFileStatus(PaymentStatus paymentFileStatus) {
+        this.setPaymentFileStatus(paymentFileStatus);
         return this;
     }
 
-    public void setPaymentStatus(PaymentStatus paymentStatus) {
-        this.paymentStatus = paymentStatus;
+    public void setPaymentFileStatus(PaymentStatus paymentFileStatus) {
+        this.paymentFileStatus = paymentFileStatus;
     }
 
-    public String getBankName() {
-        return this.bankName;
+    public String getKhatedarIfscCode() {
+        return this.khatedarIfscCode;
     }
 
-    public PaymentFile bankName(String bankName) {
-        this.setBankName(bankName);
+    public PaymentFile khatedarIfscCode(String khatedarIfscCode) {
+        this.setKhatedarIfscCode(khatedarIfscCode);
         return this;
     }
 
-    public void setBankName(String bankName) {
-        this.bankName = bankName;
-    }
-
-    public String getIfscCode() {
-        return this.ifscCode;
-    }
-
-    public PaymentFile ifscCode(String ifscCode) {
-        this.setIfscCode(ifscCode);
-        return this;
-    }
-
-    public void setIfscCode(String ifscCode) {
-        this.ifscCode = ifscCode;
+    public void setKhatedarIfscCode(String khatedarIfscCode) {
+        this.khatedarIfscCode = khatedarIfscCode;
     }
 
     public PaymentAdviceType getPaymentMode() {
@@ -299,6 +295,32 @@ public class PaymentFile implements Serializable {
         return this;
     }
 
+    public PaymentFileHeader getPaymentFileHeader() {
+        return this.paymentFileHeader;
+    }
+
+    public void setPaymentFileHeader(PaymentFileHeader paymentFileHeader) {
+        this.paymentFileHeader = paymentFileHeader;
+    }
+
+    public PaymentFile paymentFileHeader(PaymentFileHeader paymentFileHeader) {
+        this.setPaymentFileHeader(paymentFileHeader);
+        return this;
+    }
+
+    public Project getProject() {
+        return this.project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public PaymentFile project(Project project) {
+        this.setProject(project);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -326,9 +348,8 @@ public class PaymentFile implements Serializable {
             ", paymentFileId=" + getPaymentFileId() +
             ", totalPaymentAmount=" + getTotalPaymentAmount() +
             ", paymentFileDate='" + getPaymentFileDate() + "'" +
-            ", paymentStatus='" + getPaymentStatus() + "'" +
-            ", bankName='" + getBankName() + "'" +
-            ", ifscCode='" + getIfscCode() + "'" +
+            ", paymentFileStatus='" + getPaymentFileStatus() + "'" +
+            ", khatedarIfscCode='" + getKhatedarIfscCode() + "'" +
             ", paymentMode='" + getPaymentMode() + "'" +
             "}";
     }

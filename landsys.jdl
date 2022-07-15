@@ -103,6 +103,7 @@ entity Citizen(landsys_citizen) {
     address String required
     mobileNumber String
     dob LocalDate
+    accountName String
     accountNumber String
     fatherName String required
     spouseName String
@@ -154,15 +155,24 @@ entity PaymentAdviceDetails(landsys_payment_advice_details) {
     hissaType HissaType required
 }
 
+entity PaymentFileHeader(landsys_payment_file_header) {
+    grandTotalPaymentAmount          Double required
+	paymentStatus	 			PaymentStatus required
+    paymentMode                 PaymentAdviceType
+    approverRemarks             String
+
+}
+
 entity PaymentFile(landsys_payment_file) {
 	paymentFileId               Double required
     totalPaymentAmount          Double required
 	paymentFileDate           	LocalDate
-	paymentStatus	 			PaymentStatus required
-    bankName                    String
-    ifscCode                    String
-    paymentMode PaymentAdviceType
+	paymentFileStatus	 		PaymentStatus required
+    khatedarIfscCode            String
+    paymentMode PaymentAdviceType required
 }
+
+
 
 entity PaymentFileRecon(landsys_payment_file_recon) {
 	primaryHolderName			String required
@@ -221,12 +231,16 @@ relationship OneToOne {
     LandCompensation{survey required} to Survey{landCompensation}
     PaymentFile{khatedar required} to Khatedar{paymentFile}
     PaymentFile{paymentAdvice required} to PaymentAdvice{paymentFile}
+
     }
 
 relationship ManyToOne {
     ProjectLand{land(khasraNumber) required } to Land{projectLand}
     ProjectLand{project(name) required} to Project{projectLand}
     Land{village(name) required} to Village{land(khasraNumber)}
+    Survey{village(name) required} to Village{survey}
+    LandCompensation{village(name) required} to Village{landCompensation}
+    ProjectLand{village(name) required} to Village{projectLand}
 	Land{unit(name) required} to  Unit{land(khasraNumber)}
 	Land{LandType(name) required} to LandType{land(khasraNumber)}
     SubDistrict{district(name) required} to District{subDistrict}
@@ -249,8 +263,10 @@ relationship ManyToOne {
     PaymentFile{landCompensation required} to LandCompensation{paymentFile}
     Khatedar{projectLand required} to ProjectLand{khatedar}
     Khatedar{citizen required} to Citizen{khatedar}
-
-}
+    PaymentFile{paymentFileHeader required} to PaymentFileHeader{paymentFile}
+    PaymentFileHeader{project(name) required} to Project
+    PaymentFile{project(name) required} to Project
+ }
 
 enum KhatedarStatus {
     NEW

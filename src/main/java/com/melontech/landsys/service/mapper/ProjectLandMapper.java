@@ -4,10 +4,12 @@ import com.melontech.landsys.domain.Land;
 import com.melontech.landsys.domain.NoticeStatusInfo;
 import com.melontech.landsys.domain.Project;
 import com.melontech.landsys.domain.ProjectLand;
+import com.melontech.landsys.domain.Village;
 import com.melontech.landsys.service.dto.LandDTO;
 import com.melontech.landsys.service.dto.NoticeStatusInfoDTO;
 import com.melontech.landsys.service.dto.ProjectDTO;
 import com.melontech.landsys.service.dto.ProjectLandDTO;
+import com.melontech.landsys.service.dto.VillageDTO;
 import org.mapstruct.*;
 
 /**
@@ -17,6 +19,7 @@ import org.mapstruct.*;
 public interface ProjectLandMapper extends EntityMapper<ProjectLandDTO, ProjectLand> {
     @Mapping(target = "land", source = "land", qualifiedByName = "landKhasraNumber")
     @Mapping(target = "project", source = "project", qualifiedByName = "projectName")
+    @Mapping(target = "village", source = "village", qualifiedByName = "villageName")
     @Mapping(target = "noticeStatusInfo", source = "noticeStatusInfo", qualifiedByName = "noticeStatusInfoId")
     ProjectLandDTO toDto(ProjectLand s);
 
@@ -31,6 +34,12 @@ public interface ProjectLandMapper extends EntityMapper<ProjectLandDTO, ProjectL
     @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "name")
     ProjectDTO toDtoProjectName(Project project);
+
+    @Named("villageName")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
+    VillageDTO toDtoVillageName(Village village);
 
     @Named("noticeStatusInfoId")
     @BeanMapping(ignoreByDefault = true)

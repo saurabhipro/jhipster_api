@@ -32,6 +32,9 @@
             <column name="dob" type="date">
                 <constraints nullable="true" />
             </column>
+            <column name="account_name" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="account_number" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -101,6 +104,7 @@
             <column name="address" type="string"/>
             <column name="mobile_number" type="string"/>
             <column name="dob" type="date"/>
+            <column name="account_name" type="string"/>
             <column name="account_number" type="string"/>
             <column name="father_name" type="string"/>
             <column name="spouse_name" type="string"/>

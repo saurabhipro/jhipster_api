@@ -81,7 +81,7 @@ public class PaymentAdvice implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "projectLand", "survey", "paymentAdvices", "paymentFiles" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "projectLand", "survey", "village", "paymentAdvices", "paymentFiles" }, allowSetters = true)
     private LandCompensation landCompensation;
 
     @ManyToOne(optional = false)
@@ -90,6 +90,7 @@ public class PaymentAdvice implements Serializable {
         value = {
             "land",
             "project",
+            "village",
             "noticeStatusInfo",
             "survey",
             "landCompensation",
@@ -104,7 +105,7 @@ public class PaymentAdvice implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "projectLand", "landCompensation", "paymentAdvices", "paymentFiles" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "projectLand", "village", "landCompensation", "paymentAdvices", "paymentFiles" }, allowSetters = true)
     private Survey survey;
 
     @JsonIgnoreProperties(value = { "paymentAdvice" }, allowSetters = true)
@@ -112,7 +113,9 @@ public class PaymentAdvice implements Serializable {
     private PaymentFileRecon paymentFileRecon;
 
     @JsonIgnoreProperties(
-        value = { "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation" },
+        value = {
+            "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation", "paymentFileHeader", "project",
+        },
         allowSetters = true
     )
     @OneToOne(mappedBy = "paymentAdvice")

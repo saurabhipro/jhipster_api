@@ -64,6 +64,9 @@ class CitizenResourceIT {
     private static final LocalDate UPDATED_DOB = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_DOB = LocalDate.ofEpochDay(-1L);
 
+    private static final String DEFAULT_ACCOUNT_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_ACCOUNT_NAME = "BBBBBBBBBB";
+
     private static final String DEFAULT_ACCOUNT_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_ACCOUNT_NUMBER = "BBBBBBBBBB";
 
@@ -140,6 +143,7 @@ class CitizenResourceIT {
             .address(DEFAULT_ADDRESS)
             .mobileNumber(DEFAULT_MOBILE_NUMBER)
             .dob(DEFAULT_DOB)
+            .accountName(DEFAULT_ACCOUNT_NAME)
             .accountNumber(DEFAULT_ACCOUNT_NUMBER)
             .fatherName(DEFAULT_FATHER_NAME)
             .spouseName(DEFAULT_SPOUSE_NAME)
@@ -170,6 +174,7 @@ class CitizenResourceIT {
             .address(UPDATED_ADDRESS)
             .mobileNumber(UPDATED_MOBILE_NUMBER)
             .dob(UPDATED_DOB)
+            .accountName(UPDATED_ACCOUNT_NAME)
             .accountNumber(UPDATED_ACCOUNT_NUMBER)
             .fatherName(UPDATED_FATHER_NAME)
             .spouseName(UPDATED_SPOUSE_NAME)
@@ -211,6 +216,7 @@ class CitizenResourceIT {
         assertThat(testCitizen.getAddress()).isEqualTo(DEFAULT_ADDRESS);
         assertThat(testCitizen.getMobileNumber()).isEqualTo(DEFAULT_MOBILE_NUMBER);
         assertThat(testCitizen.getDob()).isEqualTo(DEFAULT_DOB);
+        assertThat(testCitizen.getAccountName()).isEqualTo(DEFAULT_ACCOUNT_NAME);
         assertThat(testCitizen.getAccountNumber()).isEqualTo(DEFAULT_ACCOUNT_NUMBER);
         assertThat(testCitizen.getFatherName()).isEqualTo(DEFAULT_FATHER_NAME);
         assertThat(testCitizen.getSpouseName()).isEqualTo(DEFAULT_SPOUSE_NAME);
@@ -335,6 +341,7 @@ class CitizenResourceIT {
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
             .andExpect(jsonPath("$.[*].mobileNumber").value(hasItem(DEFAULT_MOBILE_NUMBER)))
             .andExpect(jsonPath("$.[*].dob").value(hasItem(DEFAULT_DOB.toString())))
+            .andExpect(jsonPath("$.[*].accountName").value(hasItem(DEFAULT_ACCOUNT_NAME)))
             .andExpect(jsonPath("$.[*].accountNumber").value(hasItem(DEFAULT_ACCOUNT_NUMBER)))
             .andExpect(jsonPath("$.[*].fatherName").value(hasItem(DEFAULT_FATHER_NAME)))
             .andExpect(jsonPath("$.[*].spouseName").value(hasItem(DEFAULT_SPOUSE_NAME)))
@@ -386,6 +393,7 @@ class CitizenResourceIT {
             .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS))
             .andExpect(jsonPath("$.mobileNumber").value(DEFAULT_MOBILE_NUMBER))
             .andExpect(jsonPath("$.dob").value(DEFAULT_DOB.toString()))
+            .andExpect(jsonPath("$.accountName").value(DEFAULT_ACCOUNT_NAME))
             .andExpect(jsonPath("$.accountNumber").value(DEFAULT_ACCOUNT_NUMBER))
             .andExpect(jsonPath("$.fatherName").value(DEFAULT_FATHER_NAME))
             .andExpect(jsonPath("$.spouseName").value(DEFAULT_SPOUSE_NAME))
@@ -755,6 +763,84 @@ class CitizenResourceIT {
 
         // Get all the citizenList where dob is greater than SMALLER_DOB
         defaultCitizenShouldBeFound("dob.greaterThan=" + SMALLER_DOB);
+    }
+
+    @Test
+    @Transactional
+    void getAllCitizensByAccountNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        citizenRepository.saveAndFlush(citizen);
+
+        // Get all the citizenList where accountName equals to DEFAULT_ACCOUNT_NAME
+        defaultCitizenShouldBeFound("accountName.equals=" + DEFAULT_ACCOUNT_NAME);
+
+        // Get all the citizenList where accountName equals to UPDATED_ACCOUNT_NAME
+        defaultCitizenShouldNotBeFound("accountName.equals=" + UPDATED_ACCOUNT_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllCitizensByAccountNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        citizenRepository.saveAndFlush(citizen);
+
+        // Get all the citizenList where accountName not equals to DEFAULT_ACCOUNT_NAME
+        defaultCitizenShouldNotBeFound("accountName.notEquals=" + DEFAULT_ACCOUNT_NAME);
+
+        // Get all the citizenList where accountName not equals to UPDATED_ACCOUNT_NAME
+        defaultCitizenShouldBeFound("accountName.notEquals=" + UPDATED_ACCOUNT_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllCitizensByAccountNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        citizenRepository.saveAndFlush(citizen);
+
+        // Get all the citizenList where accountName in DEFAULT_ACCOUNT_NAME or UPDATED_ACCOUNT_NAME
+        defaultCitizenShouldBeFound("accountName.in=" + DEFAULT_ACCOUNT_NAME + "," + UPDATED_ACCOUNT_NAME);
+
+        // Get all the citizenList where accountName equals to UPDATED_ACCOUNT_NAME
+        defaultCitizenShouldNotBeFound("accountName.in=" + UPDATED_ACCOUNT_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllCitizensByAccountNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        citizenRepository.saveAndFlush(citizen);
+
+        // Get all the citizenList where accountName is not null
+        defaultCitizenShouldBeFound("accountName.specified=true");
+
+        // Get all the citizenList where accountName is null
+        defaultCitizenShouldNotBeFound("accountName.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllCitizensByAccountNameContainsSomething() throws Exception {
+        // Initialize the database
+        citizenRepository.saveAndFlush(citizen);
+
+        // Get all the citizenList where accountName contains DEFAULT_ACCOUNT_NAME
+        defaultCitizenShouldBeFound("accountName.contains=" + DEFAULT_ACCOUNT_NAME);
+
+        // Get all the citizenList where accountName contains UPDATED_ACCOUNT_NAME
+        defaultCitizenShouldNotBeFound("accountName.contains=" + UPDATED_ACCOUNT_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllCitizensByAccountNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        citizenRepository.saveAndFlush(citizen);
+
+        // Get all the citizenList where accountName does not contain DEFAULT_ACCOUNT_NAME
+        defaultCitizenShouldNotBeFound("accountName.doesNotContain=" + DEFAULT_ACCOUNT_NAME);
+
+        // Get all the citizenList where accountName does not contain UPDATED_ACCOUNT_NAME
+        defaultCitizenShouldBeFound("accountName.doesNotContain=" + UPDATED_ACCOUNT_NAME);
     }
 
     @Test
@@ -1370,6 +1456,7 @@ class CitizenResourceIT {
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
             .andExpect(jsonPath("$.[*].mobileNumber").value(hasItem(DEFAULT_MOBILE_NUMBER)))
             .andExpect(jsonPath("$.[*].dob").value(hasItem(DEFAULT_DOB.toString())))
+            .andExpect(jsonPath("$.[*].accountName").value(hasItem(DEFAULT_ACCOUNT_NAME)))
             .andExpect(jsonPath("$.[*].accountNumber").value(hasItem(DEFAULT_ACCOUNT_NUMBER)))
             .andExpect(jsonPath("$.[*].fatherName").value(hasItem(DEFAULT_FATHER_NAME)))
             .andExpect(jsonPath("$.[*].spouseName").value(hasItem(DEFAULT_SPOUSE_NAME)))
@@ -1437,6 +1524,7 @@ class CitizenResourceIT {
             .address(UPDATED_ADDRESS)
             .mobileNumber(UPDATED_MOBILE_NUMBER)
             .dob(UPDATED_DOB)
+            .accountName(UPDATED_ACCOUNT_NAME)
             .accountNumber(UPDATED_ACCOUNT_NUMBER)
             .fatherName(UPDATED_FATHER_NAME)
             .spouseName(UPDATED_SPOUSE_NAME)
@@ -1470,6 +1558,7 @@ class CitizenResourceIT {
         assertThat(testCitizen.getAddress()).isEqualTo(UPDATED_ADDRESS);
         assertThat(testCitizen.getMobileNumber()).isEqualTo(UPDATED_MOBILE_NUMBER);
         assertThat(testCitizen.getDob()).isEqualTo(UPDATED_DOB);
+        assertThat(testCitizen.getAccountName()).isEqualTo(UPDATED_ACCOUNT_NAME);
         assertThat(testCitizen.getAccountNumber()).isEqualTo(UPDATED_ACCOUNT_NUMBER);
         assertThat(testCitizen.getFatherName()).isEqualTo(UPDATED_FATHER_NAME);
         assertThat(testCitizen.getSpouseName()).isEqualTo(UPDATED_SPOUSE_NAME);
@@ -1562,13 +1651,7 @@ class CitizenResourceIT {
         Citizen partialUpdatedCitizen = new Citizen();
         partialUpdatedCitizen.setId(citizen.getId());
 
-        partialUpdatedCitizen
-            .address(UPDATED_ADDRESS)
-            .spouseName(UPDATED_SPOUSE_NAME)
-            .aadharImage(UPDATED_AADHAR_IMAGE)
-            .aadharImageContentType(UPDATED_AADHAR_IMAGE_CONTENT_TYPE)
-            .accNoImage(UPDATED_ACC_NO_IMAGE)
-            .accNoImageContentType(UPDATED_ACC_NO_IMAGE_CONTENT_TYPE);
+        partialUpdatedCitizen.address(UPDATED_ADDRESS).fatherName(UPDATED_FATHER_NAME).pan(UPDATED_PAN).accountNo(UPDATED_ACCOUNT_NO);
 
         restCitizenMockMvc
             .perform(
@@ -1588,19 +1671,20 @@ class CitizenResourceIT {
         assertThat(testCitizen.getAddress()).isEqualTo(UPDATED_ADDRESS);
         assertThat(testCitizen.getMobileNumber()).isEqualTo(DEFAULT_MOBILE_NUMBER);
         assertThat(testCitizen.getDob()).isEqualTo(DEFAULT_DOB);
+        assertThat(testCitizen.getAccountName()).isEqualTo(DEFAULT_ACCOUNT_NAME);
         assertThat(testCitizen.getAccountNumber()).isEqualTo(DEFAULT_ACCOUNT_NUMBER);
-        assertThat(testCitizen.getFatherName()).isEqualTo(DEFAULT_FATHER_NAME);
-        assertThat(testCitizen.getSpouseName()).isEqualTo(UPDATED_SPOUSE_NAME);
+        assertThat(testCitizen.getFatherName()).isEqualTo(UPDATED_FATHER_NAME);
+        assertThat(testCitizen.getSpouseName()).isEqualTo(DEFAULT_SPOUSE_NAME);
         assertThat(testCitizen.getSuccessorName()).isEqualTo(DEFAULT_SUCCESSOR_NAME);
         assertThat(testCitizen.getAadhar()).isEqualTo(DEFAULT_AADHAR);
-        assertThat(testCitizen.getPan()).isEqualTo(DEFAULT_PAN);
-        assertThat(testCitizen.getAadharImage()).isEqualTo(UPDATED_AADHAR_IMAGE);
-        assertThat(testCitizen.getAadharImageContentType()).isEqualTo(UPDATED_AADHAR_IMAGE_CONTENT_TYPE);
+        assertThat(testCitizen.getPan()).isEqualTo(UPDATED_PAN);
+        assertThat(testCitizen.getAadharImage()).isEqualTo(DEFAULT_AADHAR_IMAGE);
+        assertThat(testCitizen.getAadharImageContentType()).isEqualTo(DEFAULT_AADHAR_IMAGE_CONTENT_TYPE);
         assertThat(testCitizen.getPanImage()).isEqualTo(DEFAULT_PAN_IMAGE);
         assertThat(testCitizen.getPanImageContentType()).isEqualTo(DEFAULT_PAN_IMAGE_CONTENT_TYPE);
-        assertThat(testCitizen.getAccountNo()).isEqualTo(DEFAULT_ACCOUNT_NO);
-        assertThat(testCitizen.getAccNoImage()).isEqualTo(UPDATED_ACC_NO_IMAGE);
-        assertThat(testCitizen.getAccNoImageContentType()).isEqualTo(UPDATED_ACC_NO_IMAGE_CONTENT_TYPE);
+        assertThat(testCitizen.getAccountNo()).isEqualTo(UPDATED_ACCOUNT_NO);
+        assertThat(testCitizen.getAccNoImage()).isEqualTo(DEFAULT_ACC_NO_IMAGE);
+        assertThat(testCitizen.getAccNoImageContentType()).isEqualTo(DEFAULT_ACC_NO_IMAGE_CONTENT_TYPE);
     }
 
     @Test
@@ -1622,6 +1706,7 @@ class CitizenResourceIT {
             .address(UPDATED_ADDRESS)
             .mobileNumber(UPDATED_MOBILE_NUMBER)
             .dob(UPDATED_DOB)
+            .accountName(UPDATED_ACCOUNT_NAME)
             .accountNumber(UPDATED_ACCOUNT_NUMBER)
             .fatherName(UPDATED_FATHER_NAME)
             .spouseName(UPDATED_SPOUSE_NAME)
@@ -1654,6 +1739,7 @@ class CitizenResourceIT {
         assertThat(testCitizen.getAddress()).isEqualTo(UPDATED_ADDRESS);
         assertThat(testCitizen.getMobileNumber()).isEqualTo(UPDATED_MOBILE_NUMBER);
         assertThat(testCitizen.getDob()).isEqualTo(UPDATED_DOB);
+        assertThat(testCitizen.getAccountName()).isEqualTo(UPDATED_ACCOUNT_NAME);
         assertThat(testCitizen.getAccountNumber()).isEqualTo(UPDATED_ACCOUNT_NUMBER);
         assertThat(testCitizen.getFatherName()).isEqualTo(UPDATED_FATHER_NAME);
         assertThat(testCitizen.getSpouseName()).isEqualTo(UPDATED_SPOUSE_NAME);

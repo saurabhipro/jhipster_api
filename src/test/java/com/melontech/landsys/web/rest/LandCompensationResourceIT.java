@@ -2,6 +2,7 @@ package com.melontech.landsys.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -11,22 +12,30 @@ import com.melontech.landsys.domain.PaymentAdvice;
 import com.melontech.landsys.domain.PaymentFile;
 import com.melontech.landsys.domain.ProjectLand;
 import com.melontech.landsys.domain.Survey;
+import com.melontech.landsys.domain.Village;
 import com.melontech.landsys.domain.enumeration.CompensationStatus;
 import com.melontech.landsys.domain.enumeration.HissaType;
 import com.melontech.landsys.repository.LandCompensationRepository;
+import com.melontech.landsys.service.LandCompensationService;
 import com.melontech.landsys.service.criteria.LandCompensationCriteria;
 import com.melontech.landsys.service.dto.LandCompensationDTO;
 import com.melontech.landsys.service.mapper.LandCompensationMapper;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -36,6 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link LandCompensationResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class LandCompensationResourceIT {
@@ -106,8 +116,14 @@ class LandCompensationResourceIT {
     @Autowired
     private LandCompensationRepository landCompensationRepository;
 
+    @Mock
+    private LandCompensationRepository landCompensationRepositoryMock;
+
     @Autowired
     private LandCompensationMapper landCompensationMapper;
+
+    @Mock
+    private LandCompensationService landCompensationServiceMock;
 
     @Autowired
     private EntityManager em;
@@ -160,6 +176,16 @@ class LandCompensationResourceIT {
             survey = TestUtil.findAll(em, Survey.class).get(0);
         }
         landCompensation.setSurvey(survey);
+        // Add required entity
+        Village village;
+        if (TestUtil.findAll(em, Village.class).isEmpty()) {
+            village = VillageResourceIT.createEntity(em);
+            em.persist(village);
+            em.flush();
+        } else {
+            village = TestUtil.findAll(em, Village.class).get(0);
+        }
+        landCompensation.setVillage(village);
         return landCompensation;
     }
 
@@ -206,6 +232,16 @@ class LandCompensationResourceIT {
             survey = TestUtil.findAll(em, Survey.class).get(0);
         }
         landCompensation.setSurvey(survey);
+        // Add required entity
+        Village village;
+        if (TestUtil.findAll(em, Village.class).isEmpty()) {
+            village = VillageResourceIT.createUpdatedEntity(em);
+            em.persist(village);
+            em.flush();
+        } else {
+            village = TestUtil.findAll(em, Village.class).get(0);
+        }
+        landCompensation.setVillage(village);
         return landCompensation;
     }
 
@@ -375,6 +411,24 @@ class LandCompensationResourceIT {
             .andExpect(jsonPath("$.[*].interestRate").value(hasItem(DEFAULT_INTEREST_RATE.doubleValue())))
             .andExpect(jsonPath("$.[*].interestDays").value(hasItem(DEFAULT_INTEREST_DAYS.doubleValue())))
             .andExpect(jsonPath("$.[*].transactionId").value(hasItem(DEFAULT_TRANSACTION_ID)));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllLandCompensationsWithEagerRelationshipsIsEnabled() throws Exception {
+        when(landCompensationServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restLandCompensationMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(landCompensationServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllLandCompensationsWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(landCompensationServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restLandCompensationMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(landCompensationServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -1888,6 +1942,32 @@ class LandCompensationResourceIT {
 
         // Get all the landCompensationList where survey equals to (surveyId + 1)
         defaultLandCompensationShouldNotBeFound("surveyId.equals=" + (surveyId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllLandCompensationsByVillageIsEqualToSomething() throws Exception {
+        // Initialize the database
+        landCompensationRepository.saveAndFlush(landCompensation);
+        Village village;
+        if (TestUtil.findAll(em, Village.class).isEmpty()) {
+            village = VillageResourceIT.createEntity(em);
+            em.persist(village);
+            em.flush();
+        } else {
+            village = TestUtil.findAll(em, Village.class).get(0);
+        }
+        em.persist(village);
+        em.flush();
+        landCompensation.setVillage(village);
+        landCompensationRepository.saveAndFlush(landCompensation);
+        Long villageId = village.getId();
+
+        // Get all the landCompensationList where village equals to villageId
+        defaultLandCompensationShouldBeFound("villageId.equals=" + villageId);
+
+        // Get all the landCompensationList where village equals to (villageId + 1)
+        defaultLandCompensationShouldNotBeFound("villageId.equals=" + (villageId + 1));
     }
 
     @Test

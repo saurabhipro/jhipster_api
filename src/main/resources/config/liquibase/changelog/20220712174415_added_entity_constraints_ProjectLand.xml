@@ -20,6 +20,12 @@
                                  referencedColumnNames="id"
                                  referencedTableName="landsys_project"/>
 
+        <addForeignKeyConstraint baseColumnNames="village_id"
+                                 baseTableName="landsys_project_land"
+                                 constraintName="fk_landsys_project_land__village_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landsys_village"/>
+
         <addForeignKeyConstraint baseColumnNames="notice_status_info_id"
                                  baseTableName="landsys_project_land"
                                  constraintName="fk_landsys_project_land__notice_status_info_id"

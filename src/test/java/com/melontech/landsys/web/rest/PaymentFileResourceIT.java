@@ -13,6 +13,8 @@ import com.melontech.landsys.domain.Khatedar;
 import com.melontech.landsys.domain.LandCompensation;
 import com.melontech.landsys.domain.PaymentAdvice;
 import com.melontech.landsys.domain.PaymentFile;
+import com.melontech.landsys.domain.PaymentFileHeader;
+import com.melontech.landsys.domain.Project;
 import com.melontech.landsys.domain.ProjectLand;
 import com.melontech.landsys.domain.Survey;
 import com.melontech.landsys.domain.enumeration.PaymentAdviceType;
@@ -64,14 +66,11 @@ class PaymentFileResourceIT {
     private static final LocalDate UPDATED_PAYMENT_FILE_DATE = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_PAYMENT_FILE_DATE = LocalDate.ofEpochDay(-1L);
 
-    private static final PaymentStatus DEFAULT_PAYMENT_STATUS = PaymentStatus.PENDING;
-    private static final PaymentStatus UPDATED_PAYMENT_STATUS = PaymentStatus.APPROVED;
+    private static final PaymentStatus DEFAULT_PAYMENT_FILE_STATUS = PaymentStatus.PENDING;
+    private static final PaymentStatus UPDATED_PAYMENT_FILE_STATUS = PaymentStatus.APPROVED;
 
-    private static final String DEFAULT_BANK_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_BANK_NAME = "BBBBBBBBBB";
-
-    private static final String DEFAULT_IFSC_CODE = "AAAAAAAAAA";
-    private static final String UPDATED_IFSC_CODE = "BBBBBBBBBB";
+    private static final String DEFAULT_KHATEDAR_IFSC_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_KHATEDAR_IFSC_CODE = "BBBBBBBBBB";
 
     private static final PaymentAdviceType DEFAULT_PAYMENT_MODE = PaymentAdviceType.ONLINE;
     private static final PaymentAdviceType UPDATED_PAYMENT_MODE = PaymentAdviceType.CHECQUE;
@@ -113,9 +112,8 @@ class PaymentFileResourceIT {
             .paymentFileId(DEFAULT_PAYMENT_FILE_ID)
             .totalPaymentAmount(DEFAULT_TOTAL_PAYMENT_AMOUNT)
             .paymentFileDate(DEFAULT_PAYMENT_FILE_DATE)
-            .paymentStatus(DEFAULT_PAYMENT_STATUS)
-            .bankName(DEFAULT_BANK_NAME)
-            .ifscCode(DEFAULT_IFSC_CODE)
+            .paymentFileStatus(DEFAULT_PAYMENT_FILE_STATUS)
+            .khatedarIfscCode(DEFAULT_KHATEDAR_IFSC_CODE)
             .paymentMode(DEFAULT_PAYMENT_MODE);
         // Add required entity
         Khatedar khatedar;
@@ -187,6 +185,26 @@ class PaymentFileResourceIT {
             landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
         }
         paymentFile.setLandCompensation(landCompensation);
+        // Add required entity
+        PaymentFileHeader paymentFileHeader;
+        if (TestUtil.findAll(em, PaymentFileHeader.class).isEmpty()) {
+            paymentFileHeader = PaymentFileHeaderResourceIT.createEntity(em);
+            em.persist(paymentFileHeader);
+            em.flush();
+        } else {
+            paymentFileHeader = TestUtil.findAll(em, PaymentFileHeader.class).get(0);
+        }
+        paymentFile.setPaymentFileHeader(paymentFileHeader);
+        // Add required entity
+        Project project;
+        if (TestUtil.findAll(em, Project.class).isEmpty()) {
+            project = ProjectResourceIT.createEntity(em);
+            em.persist(project);
+            em.flush();
+        } else {
+            project = TestUtil.findAll(em, Project.class).get(0);
+        }
+        paymentFile.setProject(project);
         return paymentFile;
     }
 
@@ -201,9 +219,8 @@ class PaymentFileResourceIT {
             .paymentFileId(UPDATED_PAYMENT_FILE_ID)
             .totalPaymentAmount(UPDATED_TOTAL_PAYMENT_AMOUNT)
             .paymentFileDate(UPDATED_PAYMENT_FILE_DATE)
-            .paymentStatus(UPDATED_PAYMENT_STATUS)
-            .bankName(UPDATED_BANK_NAME)
-            .ifscCode(UPDATED_IFSC_CODE)
+            .paymentFileStatus(UPDATED_PAYMENT_FILE_STATUS)
+            .khatedarIfscCode(UPDATED_KHATEDAR_IFSC_CODE)
             .paymentMode(UPDATED_PAYMENT_MODE);
         // Add required entity
         Khatedar khatedar;
@@ -275,6 +292,26 @@ class PaymentFileResourceIT {
             landCompensation = TestUtil.findAll(em, LandCompensation.class).get(0);
         }
         paymentFile.setLandCompensation(landCompensation);
+        // Add required entity
+        PaymentFileHeader paymentFileHeader;
+        if (TestUtil.findAll(em, PaymentFileHeader.class).isEmpty()) {
+            paymentFileHeader = PaymentFileHeaderResourceIT.createUpdatedEntity(em);
+            em.persist(paymentFileHeader);
+            em.flush();
+        } else {
+            paymentFileHeader = TestUtil.findAll(em, PaymentFileHeader.class).get(0);
+        }
+        paymentFile.setPaymentFileHeader(paymentFileHeader);
+        // Add required entity
+        Project project;
+        if (TestUtil.findAll(em, Project.class).isEmpty()) {
+            project = ProjectResourceIT.createUpdatedEntity(em);
+            em.persist(project);
+            em.flush();
+        } else {
+            project = TestUtil.findAll(em, Project.class).get(0);
+        }
+        paymentFile.setProject(project);
         return paymentFile;
     }
 
@@ -302,9 +339,8 @@ class PaymentFileResourceIT {
         assertThat(testPaymentFile.getPaymentFileId()).isEqualTo(DEFAULT_PAYMENT_FILE_ID);
         assertThat(testPaymentFile.getTotalPaymentAmount()).isEqualTo(DEFAULT_TOTAL_PAYMENT_AMOUNT);
         assertThat(testPaymentFile.getPaymentFileDate()).isEqualTo(DEFAULT_PAYMENT_FILE_DATE);
-        assertThat(testPaymentFile.getPaymentStatus()).isEqualTo(DEFAULT_PAYMENT_STATUS);
-        assertThat(testPaymentFile.getBankName()).isEqualTo(DEFAULT_BANK_NAME);
-        assertThat(testPaymentFile.getIfscCode()).isEqualTo(DEFAULT_IFSC_CODE);
+        assertThat(testPaymentFile.getPaymentFileStatus()).isEqualTo(DEFAULT_PAYMENT_FILE_STATUS);
+        assertThat(testPaymentFile.getKhatedarIfscCode()).isEqualTo(DEFAULT_KHATEDAR_IFSC_CODE);
         assertThat(testPaymentFile.getPaymentMode()).isEqualTo(DEFAULT_PAYMENT_MODE);
     }
 
@@ -371,10 +407,30 @@ class PaymentFileResourceIT {
 
     @Test
     @Transactional
-    void checkPaymentStatusIsRequired() throws Exception {
+    void checkPaymentFileStatusIsRequired() throws Exception {
         int databaseSizeBeforeTest = paymentFileRepository.findAll().size();
         // set the field null
-        paymentFile.setPaymentStatus(null);
+        paymentFile.setPaymentFileStatus(null);
+
+        // Create the PaymentFile, which fails.
+        PaymentFileDTO paymentFileDTO = paymentFileMapper.toDto(paymentFile);
+
+        restPaymentFileMockMvc
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(paymentFileDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<PaymentFile> paymentFileList = paymentFileRepository.findAll();
+        assertThat(paymentFileList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkPaymentModeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = paymentFileRepository.findAll().size();
+        // set the field null
+        paymentFile.setPaymentMode(null);
 
         // Create the PaymentFile, which fails.
         PaymentFileDTO paymentFileDTO = paymentFileMapper.toDto(paymentFile);
@@ -404,9 +460,8 @@ class PaymentFileResourceIT {
             .andExpect(jsonPath("$.[*].paymentFileId").value(hasItem(DEFAULT_PAYMENT_FILE_ID.doubleValue())))
             .andExpect(jsonPath("$.[*].totalPaymentAmount").value(hasItem(DEFAULT_TOTAL_PAYMENT_AMOUNT.doubleValue())))
             .andExpect(jsonPath("$.[*].paymentFileDate").value(hasItem(DEFAULT_PAYMENT_FILE_DATE.toString())))
-            .andExpect(jsonPath("$.[*].paymentStatus").value(hasItem(DEFAULT_PAYMENT_STATUS.toString())))
-            .andExpect(jsonPath("$.[*].bankName").value(hasItem(DEFAULT_BANK_NAME)))
-            .andExpect(jsonPath("$.[*].ifscCode").value(hasItem(DEFAULT_IFSC_CODE)))
+            .andExpect(jsonPath("$.[*].paymentFileStatus").value(hasItem(DEFAULT_PAYMENT_FILE_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].khatedarIfscCode").value(hasItem(DEFAULT_KHATEDAR_IFSC_CODE)))
             .andExpect(jsonPath("$.[*].paymentMode").value(hasItem(DEFAULT_PAYMENT_MODE.toString())));
     }
 
@@ -443,9 +498,8 @@ class PaymentFileResourceIT {
             .andExpect(jsonPath("$.paymentFileId").value(DEFAULT_PAYMENT_FILE_ID.doubleValue()))
             .andExpect(jsonPath("$.totalPaymentAmount").value(DEFAULT_TOTAL_PAYMENT_AMOUNT.doubleValue()))
             .andExpect(jsonPath("$.paymentFileDate").value(DEFAULT_PAYMENT_FILE_DATE.toString()))
-            .andExpect(jsonPath("$.paymentStatus").value(DEFAULT_PAYMENT_STATUS.toString()))
-            .andExpect(jsonPath("$.bankName").value(DEFAULT_BANK_NAME))
-            .andExpect(jsonPath("$.ifscCode").value(DEFAULT_IFSC_CODE))
+            .andExpect(jsonPath("$.paymentFileStatus").value(DEFAULT_PAYMENT_FILE_STATUS.toString()))
+            .andExpect(jsonPath("$.khatedarIfscCode").value(DEFAULT_KHATEDAR_IFSC_CODE))
             .andExpect(jsonPath("$.paymentMode").value(DEFAULT_PAYMENT_MODE.toString()));
     }
 
@@ -781,210 +835,132 @@ class PaymentFileResourceIT {
 
     @Test
     @Transactional
-    void getAllPaymentFilesByPaymentStatusIsEqualToSomething() throws Exception {
+    void getAllPaymentFilesByPaymentFileStatusIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentFileRepository.saveAndFlush(paymentFile);
 
-        // Get all the paymentFileList where paymentStatus equals to DEFAULT_PAYMENT_STATUS
-        defaultPaymentFileShouldBeFound("paymentStatus.equals=" + DEFAULT_PAYMENT_STATUS);
+        // Get all the paymentFileList where paymentFileStatus equals to DEFAULT_PAYMENT_FILE_STATUS
+        defaultPaymentFileShouldBeFound("paymentFileStatus.equals=" + DEFAULT_PAYMENT_FILE_STATUS);
 
-        // Get all the paymentFileList where paymentStatus equals to UPDATED_PAYMENT_STATUS
-        defaultPaymentFileShouldNotBeFound("paymentStatus.equals=" + UPDATED_PAYMENT_STATUS);
+        // Get all the paymentFileList where paymentFileStatus equals to UPDATED_PAYMENT_FILE_STATUS
+        defaultPaymentFileShouldNotBeFound("paymentFileStatus.equals=" + UPDATED_PAYMENT_FILE_STATUS);
     }
 
     @Test
     @Transactional
-    void getAllPaymentFilesByPaymentStatusIsNotEqualToSomething() throws Exception {
+    void getAllPaymentFilesByPaymentFileStatusIsNotEqualToSomething() throws Exception {
         // Initialize the database
         paymentFileRepository.saveAndFlush(paymentFile);
 
-        // Get all the paymentFileList where paymentStatus not equals to DEFAULT_PAYMENT_STATUS
-        defaultPaymentFileShouldNotBeFound("paymentStatus.notEquals=" + DEFAULT_PAYMENT_STATUS);
+        // Get all the paymentFileList where paymentFileStatus not equals to DEFAULT_PAYMENT_FILE_STATUS
+        defaultPaymentFileShouldNotBeFound("paymentFileStatus.notEquals=" + DEFAULT_PAYMENT_FILE_STATUS);
 
-        // Get all the paymentFileList where paymentStatus not equals to UPDATED_PAYMENT_STATUS
-        defaultPaymentFileShouldBeFound("paymentStatus.notEquals=" + UPDATED_PAYMENT_STATUS);
+        // Get all the paymentFileList where paymentFileStatus not equals to UPDATED_PAYMENT_FILE_STATUS
+        defaultPaymentFileShouldBeFound("paymentFileStatus.notEquals=" + UPDATED_PAYMENT_FILE_STATUS);
     }
 
     @Test
     @Transactional
-    void getAllPaymentFilesByPaymentStatusIsInShouldWork() throws Exception {
+    void getAllPaymentFilesByPaymentFileStatusIsInShouldWork() throws Exception {
         // Initialize the database
         paymentFileRepository.saveAndFlush(paymentFile);
 
-        // Get all the paymentFileList where paymentStatus in DEFAULT_PAYMENT_STATUS or UPDATED_PAYMENT_STATUS
-        defaultPaymentFileShouldBeFound("paymentStatus.in=" + DEFAULT_PAYMENT_STATUS + "," + UPDATED_PAYMENT_STATUS);
+        // Get all the paymentFileList where paymentFileStatus in DEFAULT_PAYMENT_FILE_STATUS or UPDATED_PAYMENT_FILE_STATUS
+        defaultPaymentFileShouldBeFound("paymentFileStatus.in=" + DEFAULT_PAYMENT_FILE_STATUS + "," + UPDATED_PAYMENT_FILE_STATUS);
 
-        // Get all the paymentFileList where paymentStatus equals to UPDATED_PAYMENT_STATUS
-        defaultPaymentFileShouldNotBeFound("paymentStatus.in=" + UPDATED_PAYMENT_STATUS);
+        // Get all the paymentFileList where paymentFileStatus equals to UPDATED_PAYMENT_FILE_STATUS
+        defaultPaymentFileShouldNotBeFound("paymentFileStatus.in=" + UPDATED_PAYMENT_FILE_STATUS);
     }
 
     @Test
     @Transactional
-    void getAllPaymentFilesByPaymentStatusIsNullOrNotNull() throws Exception {
+    void getAllPaymentFilesByPaymentFileStatusIsNullOrNotNull() throws Exception {
         // Initialize the database
         paymentFileRepository.saveAndFlush(paymentFile);
 
-        // Get all the paymentFileList where paymentStatus is not null
-        defaultPaymentFileShouldBeFound("paymentStatus.specified=true");
+        // Get all the paymentFileList where paymentFileStatus is not null
+        defaultPaymentFileShouldBeFound("paymentFileStatus.specified=true");
 
-        // Get all the paymentFileList where paymentStatus is null
-        defaultPaymentFileShouldNotBeFound("paymentStatus.specified=false");
+        // Get all the paymentFileList where paymentFileStatus is null
+        defaultPaymentFileShouldNotBeFound("paymentFileStatus.specified=false");
     }
 
     @Test
     @Transactional
-    void getAllPaymentFilesByBankNameIsEqualToSomething() throws Exception {
+    void getAllPaymentFilesByKhatedarIfscCodeIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentFileRepository.saveAndFlush(paymentFile);
 
-        // Get all the paymentFileList where bankName equals to DEFAULT_BANK_NAME
-        defaultPaymentFileShouldBeFound("bankName.equals=" + DEFAULT_BANK_NAME);
+        // Get all the paymentFileList where khatedarIfscCode equals to DEFAULT_KHATEDAR_IFSC_CODE
+        defaultPaymentFileShouldBeFound("khatedarIfscCode.equals=" + DEFAULT_KHATEDAR_IFSC_CODE);
 
-        // Get all the paymentFileList where bankName equals to UPDATED_BANK_NAME
-        defaultPaymentFileShouldNotBeFound("bankName.equals=" + UPDATED_BANK_NAME);
+        // Get all the paymentFileList where khatedarIfscCode equals to UPDATED_KHATEDAR_IFSC_CODE
+        defaultPaymentFileShouldNotBeFound("khatedarIfscCode.equals=" + UPDATED_KHATEDAR_IFSC_CODE);
     }
 
     @Test
     @Transactional
-    void getAllPaymentFilesByBankNameIsNotEqualToSomething() throws Exception {
+    void getAllPaymentFilesByKhatedarIfscCodeIsNotEqualToSomething() throws Exception {
         // Initialize the database
         paymentFileRepository.saveAndFlush(paymentFile);
 
-        // Get all the paymentFileList where bankName not equals to DEFAULT_BANK_NAME
-        defaultPaymentFileShouldNotBeFound("bankName.notEquals=" + DEFAULT_BANK_NAME);
+        // Get all the paymentFileList where khatedarIfscCode not equals to DEFAULT_KHATEDAR_IFSC_CODE
+        defaultPaymentFileShouldNotBeFound("khatedarIfscCode.notEquals=" + DEFAULT_KHATEDAR_IFSC_CODE);
 
-        // Get all the paymentFileList where bankName not equals to UPDATED_BANK_NAME
-        defaultPaymentFileShouldBeFound("bankName.notEquals=" + UPDATED_BANK_NAME);
+        // Get all the paymentFileList where khatedarIfscCode not equals to UPDATED_KHATEDAR_IFSC_CODE
+        defaultPaymentFileShouldBeFound("khatedarIfscCode.notEquals=" + UPDATED_KHATEDAR_IFSC_CODE);
     }
 
     @Test
     @Transactional
-    void getAllPaymentFilesByBankNameIsInShouldWork() throws Exception {
+    void getAllPaymentFilesByKhatedarIfscCodeIsInShouldWork() throws Exception {
         // Initialize the database
         paymentFileRepository.saveAndFlush(paymentFile);
 
-        // Get all the paymentFileList where bankName in DEFAULT_BANK_NAME or UPDATED_BANK_NAME
-        defaultPaymentFileShouldBeFound("bankName.in=" + DEFAULT_BANK_NAME + "," + UPDATED_BANK_NAME);
+        // Get all the paymentFileList where khatedarIfscCode in DEFAULT_KHATEDAR_IFSC_CODE or UPDATED_KHATEDAR_IFSC_CODE
+        defaultPaymentFileShouldBeFound("khatedarIfscCode.in=" + DEFAULT_KHATEDAR_IFSC_CODE + "," + UPDATED_KHATEDAR_IFSC_CODE);
 
-        // Get all the paymentFileList where bankName equals to UPDATED_BANK_NAME
-        defaultPaymentFileShouldNotBeFound("bankName.in=" + UPDATED_BANK_NAME);
+        // Get all the paymentFileList where khatedarIfscCode equals to UPDATED_KHATEDAR_IFSC_CODE
+        defaultPaymentFileShouldNotBeFound("khatedarIfscCode.in=" + UPDATED_KHATEDAR_IFSC_CODE);
     }
 
     @Test
     @Transactional
-    void getAllPaymentFilesByBankNameIsNullOrNotNull() throws Exception {
+    void getAllPaymentFilesByKhatedarIfscCodeIsNullOrNotNull() throws Exception {
         // Initialize the database
         paymentFileRepository.saveAndFlush(paymentFile);
 
-        // Get all the paymentFileList where bankName is not null
-        defaultPaymentFileShouldBeFound("bankName.specified=true");
+        // Get all the paymentFileList where khatedarIfscCode is not null
+        defaultPaymentFileShouldBeFound("khatedarIfscCode.specified=true");
 
-        // Get all the paymentFileList where bankName is null
-        defaultPaymentFileShouldNotBeFound("bankName.specified=false");
+        // Get all the paymentFileList where khatedarIfscCode is null
+        defaultPaymentFileShouldNotBeFound("khatedarIfscCode.specified=false");
     }
 
     @Test
     @Transactional
-    void getAllPaymentFilesByBankNameContainsSomething() throws Exception {
+    void getAllPaymentFilesByKhatedarIfscCodeContainsSomething() throws Exception {
         // Initialize the database
         paymentFileRepository.saveAndFlush(paymentFile);
 
-        // Get all the paymentFileList where bankName contains DEFAULT_BANK_NAME
-        defaultPaymentFileShouldBeFound("bankName.contains=" + DEFAULT_BANK_NAME);
+        // Get all the paymentFileList where khatedarIfscCode contains DEFAULT_KHATEDAR_IFSC_CODE
+        defaultPaymentFileShouldBeFound("khatedarIfscCode.contains=" + DEFAULT_KHATEDAR_IFSC_CODE);
 
-        // Get all the paymentFileList where bankName contains UPDATED_BANK_NAME
-        defaultPaymentFileShouldNotBeFound("bankName.contains=" + UPDATED_BANK_NAME);
+        // Get all the paymentFileList where khatedarIfscCode contains UPDATED_KHATEDAR_IFSC_CODE
+        defaultPaymentFileShouldNotBeFound("khatedarIfscCode.contains=" + UPDATED_KHATEDAR_IFSC_CODE);
     }
 
     @Test
     @Transactional
-    void getAllPaymentFilesByBankNameNotContainsSomething() throws Exception {
+    void getAllPaymentFilesByKhatedarIfscCodeNotContainsSomething() throws Exception {
         // Initialize the database
         paymentFileRepository.saveAndFlush(paymentFile);
 
-        // Get all the paymentFileList where bankName does not contain DEFAULT_BANK_NAME
-        defaultPaymentFileShouldNotBeFound("bankName.doesNotContain=" + DEFAULT_BANK_NAME);
+        // Get all the paymentFileList where khatedarIfscCode does not contain DEFAULT_KHATEDAR_IFSC_CODE
+        defaultPaymentFileShouldNotBeFound("khatedarIfscCode.doesNotContain=" + DEFAULT_KHATEDAR_IFSC_CODE);
 
-        // Get all the paymentFileList where bankName does not contain UPDATED_BANK_NAME
-        defaultPaymentFileShouldBeFound("bankName.doesNotContain=" + UPDATED_BANK_NAME);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentFilesByIfscCodeIsEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentFileRepository.saveAndFlush(paymentFile);
-
-        // Get all the paymentFileList where ifscCode equals to DEFAULT_IFSC_CODE
-        defaultPaymentFileShouldBeFound("ifscCode.equals=" + DEFAULT_IFSC_CODE);
-
-        // Get all the paymentFileList where ifscCode equals to UPDATED_IFSC_CODE
-        defaultPaymentFileShouldNotBeFound("ifscCode.equals=" + UPDATED_IFSC_CODE);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentFilesByIfscCodeIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        paymentFileRepository.saveAndFlush(paymentFile);
-
-        // Get all the paymentFileList where ifscCode not equals to DEFAULT_IFSC_CODE
-        defaultPaymentFileShouldNotBeFound("ifscCode.notEquals=" + DEFAULT_IFSC_CODE);
-
-        // Get all the paymentFileList where ifscCode not equals to UPDATED_IFSC_CODE
-        defaultPaymentFileShouldBeFound("ifscCode.notEquals=" + UPDATED_IFSC_CODE);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentFilesByIfscCodeIsInShouldWork() throws Exception {
-        // Initialize the database
-        paymentFileRepository.saveAndFlush(paymentFile);
-
-        // Get all the paymentFileList where ifscCode in DEFAULT_IFSC_CODE or UPDATED_IFSC_CODE
-        defaultPaymentFileShouldBeFound("ifscCode.in=" + DEFAULT_IFSC_CODE + "," + UPDATED_IFSC_CODE);
-
-        // Get all the paymentFileList where ifscCode equals to UPDATED_IFSC_CODE
-        defaultPaymentFileShouldNotBeFound("ifscCode.in=" + UPDATED_IFSC_CODE);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentFilesByIfscCodeIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        paymentFileRepository.saveAndFlush(paymentFile);
-
-        // Get all the paymentFileList where ifscCode is not null
-        defaultPaymentFileShouldBeFound("ifscCode.specified=true");
-
-        // Get all the paymentFileList where ifscCode is null
-        defaultPaymentFileShouldNotBeFound("ifscCode.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentFilesByIfscCodeContainsSomething() throws Exception {
-        // Initialize the database
-        paymentFileRepository.saveAndFlush(paymentFile);
-
-        // Get all the paymentFileList where ifscCode contains DEFAULT_IFSC_CODE
-        defaultPaymentFileShouldBeFound("ifscCode.contains=" + DEFAULT_IFSC_CODE);
-
-        // Get all the paymentFileList where ifscCode contains UPDATED_IFSC_CODE
-        defaultPaymentFileShouldNotBeFound("ifscCode.contains=" + UPDATED_IFSC_CODE);
-    }
-
-    @Test
-    @Transactional
-    void getAllPaymentFilesByIfscCodeNotContainsSomething() throws Exception {
-        // Initialize the database
-        paymentFileRepository.saveAndFlush(paymentFile);
-
-        // Get all the paymentFileList where ifscCode does not contain DEFAULT_IFSC_CODE
-        defaultPaymentFileShouldNotBeFound("ifscCode.doesNotContain=" + DEFAULT_IFSC_CODE);
-
-        // Get all the paymentFileList where ifscCode does not contain UPDATED_IFSC_CODE
-        defaultPaymentFileShouldBeFound("ifscCode.doesNotContain=" + UPDATED_IFSC_CODE);
+        // Get all the paymentFileList where khatedarIfscCode does not contain UPDATED_KHATEDAR_IFSC_CODE
+        defaultPaymentFileShouldBeFound("khatedarIfscCode.doesNotContain=" + UPDATED_KHATEDAR_IFSC_CODE);
     }
 
     @Test
@@ -1199,6 +1175,58 @@ class PaymentFileResourceIT {
         defaultPaymentFileShouldNotBeFound("landCompensationId.equals=" + (landCompensationId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllPaymentFilesByPaymentFileHeaderIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentFileRepository.saveAndFlush(paymentFile);
+        PaymentFileHeader paymentFileHeader;
+        if (TestUtil.findAll(em, PaymentFileHeader.class).isEmpty()) {
+            paymentFileHeader = PaymentFileHeaderResourceIT.createEntity(em);
+            em.persist(paymentFileHeader);
+            em.flush();
+        } else {
+            paymentFileHeader = TestUtil.findAll(em, PaymentFileHeader.class).get(0);
+        }
+        em.persist(paymentFileHeader);
+        em.flush();
+        paymentFile.setPaymentFileHeader(paymentFileHeader);
+        paymentFileRepository.saveAndFlush(paymentFile);
+        Long paymentFileHeaderId = paymentFileHeader.getId();
+
+        // Get all the paymentFileList where paymentFileHeader equals to paymentFileHeaderId
+        defaultPaymentFileShouldBeFound("paymentFileHeaderId.equals=" + paymentFileHeaderId);
+
+        // Get all the paymentFileList where paymentFileHeader equals to (paymentFileHeaderId + 1)
+        defaultPaymentFileShouldNotBeFound("paymentFileHeaderId.equals=" + (paymentFileHeaderId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentFilesByProjectIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentFileRepository.saveAndFlush(paymentFile);
+        Project project;
+        if (TestUtil.findAll(em, Project.class).isEmpty()) {
+            project = ProjectResourceIT.createEntity(em);
+            em.persist(project);
+            em.flush();
+        } else {
+            project = TestUtil.findAll(em, Project.class).get(0);
+        }
+        em.persist(project);
+        em.flush();
+        paymentFile.setProject(project);
+        paymentFileRepository.saveAndFlush(paymentFile);
+        Long projectId = project.getId();
+
+        // Get all the paymentFileList where project equals to projectId
+        defaultPaymentFileShouldBeFound("projectId.equals=" + projectId);
+
+        // Get all the paymentFileList where project equals to (projectId + 1)
+        defaultPaymentFileShouldNotBeFound("projectId.equals=" + (projectId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -1211,9 +1239,8 @@ class PaymentFileResourceIT {
             .andExpect(jsonPath("$.[*].paymentFileId").value(hasItem(DEFAULT_PAYMENT_FILE_ID.doubleValue())))
             .andExpect(jsonPath("$.[*].totalPaymentAmount").value(hasItem(DEFAULT_TOTAL_PAYMENT_AMOUNT.doubleValue())))
             .andExpect(jsonPath("$.[*].paymentFileDate").value(hasItem(DEFAULT_PAYMENT_FILE_DATE.toString())))
-            .andExpect(jsonPath("$.[*].paymentStatus").value(hasItem(DEFAULT_PAYMENT_STATUS.toString())))
-            .andExpect(jsonPath("$.[*].bankName").value(hasItem(DEFAULT_BANK_NAME)))
-            .andExpect(jsonPath("$.[*].ifscCode").value(hasItem(DEFAULT_IFSC_CODE)))
+            .andExpect(jsonPath("$.[*].paymentFileStatus").value(hasItem(DEFAULT_PAYMENT_FILE_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].khatedarIfscCode").value(hasItem(DEFAULT_KHATEDAR_IFSC_CODE)))
             .andExpect(jsonPath("$.[*].paymentMode").value(hasItem(DEFAULT_PAYMENT_MODE.toString())));
 
         // Check, that the count call also returns 1
@@ -1266,9 +1293,8 @@ class PaymentFileResourceIT {
             .paymentFileId(UPDATED_PAYMENT_FILE_ID)
             .totalPaymentAmount(UPDATED_TOTAL_PAYMENT_AMOUNT)
             .paymentFileDate(UPDATED_PAYMENT_FILE_DATE)
-            .paymentStatus(UPDATED_PAYMENT_STATUS)
-            .bankName(UPDATED_BANK_NAME)
-            .ifscCode(UPDATED_IFSC_CODE)
+            .paymentFileStatus(UPDATED_PAYMENT_FILE_STATUS)
+            .khatedarIfscCode(UPDATED_KHATEDAR_IFSC_CODE)
             .paymentMode(UPDATED_PAYMENT_MODE);
         PaymentFileDTO paymentFileDTO = paymentFileMapper.toDto(updatedPaymentFile);
 
@@ -1287,9 +1313,8 @@ class PaymentFileResourceIT {
         assertThat(testPaymentFile.getPaymentFileId()).isEqualTo(UPDATED_PAYMENT_FILE_ID);
         assertThat(testPaymentFile.getTotalPaymentAmount()).isEqualTo(UPDATED_TOTAL_PAYMENT_AMOUNT);
         assertThat(testPaymentFile.getPaymentFileDate()).isEqualTo(UPDATED_PAYMENT_FILE_DATE);
-        assertThat(testPaymentFile.getPaymentStatus()).isEqualTo(UPDATED_PAYMENT_STATUS);
-        assertThat(testPaymentFile.getBankName()).isEqualTo(UPDATED_BANK_NAME);
-        assertThat(testPaymentFile.getIfscCode()).isEqualTo(UPDATED_IFSC_CODE);
+        assertThat(testPaymentFile.getPaymentFileStatus()).isEqualTo(UPDATED_PAYMENT_FILE_STATUS);
+        assertThat(testPaymentFile.getKhatedarIfscCode()).isEqualTo(UPDATED_KHATEDAR_IFSC_CODE);
         assertThat(testPaymentFile.getPaymentMode()).isEqualTo(UPDATED_PAYMENT_MODE);
     }
 
@@ -1370,7 +1395,7 @@ class PaymentFileResourceIT {
         PaymentFile partialUpdatedPaymentFile = new PaymentFile();
         partialUpdatedPaymentFile.setId(paymentFile.getId());
 
-        partialUpdatedPaymentFile.bankName(UPDATED_BANK_NAME).paymentMode(UPDATED_PAYMENT_MODE);
+        partialUpdatedPaymentFile.khatedarIfscCode(UPDATED_KHATEDAR_IFSC_CODE);
 
         restPaymentFileMockMvc
             .perform(
@@ -1387,10 +1412,9 @@ class PaymentFileResourceIT {
         assertThat(testPaymentFile.getPaymentFileId()).isEqualTo(DEFAULT_PAYMENT_FILE_ID);
         assertThat(testPaymentFile.getTotalPaymentAmount()).isEqualTo(DEFAULT_TOTAL_PAYMENT_AMOUNT);
         assertThat(testPaymentFile.getPaymentFileDate()).isEqualTo(DEFAULT_PAYMENT_FILE_DATE);
-        assertThat(testPaymentFile.getPaymentStatus()).isEqualTo(DEFAULT_PAYMENT_STATUS);
-        assertThat(testPaymentFile.getBankName()).isEqualTo(UPDATED_BANK_NAME);
-        assertThat(testPaymentFile.getIfscCode()).isEqualTo(DEFAULT_IFSC_CODE);
-        assertThat(testPaymentFile.getPaymentMode()).isEqualTo(UPDATED_PAYMENT_MODE);
+        assertThat(testPaymentFile.getPaymentFileStatus()).isEqualTo(DEFAULT_PAYMENT_FILE_STATUS);
+        assertThat(testPaymentFile.getKhatedarIfscCode()).isEqualTo(UPDATED_KHATEDAR_IFSC_CODE);
+        assertThat(testPaymentFile.getPaymentMode()).isEqualTo(DEFAULT_PAYMENT_MODE);
     }
 
     @Test
@@ -1409,9 +1433,8 @@ class PaymentFileResourceIT {
             .paymentFileId(UPDATED_PAYMENT_FILE_ID)
             .totalPaymentAmount(UPDATED_TOTAL_PAYMENT_AMOUNT)
             .paymentFileDate(UPDATED_PAYMENT_FILE_DATE)
-            .paymentStatus(UPDATED_PAYMENT_STATUS)
-            .bankName(UPDATED_BANK_NAME)
-            .ifscCode(UPDATED_IFSC_CODE)
+            .paymentFileStatus(UPDATED_PAYMENT_FILE_STATUS)
+            .khatedarIfscCode(UPDATED_KHATEDAR_IFSC_CODE)
             .paymentMode(UPDATED_PAYMENT_MODE);
 
         restPaymentFileMockMvc
@@ -1429,9 +1452,8 @@ class PaymentFileResourceIT {
         assertThat(testPaymentFile.getPaymentFileId()).isEqualTo(UPDATED_PAYMENT_FILE_ID);
         assertThat(testPaymentFile.getTotalPaymentAmount()).isEqualTo(UPDATED_TOTAL_PAYMENT_AMOUNT);
         assertThat(testPaymentFile.getPaymentFileDate()).isEqualTo(UPDATED_PAYMENT_FILE_DATE);
-        assertThat(testPaymentFile.getPaymentStatus()).isEqualTo(UPDATED_PAYMENT_STATUS);
-        assertThat(testPaymentFile.getBankName()).isEqualTo(UPDATED_BANK_NAME);
-        assertThat(testPaymentFile.getIfscCode()).isEqualTo(UPDATED_IFSC_CODE);
+        assertThat(testPaymentFile.getPaymentFileStatus()).isEqualTo(UPDATED_PAYMENT_FILE_STATUS);
+        assertThat(testPaymentFile.getKhatedarIfscCode()).isEqualTo(UPDATED_KHATEDAR_IFSC_CODE);
         assertThat(testPaymentFile.getPaymentMode()).isEqualTo(UPDATED_PAYMENT_MODE);
     }
 

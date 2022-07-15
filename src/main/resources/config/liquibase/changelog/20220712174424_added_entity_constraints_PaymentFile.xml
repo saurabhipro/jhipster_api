@@ -49,5 +49,17 @@
                                  constraintName="fk_landsys_payment_file__land_compensation_id"
                                  referencedColumnNames="id"
                                  referencedTableName="land_compensation"/>
+
+        <addForeignKeyConstraint baseColumnNames="payment_file_header_id"
+                                 baseTableName="landsys_payment_file"
+                                 constraintName="fk_landsys_payment_file__payment_file_header_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landsys_payment_file_header"/>
+
+        <addForeignKeyConstraint baseColumnNames="project_id"
+                                 baseTableName="landsys_payment_file"
+                                 constraintName="fk_landsys_payment_file__project_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landsys_project"/>
     </changeSet>
 </databaseChangeLog>

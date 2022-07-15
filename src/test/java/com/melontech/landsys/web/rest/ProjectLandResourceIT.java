@@ -10,6 +10,7 @@ import com.melontech.landsys.IntegrationTest;
 import com.melontech.landsys.domain.Land;
 import com.melontech.landsys.domain.Project;
 import com.melontech.landsys.domain.ProjectLand;
+import com.melontech.landsys.domain.Village;
 import com.melontech.landsys.domain.enumeration.HissaType;
 import com.melontech.landsys.repository.ProjectLandRepository;
 import com.melontech.landsys.service.ProjectLandService;
@@ -113,6 +114,16 @@ class ProjectLandResourceIT {
             project = TestUtil.findAll(em, Project.class).get(0);
         }
         projectLand.setProject(project);
+        // Add required entity
+        Village village;
+        if (TestUtil.findAll(em, Village.class).isEmpty()) {
+            village = VillageResourceIT.createEntity(em);
+            em.persist(village);
+            em.flush();
+        } else {
+            village = TestUtil.findAll(em, Village.class).get(0);
+        }
+        projectLand.setVillage(village);
         return projectLand;
     }
 
@@ -148,6 +159,16 @@ class ProjectLandResourceIT {
             project = TestUtil.findAll(em, Project.class).get(0);
         }
         projectLand.setProject(project);
+        // Add required entity
+        Village village;
+        if (TestUtil.findAll(em, Village.class).isEmpty()) {
+            village = VillageResourceIT.createUpdatedEntity(em);
+            em.persist(village);
+            em.flush();
+        } else {
+            village = TestUtil.findAll(em, Village.class).get(0);
+        }
+        projectLand.setVillage(village);
         return projectLand;
     }
 

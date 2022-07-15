@@ -68,6 +68,7 @@ public class Survey implements Serializable {
         value = {
             "land",
             "project",
+            "village",
             "noticeStatusInfo",
             "survey",
             "landCompensation",
@@ -83,7 +84,12 @@ public class Survey implements Serializable {
     @JoinColumn(unique = true)
     private ProjectLand projectLand;
 
-    @JsonIgnoreProperties(value = { "projectLand", "survey", "paymentAdvices", "paymentFiles" }, allowSetters = true)
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "subDistrict", "lands", "surveys", "landCompensations", "projectLands" }, allowSetters = true)
+    private Village village;
+
+    @JsonIgnoreProperties(value = { "projectLand", "survey", "village", "paymentAdvices", "paymentFiles" }, allowSetters = true)
     @OneToOne(mappedBy = "survey")
     private LandCompensation landCompensation;
 
@@ -96,7 +102,9 @@ public class Survey implements Serializable {
 
     @OneToMany(mappedBy = "survey")
     @JsonIgnoreProperties(
-        value = { "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation" },
+        value = {
+            "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation", "paymentFileHeader", "project",
+        },
         allowSetters = true
     )
     private Set<PaymentFile> paymentFiles = new HashSet<>();
@@ -269,6 +277,19 @@ public class Survey implements Serializable {
 
     public Survey projectLand(ProjectLand projectLand) {
         this.setProjectLand(projectLand);
+        return this;
+    }
+
+    public Village getVillage() {
+        return this.village;
+    }
+
+    public void setVillage(Village village) {
+        this.village = village;
+    }
+
+    public Survey village(Village village) {
+        this.setVillage(village);
         return this;
     }
 
