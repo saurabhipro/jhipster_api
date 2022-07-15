@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 import javax.persistence.Lob;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link com.melontech.landsys.domain.PublicNotification} entity.
@@ -12,12 +13,16 @@ public class PublicNotificationDTO implements Serializable {
 
     private Long id;
 
+    @NotNull
     private LocalDate date;
 
     @Lob
     private byte[] file;
 
     private String fileContentType;
+
+    @Lob
+    private String description;
 
     public Long getId() {
         return id;
@@ -51,6 +56,14 @@ public class PublicNotificationDTO implements Serializable {
         this.fileContentType = fileContentType;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -79,6 +92,7 @@ public class PublicNotificationDTO implements Serializable {
             "id=" + getId() +
             ", date='" + getDate() + "'" +
             ", file='" + getFile() + "'" +
+            ", description='" + getDescription() + "'" +
             "}";
     }
 }
