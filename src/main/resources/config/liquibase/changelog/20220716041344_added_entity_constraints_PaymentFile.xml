@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <!--
+        Added the constraints for entity PaymentFile.
+    -->
+    <changeSet id="20220716041344-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="khatedar_id"
+                                 baseTableName="landsys_payment_file"
+                                 constraintName="fk_landsys_payment_file__khatedar_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landsys_khatedar"/>
+
+        <addForeignKeyConstraint baseColumnNames="payment_advice_id"
+                                 baseTableName="landsys_payment_file"
+                                 constraintName="fk_landsys_payment_file__payment_advice_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landsys_payment_advice"/>
+
+        <addForeignKeyConstraint baseColumnNames="project_land_id"
+                                 baseTableName="landsys_payment_file"
+                                 constraintName="fk_landsys_payment_file__project_land_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landsys_project_land"/>
+
+        <addForeignKeyConstraint baseColumnNames="survey_id"
+                                 baseTableName="landsys_payment_file"
+                                 constraintName="fk_landsys_payment_file__survey_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landsys_survey"/>
+
+        <addForeignKeyConstraint baseColumnNames="bank_id"
+                                 baseTableName="landsys_payment_file"
+                                 constraintName="fk_landsys_payment_file__bank_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landsys_bank"/>
+
+        <addForeignKeyConstraint baseColumnNames="bank_branch_id"
+                                 baseTableName="landsys_payment_file"
+                                 constraintName="fk_landsys_payment_file__bank_branch_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landsys_bank_branch"/>
+
+        <addForeignKeyConstraint baseColumnNames="land_compensation_id"
+                                 baseTableName="landsys_payment_file"
+                                 constraintName="fk_landsys_payment_file__land_compensation_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="land_compensation"/>
+
+        <addForeignKeyConstraint baseColumnNames="payment_file_header_id"
+                                 baseTableName="landsys_payment_file"
+                                 constraintName="fk_landsys_payment_file__payment_file_header_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landsys_payment_file_header"/>
+
+        <addForeignKeyConstraint baseColumnNames="project_id"
+                                 baseTableName="landsys_payment_file"
+                                 constraintName="fk_landsys_payment_file__project_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landsys_project"/>
+    </changeSet>
+</databaseChangeLog>

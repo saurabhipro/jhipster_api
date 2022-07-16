@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <!--
+        Added the constraints for entity PaymentAdviceDetails.
+    -->
+    <changeSet id="20220716040910-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="payment_advice_id"
+                                 baseTableName="landsys_payment_advice_details"
+                                 constraintName="fk_landsys_payment_advice_details__payment_advice_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landsys_payment_advice"/>
+
+        <addForeignKeyConstraint baseColumnNames="project_land_id"
+                                 baseTableName="landsys_payment_advice_details"
+                                 constraintName="fk_landsys_payment_advice_details__project_land_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landsys_project_land"/>
+    </changeSet>
+</databaseChangeLog>

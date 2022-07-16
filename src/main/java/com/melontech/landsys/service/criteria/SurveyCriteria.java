@@ -88,6 +88,8 @@ public class SurveyCriteria implements Serializable, Criteria {
 
     private LongFilter projectLandId;
 
+    private LongFilter villageId;
+
     private LongFilter landCompensationId;
 
     private LongFilter paymentAdviceId;
@@ -112,6 +114,7 @@ public class SurveyCriteria implements Serializable, Criteria {
         this.remarks = other.remarks == null ? null : other.remarks.copy();
         this.status = other.status == null ? null : other.status.copy();
         this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
+        this.villageId = other.villageId == null ? null : other.villageId.copy();
         this.landCompensationId = other.landCompensationId == null ? null : other.landCompensationId.copy();
         this.paymentAdviceId = other.paymentAdviceId == null ? null : other.paymentAdviceId.copy();
         this.paymentFileId = other.paymentFileId == null ? null : other.paymentFileId.copy();
@@ -318,6 +321,21 @@ public class SurveyCriteria implements Serializable, Criteria {
         this.projectLandId = projectLandId;
     }
 
+    public LongFilter getVillageId() {
+        return villageId;
+    }
+
+    public LongFilter villageId() {
+        if (villageId == null) {
+            villageId = new LongFilter();
+        }
+        return villageId;
+    }
+
+    public void setVillageId(LongFilter villageId) {
+        this.villageId = villageId;
+    }
+
     public LongFilter getLandCompensationId() {
         return landCompensationId;
     }
@@ -394,6 +412,7 @@ public class SurveyCriteria implements Serializable, Criteria {
             Objects.equals(remarks, that.remarks) &&
             Objects.equals(status, that.status) &&
             Objects.equals(projectLandId, that.projectLandId) &&
+            Objects.equals(villageId, that.villageId) &&
             Objects.equals(landCompensationId, that.landCompensationId) &&
             Objects.equals(paymentAdviceId, that.paymentAdviceId) &&
             Objects.equals(paymentFileId, that.paymentFileId) &&
@@ -417,6 +436,7 @@ public class SurveyCriteria implements Serializable, Criteria {
             remarks,
             status,
             projectLandId,
+            villageId,
             landCompensationId,
             paymentAdviceId,
             paymentFileId,
@@ -441,6 +461,7 @@ public class SurveyCriteria implements Serializable, Criteria {
             (remarks != null ? "remarks=" + remarks + ", " : "") +
             (status != null ? "status=" + status + ", " : "") +
             (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
+            (villageId != null ? "villageId=" + villageId + ", " : "") +
             (landCompensationId != null ? "landCompensationId=" + landCompensationId + ", " : "") +
             (paymentAdviceId != null ? "paymentAdviceId=" + paymentAdviceId + ", " : "") +
             (paymentFileId != null ? "paymentFileId=" + paymentFileId + ", " : "") +

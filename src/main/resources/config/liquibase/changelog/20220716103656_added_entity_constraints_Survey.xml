@@ -13,5 +13,11 @@
                                  constraintName="fk_landsys_survey__project_land_id"
                                  referencedColumnNames="id"
                                  referencedTableName="landsys_project_land"/>
+
+        <addForeignKeyConstraint baseColumnNames="village_id"
+                                 baseTableName="landsys_survey"
+                                 constraintName="fk_landsys_survey__village_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landsys_village"/>
     </changeSet>
 </databaseChangeLog>

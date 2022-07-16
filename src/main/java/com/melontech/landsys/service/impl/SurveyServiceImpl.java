@@ -73,6 +73,10 @@ public class SurveyServiceImpl implements SurveyService {
         return surveyRepository.findAll(pageable).map(surveyMapper::toDto);
     }
 
+    public Page<SurveyDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return surveyRepository.findAllWithEagerRelationships(pageable).map(surveyMapper::toDto);
+    }
+
     /**
      *  Get all the surveys where LandCompensation is {@code null}.
      *  @return the list of entities.
@@ -91,7 +95,7 @@ public class SurveyServiceImpl implements SurveyService {
     @Transactional(readOnly = true)
     public Optional<SurveyDTO> findOne(Long id) {
         log.debug("Request to get Survey : {}", id);
-        return surveyRepository.findById(id).map(surveyMapper::toDto);
+        return surveyRepository.findOneWithEagerRelationships(id).map(surveyMapper::toDto);
     }
 
     @Override

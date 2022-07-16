@@ -31,6 +31,7 @@ public class NoticeStatusInfo implements Serializable {
         value = {
             "land",
             "project",
+            "village",
             "noticeStatusInfo",
             "survey",
             "landCompensation",

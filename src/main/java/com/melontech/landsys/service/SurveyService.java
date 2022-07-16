@@ -49,6 +49,14 @@ public interface SurveyService {
     List<SurveyDTO> findAllWhereLandCompensationIsNull();
 
     /**
+     * Get all the surveys with eager load of many-to-many relationships.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<SurveyDTO> findAllWithEagerRelationships(Pageable pageable);
+
+    /**
      * Get the "id" survey.
      *
      * @param id the id of the entity.

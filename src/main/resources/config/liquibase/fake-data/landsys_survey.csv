@@ -1,11 +1,11 @@
-id;surveyor;hissa_type;share_percentage;area;land_market_value;structural_value;horticulture_value;forest_value;distance_from_city;remarks;status;project_land_id
-1;benchmark Shoes;DIVIDED;56314;73411;82689;78889;85548;69514;57232;Health Lithuania Plastic;OPEN;1
-2;Specialist deposit solution;DIVIDED;14103;10064;29119;53011;46122;78441;24681;overriding analyzer;CLOSED;2
-3;Architect Account Borders;DIVIDED;39457;4407;25990;52525;54237;40095;35363;hacking;CLOSED;3
-4;Ergonomic red;JOINT_OWNER;27996;92523;75269;46520;68897;59715;43913;Gloves;CLOSED;4
-5;system-worthy;DIVIDED;39081;21054;27529;91818;82566;44242;12499;global parse;OPEN;5
-6;Cambodia;DIVIDED;2615;5673;90121;72315;30001;12413;78665;Glens copy Integrated;OPEN;6
-7;context-sensitive;DIVIDED;27570;16784;55784;69254;11726;58168;52083;integrate Account;OPEN;7
-8;Cheese;JOINT_OWNER;35338;98442;85210;11787;63856;86867;41592;productize extend;CLOSED;8
-9;rich Agent;DIVIDED;38943;59362;70357;50996;62161;46567;44472;Strategist bandwidth Baby;CLOSED;9
-10;innovative Pizza Integration;DIVIDED;53625;88963;5517;85490;67873;52614;39636;Bacon Paradigm West;CLOSED;10
+id;surveyor;hissa_type;share_percentage;area;land_market_value;structural_value;horticulture_value;forest_value;distance_from_city;remarks;status;project_land_id;village_id
+1;benchmark Shoes;DIVIDED;56314;73411;82689;78889;85548;69514;57232;Health Lithuania Plastic;OPEN;1;1
+2;Specialist deposit solution;DIVIDED;14103;10064;29119;53011;46122;78441;24681;overriding analyzer;CLOSED;2;2
+3;Architect Account Borders;DIVIDED;39457;4407;25990;52525;54237;40095;35363;hacking;CLOSED;3;3
+4;Ergonomic red;JOINT_OWNER;27996;92523;75269;46520;68897;59715;43913;Gloves;CLOSED;4;4
+5;system-worthy;DIVIDED;39081;21054;27529;91818;82566;44242;12499;global parse;OPEN;5;5
+6;Cambodia;DIVIDED;2615;5673;90121;72315;30001;12413;78665;Glens copy Integrated;OPEN;6;6
+7;context-sensitive;DIVIDED;27570;16784;55784;69254;11726;58168;52083;integrate Account;OPEN;7;7
+8;Cheese;JOINT_OWNER;35338;98442;85210;11787;63856;86867;41592;productize extend;CLOSED;8;8
+9;rich Agent;DIVIDED;38943;59362;70357;50996;62161;46567;44472;Strategist bandwidth Baby;CLOSED;9;9
+10;innovative Pizza Integration;DIVIDED;53625;88963;5517;85490;67873;52614;39636;Bacon Paradigm West;CLOSED;10;10
