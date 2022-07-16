@@ -54,6 +54,8 @@ public class PaymentAdviceDetailsCriteria implements Serializable, Criteria {
 
     private LongFilter projectLandId;
 
+    private LongFilter khatedarId;
+
     private Boolean distinct;
 
     public PaymentAdviceDetailsCriteria() {}
@@ -64,6 +66,7 @@ public class PaymentAdviceDetailsCriteria implements Serializable, Criteria {
         this.hissaType = other.hissaType == null ? null : other.hissaType.copy();
         this.paymentAdviceId = other.paymentAdviceId == null ? null : other.paymentAdviceId.copy();
         this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
+        this.khatedarId = other.khatedarId == null ? null : other.khatedarId.copy();
         this.distinct = other.distinct;
     }
 
@@ -147,6 +150,21 @@ public class PaymentAdviceDetailsCriteria implements Serializable, Criteria {
         this.projectLandId = projectLandId;
     }
 
+    public LongFilter getKhatedarId() {
+        return khatedarId;
+    }
+
+    public LongFilter khatedarId() {
+        if (khatedarId == null) {
+            khatedarId = new LongFilter();
+        }
+        return khatedarId;
+    }
+
+    public void setKhatedarId(LongFilter khatedarId) {
+        this.khatedarId = khatedarId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -170,13 +188,14 @@ public class PaymentAdviceDetailsCriteria implements Serializable, Criteria {
             Objects.equals(hissaType, that.hissaType) &&
             Objects.equals(paymentAdviceId, that.paymentAdviceId) &&
             Objects.equals(projectLandId, that.projectLandId) &&
+            Objects.equals(khatedarId, that.khatedarId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, landOwners, hissaType, paymentAdviceId, projectLandId, distinct);
+        return Objects.hash(id, landOwners, hissaType, paymentAdviceId, projectLandId, khatedarId, distinct);
     }
 
     // prettier-ignore
@@ -188,6 +207,7 @@ public class PaymentAdviceDetailsCriteria implements Serializable, Criteria {
             (hissaType != null ? "hissaType=" + hissaType + ", " : "") +
             (paymentAdviceId != null ? "paymentAdviceId=" + paymentAdviceId + ", " : "") +
             (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
+            (khatedarId != null ? "khatedarId=" + khatedarId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

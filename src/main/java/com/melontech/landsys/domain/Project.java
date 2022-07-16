@@ -60,6 +60,7 @@ public class Project implements Serializable {
             "paymentAdviceDetails",
             "paymentFiles",
             "khatedars",
+            "paymentFileHeaders",
         },
         allowSetters = true
     )

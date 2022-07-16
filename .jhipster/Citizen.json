@@ -1,6 +1,6 @@
 {
   "applications": "*",
-  "changelogDate": "20220712174420",
+  "changelogDate": "20220716103649",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "landsys_citizen",
@@ -27,6 +27,10 @@
     {
       "fieldName": "dob",
       "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "accountName",
+      "fieldType": "String"
     },
     {
       "fieldName": "accountNumber",

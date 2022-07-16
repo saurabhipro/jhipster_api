@@ -1,9 +1,9 @@
 entity Khatedar(landsys_khatedar) {
     caseFileNo String required unique
     remarks String required unique
-    khatedarStatus String
+    hissaType HissaType required
+    khatedarStatus KhatedarStatus required
 }
-
 
 entity State(landsys_state) {
     name String required unique
@@ -63,13 +63,11 @@ entity ProjectStatusHistory(landsys_project_status_history) {
     remarks String
 }
 
-
 entity ProjectLand(landsys_project_land) {
     remarks String
     documents  AnyBlob
     hissaType HissaType
 }
-
 
 entity NotificationTemplate(landsys_notification_template) {
      name String
@@ -79,8 +77,9 @@ entity NotificationTemplate(landsys_notification_template) {
 }
 
 entity PublicNotification(landsys_public_notification) {
-    date  LocalDate
+    date  LocalDate required
     file  AnyBlob
+    description TextBlob required
 }
 
 
@@ -102,6 +101,7 @@ entity Citizen(landsys_citizen) {
     address String required
     mobileNumber String
     dob LocalDate
+    accountName String
     accountNumber String
     fatherName String required
     spouseName String
@@ -112,7 +112,6 @@ entity Citizen(landsys_citizen) {
     panImage  AnyBlob
     accountNo String unique
     accNoImage  ImageBlob
-
  }
 
 entity LandCompensation(land_Compensation) {
@@ -153,14 +152,20 @@ entity PaymentAdviceDetails(landsys_payment_advice_details) {
     hissaType HissaType required
 }
 
+entity PaymentFileHeader(landsys_payment_file_header) {
+    grandTotalPaymentAmount          Double required
+	paymentStatus	 			PaymentStatus required
+    paymentMode                 PaymentAdviceType
+    approverRemarks             String
+}
+
 entity PaymentFile(landsys_payment_file) {
 	paymentFileId               Double required
     totalPaymentAmount          Double required
 	paymentFileDate           	LocalDate
-	paymentStatus	 			PaymentStatus required
-    bankName                    String
-    ifscCode                    String
-    paymentMode PaymentAdviceType 
+	paymentFileStatus	 		PaymentStatus required
+    khatedarIfscCode            String
+    paymentMode PaymentAdviceType required
 }
 
 entity PaymentFileRecon(landsys_payment_file_recon) {
@@ -212,6 +217,28 @@ entity TransactionHistory(landsys_transaction_history)
     approver3 String
 }
 
+entity CreatePaymentFile(landsys_create_payment_file) {
+	    accountHolderName			String required
+        accountHolderBankName       String required
+        paymentAmount               Double required
+    	bankName			 		String required
+    	accountNumber				String required
+    	ifscCode			 		String required
+    	checkNumber			 		String
+    	micrCode			 		String
+    	paymentAdviceType			PaymentAdviceType
+    	referenceNumber		     	UUID
+    	paymentStatus	 			PaymentStatus required
+        hissaType HissaType required
+}
+
+
+entity SequenceGen {
+ seqType SequenceType required
+ latestSequence Integer required
+ sequenceSuffix String required
+}
+
 relationship OneToOne {
     PaymentAdvice{khatedar required} to Khatedar{paymentAdvice}
     Survey{projectLand required} to ProjectLand{survey}
@@ -239,8 +266,9 @@ relationship ManyToOne {
     PaymentAdvice{survey required} to Survey{paymentAdvice}
     PaymentAdviceDetails{paymentAdvice required} to PaymentAdvice{paymentAdviceDetails}
     PaymentAdviceDetails{projectLand required} to ProjectLand{paymentAdviceDetails}
-	ProjectLand{noticeStatusInfo} to NoticeStatusInfo{projectLand}
-    PaymentAdvice{projectLand required} to ProjectLand{paymentAdvice}    
+	PaymentAdviceDetails{khatedar required} to Khatedar{paymentAdviceDetails}
+    ProjectLand{noticeStatusInfo} to NoticeStatusInfo{projectLand}
+    PaymentAdvice{projectLand required} to ProjectLand{paymentAdvice}
     PaymentFile{projectLand required} to ProjectLand{paymentFile}
     PaymentFile{survey required} to Survey{paymentFile}
     PaymentFile{bank(name) required} to Bank{paymentFile}
@@ -248,12 +276,13 @@ relationship ManyToOne {
     PaymentFile{landCompensation required} to LandCompensation{paymentFile}
     Khatedar{projectLand required} to ProjectLand{khatedar}
     Khatedar{citizen required} to Citizen{khatedar}
-
-}
+    PaymentFile{paymentFileHeader required} to PaymentFileHeader{paymentFile}
+    PaymentFileHeader{projectLand required} to ProjectLand{paymentFileHeader}
+ }
 
 enum KhatedarStatus {
     NEW
-    SURVEY_CREATED    
+    SURVEY_CREATED
 }
 
 enum EventStatus {
@@ -315,8 +344,16 @@ enum HissaType {
     DIVIDED("divided")
 }
 
+enum SequenceType {
+    SURVEY
+    COMPENSATION
+    KHATEDAR
+    PAYMENTADVICE
+    PAYMENTFILE
+}
+
 paginate * with pagination
 service all with serviceImpl
 dto all with mapstruct
 
-filter Citizen , Khatedar , Survey , LandCompensation , Project , PaymentFileRecon, NoticeStatusInfo, PaymentAdvice , TransactionHistory, PaymentFile , PaymentAdviceDetails
+filter Citizen , Khatedar , Survey , LandCompensation , Project , PaymentFileRecon, NoticeStatusInfo, PaymentAdvice , TransactionHistory, PaymentFile , PaymentAdviceDetails , SequenceGen

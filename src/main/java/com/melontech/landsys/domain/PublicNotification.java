@@ -3,6 +3,8 @@ package com.melontech.landsys.domain;
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.*;
+import javax.validation.constraints.*;
+import org.hibernate.annotations.Type;
 
 /**
  * A PublicNotification.
@@ -19,7 +21,8 @@ public class PublicNotification implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "date")
+    @NotNull
+    @Column(name = "date", nullable = false)
     private LocalDate date;
 
     @Lob
@@ -28,6 +31,11 @@ public class PublicNotification implements Serializable {
 
     @Column(name = "file_content_type")
     private String fileContentType;
+
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @Column(name = "description", nullable = false)
+    private String description;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -83,6 +91,19 @@ public class PublicNotification implements Serializable {
         this.fileContentType = fileContentType;
     }
 
+    public String getDescription() {
+        return this.description;
+    }
+
+    public PublicNotification description(String description) {
+        this.setDescription(description);
+        return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -110,6 +131,7 @@ public class PublicNotification implements Serializable {
             ", date='" + getDate() + "'" +
             ", file='" + getFile() + "'" +
             ", fileContentType='" + getFileContentType() + "'" +
+            ", description='" + getDescription() + "'" +
             "}";
     }
 }

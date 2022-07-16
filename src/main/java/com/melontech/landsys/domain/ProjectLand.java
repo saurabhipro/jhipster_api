@@ -67,19 +67,23 @@ public class ProjectLand implements Serializable {
     private Set<PaymentAdvice> paymentAdvices = new HashSet<>();
 
     @OneToMany(mappedBy = "projectLand")
-    @JsonIgnoreProperties(value = { "paymentAdvice", "projectLand" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "paymentAdvice", "projectLand", "khatedar" }, allowSetters = true)
     private Set<PaymentAdviceDetails> paymentAdviceDetails = new HashSet<>();
 
     @OneToMany(mappedBy = "projectLand")
     @JsonIgnoreProperties(
-        value = { "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation" },
+        value = { "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation", "paymentFileHeader" },
         allowSetters = true
     )
     private Set<PaymentFile> paymentFiles = new HashSet<>();
 
     @OneToMany(mappedBy = "projectLand")
-    @JsonIgnoreProperties(value = { "projectLand", "citizen", "paymentAdvice", "paymentFile" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "projectLand", "citizen", "paymentAdvice", "paymentFile", "paymentAdviceDetails" }, allowSetters = true)
     private Set<Khatedar> khatedars = new HashSet<>();
+
+    @OneToMany(mappedBy = "projectLand")
+    @JsonIgnoreProperties(value = { "projectLand", "paymentFiles" }, allowSetters = true)
+    private Set<PaymentFileHeader> paymentFileHeaders = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -346,6 +350,37 @@ public class ProjectLand implements Serializable {
     public ProjectLand removeKhatedar(Khatedar khatedar) {
         this.khatedars.remove(khatedar);
         khatedar.setProjectLand(null);
+        return this;
+    }
+
+    public Set<PaymentFileHeader> getPaymentFileHeaders() {
+        return this.paymentFileHeaders;
+    }
+
+    public void setPaymentFileHeaders(Set<PaymentFileHeader> paymentFileHeaders) {
+        if (this.paymentFileHeaders != null) {
+            this.paymentFileHeaders.forEach(i -> i.setProjectLand(null));
+        }
+        if (paymentFileHeaders != null) {
+            paymentFileHeaders.forEach(i -> i.setProjectLand(this));
+        }
+        this.paymentFileHeaders = paymentFileHeaders;
+    }
+
+    public ProjectLand paymentFileHeaders(Set<PaymentFileHeader> paymentFileHeaders) {
+        this.setPaymentFileHeaders(paymentFileHeaders);
+        return this;
+    }
+
+    public ProjectLand addPaymentFileHeader(PaymentFileHeader paymentFileHeader) {
+        this.paymentFileHeaders.add(paymentFileHeader);
+        paymentFileHeader.setProjectLand(this);
+        return this;
+    }
+
+    public ProjectLand removePaymentFileHeader(PaymentFileHeader paymentFileHeader) {
+        this.paymentFileHeaders.remove(paymentFileHeader);
+        paymentFileHeader.setProjectLand(null);
         return this;
     }
 

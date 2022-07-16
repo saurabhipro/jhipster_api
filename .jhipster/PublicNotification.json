@@ -1,18 +1,25 @@
 {
   "applications": "*",
-  "changelogDate": "20220712174417",
+  "changelogDate": "20220716103646",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "landsys_public_notification",
   "fields": [
     {
       "fieldName": "date",
-      "fieldType": "LocalDate"
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "file",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text",
+      "fieldValidateRules": ["required"]
     }
   ],
   "fluentMethods": true,

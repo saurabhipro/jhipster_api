@@ -9,8 +9,11 @@ import com.melontech.landsys.IntegrationTest;
 import com.melontech.landsys.domain.Citizen;
 import com.melontech.landsys.domain.Khatedar;
 import com.melontech.landsys.domain.PaymentAdvice;
+import com.melontech.landsys.domain.PaymentAdviceDetails;
 import com.melontech.landsys.domain.PaymentFile;
 import com.melontech.landsys.domain.ProjectLand;
+import com.melontech.landsys.domain.enumeration.HissaType;
+import com.melontech.landsys.domain.enumeration.KhatedarStatus;
 import com.melontech.landsys.repository.KhatedarRepository;
 import com.melontech.landsys.service.criteria.KhatedarCriteria;
 import com.melontech.landsys.service.dto.KhatedarDTO;
@@ -42,8 +45,11 @@ class KhatedarResourceIT {
     private static final String DEFAULT_REMARKS = "AAAAAAAAAA";
     private static final String UPDATED_REMARKS = "BBBBBBBBBB";
 
-    private static final String DEFAULT_KHATEDAR_STATUS = "AAAAAAAAAA";
-    private static final String UPDATED_KHATEDAR_STATUS = "BBBBBBBBBB";
+    private static final HissaType DEFAULT_HISSA_TYPE = HissaType.SINGLE_OWNER;
+    private static final HissaType UPDATED_HISSA_TYPE = HissaType.JOINT_OWNER;
+
+    private static final KhatedarStatus DEFAULT_KHATEDAR_STATUS = KhatedarStatus.NEW;
+    private static final KhatedarStatus UPDATED_KHATEDAR_STATUS = KhatedarStatus.SURVEY_CREATED;
 
     private static final String ENTITY_API_URL = "/api/khatedars";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -75,6 +81,7 @@ class KhatedarResourceIT {
         Khatedar khatedar = new Khatedar()
             .caseFileNo(DEFAULT_CASE_FILE_NO)
             .remarks(DEFAULT_REMARKS)
+            .hissaType(DEFAULT_HISSA_TYPE)
             .khatedarStatus(DEFAULT_KHATEDAR_STATUS);
         // Add required entity
         ProjectLand projectLand;
@@ -109,6 +116,7 @@ class KhatedarResourceIT {
         Khatedar khatedar = new Khatedar()
             .caseFileNo(UPDATED_CASE_FILE_NO)
             .remarks(UPDATED_REMARKS)
+            .hissaType(UPDATED_HISSA_TYPE)
             .khatedarStatus(UPDATED_KHATEDAR_STATUS);
         // Add required entity
         ProjectLand projectLand;
@@ -154,6 +162,7 @@ class KhatedarResourceIT {
         Khatedar testKhatedar = khatedarList.get(khatedarList.size() - 1);
         assertThat(testKhatedar.getCaseFileNo()).isEqualTo(DEFAULT_CASE_FILE_NO);
         assertThat(testKhatedar.getRemarks()).isEqualTo(DEFAULT_REMARKS);
+        assertThat(testKhatedar.getHissaType()).isEqualTo(DEFAULT_HISSA_TYPE);
         assertThat(testKhatedar.getKhatedarStatus()).isEqualTo(DEFAULT_KHATEDAR_STATUS);
     }
 
@@ -214,6 +223,42 @@ class KhatedarResourceIT {
 
     @Test
     @Transactional
+    void checkHissaTypeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = khatedarRepository.findAll().size();
+        // set the field null
+        khatedar.setHissaType(null);
+
+        // Create the Khatedar, which fails.
+        KhatedarDTO khatedarDTO = khatedarMapper.toDto(khatedar);
+
+        restKhatedarMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(khatedarDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Khatedar> khatedarList = khatedarRepository.findAll();
+        assertThat(khatedarList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkKhatedarStatusIsRequired() throws Exception {
+        int databaseSizeBeforeTest = khatedarRepository.findAll().size();
+        // set the field null
+        khatedar.setKhatedarStatus(null);
+
+        // Create the Khatedar, which fails.
+        KhatedarDTO khatedarDTO = khatedarMapper.toDto(khatedar);
+
+        restKhatedarMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(khatedarDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Khatedar> khatedarList = khatedarRepository.findAll();
+        assertThat(khatedarList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllKhatedars() throws Exception {
         // Initialize the database
         khatedarRepository.saveAndFlush(khatedar);
@@ -226,7 +271,8 @@ class KhatedarResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(khatedar.getId().intValue())))
             .andExpect(jsonPath("$.[*].caseFileNo").value(hasItem(DEFAULT_CASE_FILE_NO)))
             .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS)))
-            .andExpect(jsonPath("$.[*].khatedarStatus").value(hasItem(DEFAULT_KHATEDAR_STATUS)));
+            .andExpect(jsonPath("$.[*].hissaType").value(hasItem(DEFAULT_HISSA_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].khatedarStatus").value(hasItem(DEFAULT_KHATEDAR_STATUS.toString())));
     }
 
     @Test
@@ -243,7 +289,8 @@ class KhatedarResourceIT {
             .andExpect(jsonPath("$.id").value(khatedar.getId().intValue()))
             .andExpect(jsonPath("$.caseFileNo").value(DEFAULT_CASE_FILE_NO))
             .andExpect(jsonPath("$.remarks").value(DEFAULT_REMARKS))
-            .andExpect(jsonPath("$.khatedarStatus").value(DEFAULT_KHATEDAR_STATUS));
+            .andExpect(jsonPath("$.hissaType").value(DEFAULT_HISSA_TYPE.toString()))
+            .andExpect(jsonPath("$.khatedarStatus").value(DEFAULT_KHATEDAR_STATUS.toString()));
     }
 
     @Test
@@ -422,6 +469,58 @@ class KhatedarResourceIT {
 
     @Test
     @Transactional
+    void getAllKhatedarsByHissaTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        khatedarRepository.saveAndFlush(khatedar);
+
+        // Get all the khatedarList where hissaType equals to DEFAULT_HISSA_TYPE
+        defaultKhatedarShouldBeFound("hissaType.equals=" + DEFAULT_HISSA_TYPE);
+
+        // Get all the khatedarList where hissaType equals to UPDATED_HISSA_TYPE
+        defaultKhatedarShouldNotBeFound("hissaType.equals=" + UPDATED_HISSA_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllKhatedarsByHissaTypeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        khatedarRepository.saveAndFlush(khatedar);
+
+        // Get all the khatedarList where hissaType not equals to DEFAULT_HISSA_TYPE
+        defaultKhatedarShouldNotBeFound("hissaType.notEquals=" + DEFAULT_HISSA_TYPE);
+
+        // Get all the khatedarList where hissaType not equals to UPDATED_HISSA_TYPE
+        defaultKhatedarShouldBeFound("hissaType.notEquals=" + UPDATED_HISSA_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllKhatedarsByHissaTypeIsInShouldWork() throws Exception {
+        // Initialize the database
+        khatedarRepository.saveAndFlush(khatedar);
+
+        // Get all the khatedarList where hissaType in DEFAULT_HISSA_TYPE or UPDATED_HISSA_TYPE
+        defaultKhatedarShouldBeFound("hissaType.in=" + DEFAULT_HISSA_TYPE + "," + UPDATED_HISSA_TYPE);
+
+        // Get all the khatedarList where hissaType equals to UPDATED_HISSA_TYPE
+        defaultKhatedarShouldNotBeFound("hissaType.in=" + UPDATED_HISSA_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllKhatedarsByHissaTypeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        khatedarRepository.saveAndFlush(khatedar);
+
+        // Get all the khatedarList where hissaType is not null
+        defaultKhatedarShouldBeFound("hissaType.specified=true");
+
+        // Get all the khatedarList where hissaType is null
+        defaultKhatedarShouldNotBeFound("hissaType.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllKhatedarsByKhatedarStatusIsEqualToSomething() throws Exception {
         // Initialize the database
         khatedarRepository.saveAndFlush(khatedar);
@@ -470,32 +569,6 @@ class KhatedarResourceIT {
 
         // Get all the khatedarList where khatedarStatus is null
         defaultKhatedarShouldNotBeFound("khatedarStatus.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllKhatedarsByKhatedarStatusContainsSomething() throws Exception {
-        // Initialize the database
-        khatedarRepository.saveAndFlush(khatedar);
-
-        // Get all the khatedarList where khatedarStatus contains DEFAULT_KHATEDAR_STATUS
-        defaultKhatedarShouldBeFound("khatedarStatus.contains=" + DEFAULT_KHATEDAR_STATUS);
-
-        // Get all the khatedarList where khatedarStatus contains UPDATED_KHATEDAR_STATUS
-        defaultKhatedarShouldNotBeFound("khatedarStatus.contains=" + UPDATED_KHATEDAR_STATUS);
-    }
-
-    @Test
-    @Transactional
-    void getAllKhatedarsByKhatedarStatusNotContainsSomething() throws Exception {
-        // Initialize the database
-        khatedarRepository.saveAndFlush(khatedar);
-
-        // Get all the khatedarList where khatedarStatus does not contain DEFAULT_KHATEDAR_STATUS
-        defaultKhatedarShouldNotBeFound("khatedarStatus.doesNotContain=" + DEFAULT_KHATEDAR_STATUS);
-
-        // Get all the khatedarList where khatedarStatus does not contain UPDATED_KHATEDAR_STATUS
-        defaultKhatedarShouldBeFound("khatedarStatus.doesNotContain=" + UPDATED_KHATEDAR_STATUS);
     }
 
     @Test
@@ -604,6 +677,32 @@ class KhatedarResourceIT {
         defaultKhatedarShouldNotBeFound("paymentFileId.equals=" + (paymentFileId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllKhatedarsByPaymentAdviceDetailsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        khatedarRepository.saveAndFlush(khatedar);
+        PaymentAdviceDetails paymentAdviceDetails;
+        if (TestUtil.findAll(em, PaymentAdviceDetails.class).isEmpty()) {
+            paymentAdviceDetails = PaymentAdviceDetailsResourceIT.createEntity(em);
+            em.persist(paymentAdviceDetails);
+            em.flush();
+        } else {
+            paymentAdviceDetails = TestUtil.findAll(em, PaymentAdviceDetails.class).get(0);
+        }
+        em.persist(paymentAdviceDetails);
+        em.flush();
+        khatedar.addPaymentAdviceDetails(paymentAdviceDetails);
+        khatedarRepository.saveAndFlush(khatedar);
+        Long paymentAdviceDetailsId = paymentAdviceDetails.getId();
+
+        // Get all the khatedarList where paymentAdviceDetails equals to paymentAdviceDetailsId
+        defaultKhatedarShouldBeFound("paymentAdviceDetailsId.equals=" + paymentAdviceDetailsId);
+
+        // Get all the khatedarList where paymentAdviceDetails equals to (paymentAdviceDetailsId + 1)
+        defaultKhatedarShouldNotBeFound("paymentAdviceDetailsId.equals=" + (paymentAdviceDetailsId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -615,7 +714,8 @@ class KhatedarResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(khatedar.getId().intValue())))
             .andExpect(jsonPath("$.[*].caseFileNo").value(hasItem(DEFAULT_CASE_FILE_NO)))
             .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS)))
-            .andExpect(jsonPath("$.[*].khatedarStatus").value(hasItem(DEFAULT_KHATEDAR_STATUS)));
+            .andExpect(jsonPath("$.[*].hissaType").value(hasItem(DEFAULT_HISSA_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].khatedarStatus").value(hasItem(DEFAULT_KHATEDAR_STATUS.toString())));
 
         // Check, that the count call also returns 1
         restKhatedarMockMvc
@@ -663,7 +763,11 @@ class KhatedarResourceIT {
         Khatedar updatedKhatedar = khatedarRepository.findById(khatedar.getId()).get();
         // Disconnect from session so that the updates on updatedKhatedar are not directly saved in db
         em.detach(updatedKhatedar);
-        updatedKhatedar.caseFileNo(UPDATED_CASE_FILE_NO).remarks(UPDATED_REMARKS).khatedarStatus(UPDATED_KHATEDAR_STATUS);
+        updatedKhatedar
+            .caseFileNo(UPDATED_CASE_FILE_NO)
+            .remarks(UPDATED_REMARKS)
+            .hissaType(UPDATED_HISSA_TYPE)
+            .khatedarStatus(UPDATED_KHATEDAR_STATUS);
         KhatedarDTO khatedarDTO = khatedarMapper.toDto(updatedKhatedar);
 
         restKhatedarMockMvc
@@ -680,6 +784,7 @@ class KhatedarResourceIT {
         Khatedar testKhatedar = khatedarList.get(khatedarList.size() - 1);
         assertThat(testKhatedar.getCaseFileNo()).isEqualTo(UPDATED_CASE_FILE_NO);
         assertThat(testKhatedar.getRemarks()).isEqualTo(UPDATED_REMARKS);
+        assertThat(testKhatedar.getHissaType()).isEqualTo(UPDATED_HISSA_TYPE);
         assertThat(testKhatedar.getKhatedarStatus()).isEqualTo(UPDATED_KHATEDAR_STATUS);
     }
 
@@ -760,7 +865,7 @@ class KhatedarResourceIT {
         Khatedar partialUpdatedKhatedar = new Khatedar();
         partialUpdatedKhatedar.setId(khatedar.getId());
 
-        partialUpdatedKhatedar.remarks(UPDATED_REMARKS);
+        partialUpdatedKhatedar.remarks(UPDATED_REMARKS).khatedarStatus(UPDATED_KHATEDAR_STATUS);
 
         restKhatedarMockMvc
             .perform(
@@ -776,7 +881,8 @@ class KhatedarResourceIT {
         Khatedar testKhatedar = khatedarList.get(khatedarList.size() - 1);
         assertThat(testKhatedar.getCaseFileNo()).isEqualTo(DEFAULT_CASE_FILE_NO);
         assertThat(testKhatedar.getRemarks()).isEqualTo(UPDATED_REMARKS);
-        assertThat(testKhatedar.getKhatedarStatus()).isEqualTo(DEFAULT_KHATEDAR_STATUS);
+        assertThat(testKhatedar.getHissaType()).isEqualTo(DEFAULT_HISSA_TYPE);
+        assertThat(testKhatedar.getKhatedarStatus()).isEqualTo(UPDATED_KHATEDAR_STATUS);
     }
 
     @Test
@@ -791,7 +897,11 @@ class KhatedarResourceIT {
         Khatedar partialUpdatedKhatedar = new Khatedar();
         partialUpdatedKhatedar.setId(khatedar.getId());
 
-        partialUpdatedKhatedar.caseFileNo(UPDATED_CASE_FILE_NO).remarks(UPDATED_REMARKS).khatedarStatus(UPDATED_KHATEDAR_STATUS);
+        partialUpdatedKhatedar
+            .caseFileNo(UPDATED_CASE_FILE_NO)
+            .remarks(UPDATED_REMARKS)
+            .hissaType(UPDATED_HISSA_TYPE)
+            .khatedarStatus(UPDATED_KHATEDAR_STATUS);
 
         restKhatedarMockMvc
             .perform(
@@ -807,6 +917,7 @@ class KhatedarResourceIT {
         Khatedar testKhatedar = khatedarList.get(khatedarList.size() - 1);
         assertThat(testKhatedar.getCaseFileNo()).isEqualTo(UPDATED_CASE_FILE_NO);
         assertThat(testKhatedar.getRemarks()).isEqualTo(UPDATED_REMARKS);
+        assertThat(testKhatedar.getHissaType()).isEqualTo(UPDATED_HISSA_TYPE);
         assertThat(testKhatedar.getKhatedarStatus()).isEqualTo(UPDATED_KHATEDAR_STATUS);
     }
 

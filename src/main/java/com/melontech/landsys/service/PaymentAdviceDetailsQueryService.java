@@ -117,6 +117,15 @@ public class PaymentAdviceDetailsQueryService extends QueryService<PaymentAdvice
                         )
                     );
             }
+            if (criteria.getKhatedarId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getKhatedarId(),
+                            root -> root.join(PaymentAdviceDetails_.khatedar, JoinType.LEFT).get(Khatedar_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

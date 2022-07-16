@@ -1,6 +1,6 @@
 {
   "applications": "*",
-  "changelogDate": "20220714125037",
+  "changelogDate": "20220716103634",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "landsys_khatedar",
@@ -16,8 +16,16 @@
       "fieldValidateRules": ["required", "unique"]
     },
     {
+      "fieldName": "hissaType",
+      "fieldType": "HissaType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "SINGLE_OWNER (Single Owner),JOINT_OWNER (Joint Owner),DIVIDED (divided)"
+    },
+    {
       "fieldName": "khatedarStatus",
-      "fieldType": "String"
+      "fieldType": "KhatedarStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "NEW,SURVEY_CREATED"
     }
   ],
   "fluentMethods": true,
@@ -53,6 +61,12 @@
       "ownerSide": false,
       "relationshipName": "paymentFile",
       "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "paymentAdviceDetails",
+      "otherEntityRelationshipName": "khatedar",
+      "relationshipName": "paymentAdviceDetails",
+      "relationshipType": "one-to-many"
     }
   ],
   "service": "serviceImpl"

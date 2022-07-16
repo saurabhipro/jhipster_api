@@ -22,6 +22,8 @@ public class PaymentAdviceDetailsDTO implements Serializable {
 
     private ProjectLandDTO projectLand;
 
+    private KhatedarDTO khatedar;
+
     public Long getId() {
         return id;
     }
@@ -62,6 +64,14 @@ public class PaymentAdviceDetailsDTO implements Serializable {
         this.projectLand = projectLand;
     }
 
+    public KhatedarDTO getKhatedar() {
+        return khatedar;
+    }
+
+    public void setKhatedar(KhatedarDTO khatedar) {
+        this.khatedar = khatedar;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -92,6 +102,7 @@ public class PaymentAdviceDetailsDTO implements Serializable {
             ", hissaType='" + getHissaType() + "'" +
             ", paymentAdvice=" + getPaymentAdvice() +
             ", projectLand=" + getProjectLand() +
+            ", khatedar=" + getKhatedar() +
             "}";
     }
 }

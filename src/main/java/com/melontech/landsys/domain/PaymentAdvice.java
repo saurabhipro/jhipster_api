@@ -73,7 +73,7 @@ public class PaymentAdvice implements Serializable {
     @Column(name = "hissa_type", nullable = false)
     private HissaType hissaType;
 
-    @JsonIgnoreProperties(value = { "projectLand", "citizen", "paymentAdvice", "paymentFile" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "projectLand", "citizen", "paymentAdvice", "paymentFile", "paymentAdviceDetails" }, allowSetters = true)
     @OneToOne(optional = false)
     @NotNull
     @JoinColumn(unique = true)
@@ -97,6 +97,7 @@ public class PaymentAdvice implements Serializable {
             "paymentAdviceDetails",
             "paymentFiles",
             "khatedars",
+            "paymentFileHeaders",
         },
         allowSetters = true
     )
@@ -112,14 +113,14 @@ public class PaymentAdvice implements Serializable {
     private PaymentFileRecon paymentFileRecon;
 
     @JsonIgnoreProperties(
-        value = { "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation" },
+        value = { "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation", "paymentFileHeader" },
         allowSetters = true
     )
     @OneToOne(mappedBy = "paymentAdvice")
     private PaymentFile paymentFile;
 
     @OneToMany(mappedBy = "paymentAdvice")
-    @JsonIgnoreProperties(value = { "paymentAdvice", "projectLand" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "paymentAdvice", "projectLand", "khatedar" }, allowSetters = true)
     private Set<PaymentAdviceDetails> paymentAdviceDetails = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

@@ -23,12 +23,11 @@ public class PaymentFileDTO implements Serializable {
     private LocalDate paymentFileDate;
 
     @NotNull
-    private PaymentStatus paymentStatus;
+    private PaymentStatus paymentFileStatus;
 
-    private String bankName;
+    private String khatedarIfscCode;
 
-    private String ifscCode;
-
+    @NotNull
     private PaymentAdviceType paymentMode;
 
     private KhatedarDTO khatedar;
@@ -44,6 +43,8 @@ public class PaymentFileDTO implements Serializable {
     private BankBranchDTO bankBranch;
 
     private LandCompensationDTO landCompensation;
+
+    private PaymentFileHeaderDTO paymentFileHeader;
 
     public Long getId() {
         return id;
@@ -77,28 +78,20 @@ public class PaymentFileDTO implements Serializable {
         this.paymentFileDate = paymentFileDate;
     }
 
-    public PaymentStatus getPaymentStatus() {
-        return paymentStatus;
+    public PaymentStatus getPaymentFileStatus() {
+        return paymentFileStatus;
     }
 
-    public void setPaymentStatus(PaymentStatus paymentStatus) {
-        this.paymentStatus = paymentStatus;
+    public void setPaymentFileStatus(PaymentStatus paymentFileStatus) {
+        this.paymentFileStatus = paymentFileStatus;
     }
 
-    public String getBankName() {
-        return bankName;
+    public String getKhatedarIfscCode() {
+        return khatedarIfscCode;
     }
 
-    public void setBankName(String bankName) {
-        this.bankName = bankName;
-    }
-
-    public String getIfscCode() {
-        return ifscCode;
-    }
-
-    public void setIfscCode(String ifscCode) {
-        this.ifscCode = ifscCode;
+    public void setKhatedarIfscCode(String khatedarIfscCode) {
+        this.khatedarIfscCode = khatedarIfscCode;
     }
 
     public PaymentAdviceType getPaymentMode() {
@@ -165,6 +158,14 @@ public class PaymentFileDTO implements Serializable {
         this.landCompensation = landCompensation;
     }
 
+    public PaymentFileHeaderDTO getPaymentFileHeader() {
+        return paymentFileHeader;
+    }
+
+    public void setPaymentFileHeader(PaymentFileHeaderDTO paymentFileHeader) {
+        this.paymentFileHeader = paymentFileHeader;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -194,9 +195,8 @@ public class PaymentFileDTO implements Serializable {
             ", paymentFileId=" + getPaymentFileId() +
             ", totalPaymentAmount=" + getTotalPaymentAmount() +
             ", paymentFileDate='" + getPaymentFileDate() + "'" +
-            ", paymentStatus='" + getPaymentStatus() + "'" +
-            ", bankName='" + getBankName() + "'" +
-            ", ifscCode='" + getIfscCode() + "'" +
+            ", paymentFileStatus='" + getPaymentFileStatus() + "'" +
+            ", khatedarIfscCode='" + getKhatedarIfscCode() + "'" +
             ", paymentMode='" + getPaymentMode() + "'" +
             ", khatedar=" + getKhatedar() +
             ", paymentAdvice=" + getPaymentAdvice() +
@@ -205,6 +205,7 @@ public class PaymentFileDTO implements Serializable {
             ", bank=" + getBank() +
             ", bankBranch=" + getBankBranch() +
             ", landCompensation=" + getLandCompensation() +
+            ", paymentFileHeader=" + getPaymentFileHeader() +
             "}";
     }
 }

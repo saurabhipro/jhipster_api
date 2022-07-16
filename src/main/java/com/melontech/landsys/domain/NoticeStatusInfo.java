@@ -38,6 +38,7 @@ public class NoticeStatusInfo implements Serializable {
             "paymentAdviceDetails",
             "paymentFiles",
             "khatedars",
+            "paymentFileHeaders",
         },
         allowSetters = true
     )

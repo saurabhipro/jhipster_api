@@ -1,5 +1,7 @@
 package com.melontech.landsys.service.criteria;
 
+import com.melontech.landsys.domain.enumeration.HissaType;
+import com.melontech.landsys.domain.enumeration.KhatedarStatus;
 import java.io.Serializable;
 import java.util.Objects;
 import org.springdoc.api.annotations.ParameterObject;
@@ -24,6 +26,40 @@ import tech.jhipster.service.filter.StringFilter;
 @ParameterObject
 public class KhatedarCriteria implements Serializable, Criteria {
 
+    /**
+     * Class for filtering HissaType
+     */
+    public static class HissaTypeFilter extends Filter<HissaType> {
+
+        public HissaTypeFilter() {}
+
+        public HissaTypeFilter(HissaTypeFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public HissaTypeFilter copy() {
+            return new HissaTypeFilter(this);
+        }
+    }
+
+    /**
+     * Class for filtering KhatedarStatus
+     */
+    public static class KhatedarStatusFilter extends Filter<KhatedarStatus> {
+
+        public KhatedarStatusFilter() {}
+
+        public KhatedarStatusFilter(KhatedarStatusFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public KhatedarStatusFilter copy() {
+            return new KhatedarStatusFilter(this);
+        }
+    }
+
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
@@ -32,7 +68,9 @@ public class KhatedarCriteria implements Serializable, Criteria {
 
     private StringFilter remarks;
 
-    private StringFilter khatedarStatus;
+    private HissaTypeFilter hissaType;
+
+    private KhatedarStatusFilter khatedarStatus;
 
     private LongFilter projectLandId;
 
@@ -42,6 +80,8 @@ public class KhatedarCriteria implements Serializable, Criteria {
 
     private LongFilter paymentFileId;
 
+    private LongFilter paymentAdviceDetailsId;
+
     private Boolean distinct;
 
     public KhatedarCriteria() {}
@@ -50,11 +90,13 @@ public class KhatedarCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.caseFileNo = other.caseFileNo == null ? null : other.caseFileNo.copy();
         this.remarks = other.remarks == null ? null : other.remarks.copy();
+        this.hissaType = other.hissaType == null ? null : other.hissaType.copy();
         this.khatedarStatus = other.khatedarStatus == null ? null : other.khatedarStatus.copy();
         this.projectLandId = other.projectLandId == null ? null : other.projectLandId.copy();
         this.citizenId = other.citizenId == null ? null : other.citizenId.copy();
         this.paymentAdviceId = other.paymentAdviceId == null ? null : other.paymentAdviceId.copy();
         this.paymentFileId = other.paymentFileId == null ? null : other.paymentFileId.copy();
+        this.paymentAdviceDetailsId = other.paymentAdviceDetailsId == null ? null : other.paymentAdviceDetailsId.copy();
         this.distinct = other.distinct;
     }
 
@@ -108,18 +150,33 @@ public class KhatedarCriteria implements Serializable, Criteria {
         this.remarks = remarks;
     }
 
-    public StringFilter getKhatedarStatus() {
+    public HissaTypeFilter getHissaType() {
+        return hissaType;
+    }
+
+    public HissaTypeFilter hissaType() {
+        if (hissaType == null) {
+            hissaType = new HissaTypeFilter();
+        }
+        return hissaType;
+    }
+
+    public void setHissaType(HissaTypeFilter hissaType) {
+        this.hissaType = hissaType;
+    }
+
+    public KhatedarStatusFilter getKhatedarStatus() {
         return khatedarStatus;
     }
 
-    public StringFilter khatedarStatus() {
+    public KhatedarStatusFilter khatedarStatus() {
         if (khatedarStatus == null) {
-            khatedarStatus = new StringFilter();
+            khatedarStatus = new KhatedarStatusFilter();
         }
         return khatedarStatus;
     }
 
-    public void setKhatedarStatus(StringFilter khatedarStatus) {
+    public void setKhatedarStatus(KhatedarStatusFilter khatedarStatus) {
         this.khatedarStatus = khatedarStatus;
     }
 
@@ -183,6 +240,21 @@ public class KhatedarCriteria implements Serializable, Criteria {
         this.paymentFileId = paymentFileId;
     }
 
+    public LongFilter getPaymentAdviceDetailsId() {
+        return paymentAdviceDetailsId;
+    }
+
+    public LongFilter paymentAdviceDetailsId() {
+        if (paymentAdviceDetailsId == null) {
+            paymentAdviceDetailsId = new LongFilter();
+        }
+        return paymentAdviceDetailsId;
+    }
+
+    public void setPaymentAdviceDetailsId(LongFilter paymentAdviceDetailsId) {
+        this.paymentAdviceDetailsId = paymentAdviceDetailsId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -204,18 +276,32 @@ public class KhatedarCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(caseFileNo, that.caseFileNo) &&
             Objects.equals(remarks, that.remarks) &&
+            Objects.equals(hissaType, that.hissaType) &&
             Objects.equals(khatedarStatus, that.khatedarStatus) &&
             Objects.equals(projectLandId, that.projectLandId) &&
             Objects.equals(citizenId, that.citizenId) &&
             Objects.equals(paymentAdviceId, that.paymentAdviceId) &&
             Objects.equals(paymentFileId, that.paymentFileId) &&
+            Objects.equals(paymentAdviceDetailsId, that.paymentAdviceDetailsId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, caseFileNo, remarks, khatedarStatus, projectLandId, citizenId, paymentAdviceId, paymentFileId, distinct);
+        return Objects.hash(
+            id,
+            caseFileNo,
+            remarks,
+            hissaType,
+            khatedarStatus,
+            projectLandId,
+            citizenId,
+            paymentAdviceId,
+            paymentFileId,
+            paymentAdviceDetailsId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -225,11 +311,13 @@ public class KhatedarCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (caseFileNo != null ? "caseFileNo=" + caseFileNo + ", " : "") +
             (remarks != null ? "remarks=" + remarks + ", " : "") +
+            (hissaType != null ? "hissaType=" + hissaType + ", " : "") +
             (khatedarStatus != null ? "khatedarStatus=" + khatedarStatus + ", " : "") +
             (projectLandId != null ? "projectLandId=" + projectLandId + ", " : "") +
             (citizenId != null ? "citizenId=" + citizenId + ", " : "") +
             (paymentAdviceId != null ? "paymentAdviceId=" + paymentAdviceId + ", " : "") +
             (paymentFileId != null ? "paymentFileId=" + paymentFileId + ", " : "") +
+            (paymentAdviceDetailsId != null ? "paymentAdviceDetailsId=" + paymentAdviceDetailsId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

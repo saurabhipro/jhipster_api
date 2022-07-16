@@ -85,6 +85,7 @@ public class Land implements Serializable {
             "paymentAdviceDetails",
             "paymentFiles",
             "khatedars",
+            "paymentFileHeaders",
         },
         allowSetters = true
     )

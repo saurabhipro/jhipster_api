@@ -44,6 +44,9 @@ public class Citizen implements Serializable {
     @Column(name = "dob")
     private LocalDate dob;
 
+    @Column(name = "account_name")
+    private String accountName;
+
     @Column(name = "account_number")
     private String accountNumber;
 
@@ -93,7 +96,7 @@ public class Citizen implements Serializable {
     private BankBranch bankBranch;
 
     @OneToMany(mappedBy = "citizen")
-    @JsonIgnoreProperties(value = { "projectLand", "citizen", "paymentAdvice", "paymentFile" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "projectLand", "citizen", "paymentAdvice", "paymentFile", "paymentAdviceDetails" }, allowSetters = true)
     private Set<Khatedar> khatedars = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -187,6 +190,19 @@ public class Citizen implements Serializable {
 
     public void setDob(LocalDate dob) {
         this.dob = dob;
+    }
+
+    public String getAccountName() {
+        return this.accountName;
+    }
+
+    public Citizen accountName(String accountName) {
+        this.setAccountName(accountName);
+        return this;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 
     public String getAccountNumber() {
@@ -432,6 +448,7 @@ public class Citizen implements Serializable {
             ", address='" + getAddress() + "'" +
             ", mobileNumber='" + getMobileNumber() + "'" +
             ", dob='" + getDob() + "'" +
+            ", accountName='" + getAccountName() + "'" +
             ", accountNumber='" + getAccountNumber() + "'" +
             ", fatherName='" + getFatherName() + "'" +
             ", spouseName='" + getSpouseName() + "'" +

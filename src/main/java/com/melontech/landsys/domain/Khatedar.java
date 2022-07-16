@@ -1,7 +1,11 @@
 package com.melontech.landsys.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.melontech.landsys.domain.enumeration.HissaType;
+import com.melontech.landsys.domain.enumeration.KhatedarStatus;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
@@ -28,8 +32,15 @@ public class Khatedar implements Serializable {
     @Column(name = "remarks", nullable = false, unique = true)
     private String remarks;
 
-    @Column(name = "khatedar_status")
-    private String khatedarStatus;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "hissa_type", nullable = false)
+    private HissaType hissaType;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "khatedar_status", nullable = false)
+    private KhatedarStatus khatedarStatus;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -44,6 +55,7 @@ public class Khatedar implements Serializable {
             "paymentAdviceDetails",
             "paymentFiles",
             "khatedars",
+            "paymentFileHeaders",
         },
         allowSetters = true
     )
@@ -62,11 +74,15 @@ public class Khatedar implements Serializable {
     private PaymentAdvice paymentAdvice;
 
     @JsonIgnoreProperties(
-        value = { "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation" },
+        value = { "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation", "paymentFileHeader" },
         allowSetters = true
     )
     @OneToOne(mappedBy = "khatedar")
     private PaymentFile paymentFile;
+
+    @OneToMany(mappedBy = "khatedar")
+    @JsonIgnoreProperties(value = { "paymentAdvice", "projectLand", "khatedar" }, allowSetters = true)
+    private Set<PaymentAdviceDetails> paymentAdviceDetails = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -109,16 +125,29 @@ public class Khatedar implements Serializable {
         this.remarks = remarks;
     }
 
-    public String getKhatedarStatus() {
+    public HissaType getHissaType() {
+        return this.hissaType;
+    }
+
+    public Khatedar hissaType(HissaType hissaType) {
+        this.setHissaType(hissaType);
+        return this;
+    }
+
+    public void setHissaType(HissaType hissaType) {
+        this.hissaType = hissaType;
+    }
+
+    public KhatedarStatus getKhatedarStatus() {
         return this.khatedarStatus;
     }
 
-    public Khatedar khatedarStatus(String khatedarStatus) {
+    public Khatedar khatedarStatus(KhatedarStatus khatedarStatus) {
         this.setKhatedarStatus(khatedarStatus);
         return this;
     }
 
-    public void setKhatedarStatus(String khatedarStatus) {
+    public void setKhatedarStatus(KhatedarStatus khatedarStatus) {
         this.khatedarStatus = khatedarStatus;
     }
 
@@ -186,6 +215,37 @@ public class Khatedar implements Serializable {
         return this;
     }
 
+    public Set<PaymentAdviceDetails> getPaymentAdviceDetails() {
+        return this.paymentAdviceDetails;
+    }
+
+    public void setPaymentAdviceDetails(Set<PaymentAdviceDetails> paymentAdviceDetails) {
+        if (this.paymentAdviceDetails != null) {
+            this.paymentAdviceDetails.forEach(i -> i.setKhatedar(null));
+        }
+        if (paymentAdviceDetails != null) {
+            paymentAdviceDetails.forEach(i -> i.setKhatedar(this));
+        }
+        this.paymentAdviceDetails = paymentAdviceDetails;
+    }
+
+    public Khatedar paymentAdviceDetails(Set<PaymentAdviceDetails> paymentAdviceDetails) {
+        this.setPaymentAdviceDetails(paymentAdviceDetails);
+        return this;
+    }
+
+    public Khatedar addPaymentAdviceDetails(PaymentAdviceDetails paymentAdviceDetails) {
+        this.paymentAdviceDetails.add(paymentAdviceDetails);
+        paymentAdviceDetails.setKhatedar(this);
+        return this;
+    }
+
+    public Khatedar removePaymentAdviceDetails(PaymentAdviceDetails paymentAdviceDetails) {
+        this.paymentAdviceDetails.remove(paymentAdviceDetails);
+        paymentAdviceDetails.setKhatedar(null);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -212,6 +272,7 @@ public class Khatedar implements Serializable {
             "id=" + getId() +
             ", caseFileNo='" + getCaseFileNo() + "'" +
             ", remarks='" + getRemarks() + "'" +
+            ", hissaType='" + getHissaType() + "'" +
             ", khatedarStatus='" + getKhatedarStatus() + "'" +
             "}";
     }

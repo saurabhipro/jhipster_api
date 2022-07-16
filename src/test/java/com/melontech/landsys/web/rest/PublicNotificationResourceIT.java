@@ -42,6 +42,9 @@ class PublicNotificationResourceIT {
     private static final String DEFAULT_FILE_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_FILE_CONTENT_TYPE = "image/png";
 
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/public-notifications";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -72,7 +75,8 @@ class PublicNotificationResourceIT {
         PublicNotification publicNotification = new PublicNotification()
             .date(DEFAULT_DATE)
             .file(DEFAULT_FILE)
-            .fileContentType(DEFAULT_FILE_CONTENT_TYPE);
+            .fileContentType(DEFAULT_FILE_CONTENT_TYPE)
+            .description(DEFAULT_DESCRIPTION);
         return publicNotification;
     }
 
@@ -86,7 +90,8 @@ class PublicNotificationResourceIT {
         PublicNotification publicNotification = new PublicNotification()
             .date(UPDATED_DATE)
             .file(UPDATED_FILE)
-            .fileContentType(UPDATED_FILE_CONTENT_TYPE);
+            .fileContentType(UPDATED_FILE_CONTENT_TYPE)
+            .description(UPDATED_DESCRIPTION);
         return publicNotification;
     }
 
@@ -116,6 +121,7 @@ class PublicNotificationResourceIT {
         assertThat(testPublicNotification.getDate()).isEqualTo(DEFAULT_DATE);
         assertThat(testPublicNotification.getFile()).isEqualTo(DEFAULT_FILE);
         assertThat(testPublicNotification.getFileContentType()).isEqualTo(DEFAULT_FILE_CONTENT_TYPE);
+        assertThat(testPublicNotification.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
     }
 
     @Test
@@ -143,6 +149,28 @@ class PublicNotificationResourceIT {
 
     @Test
     @Transactional
+    void checkDateIsRequired() throws Exception {
+        int databaseSizeBeforeTest = publicNotificationRepository.findAll().size();
+        // set the field null
+        publicNotification.setDate(null);
+
+        // Create the PublicNotification, which fails.
+        PublicNotificationDTO publicNotificationDTO = publicNotificationMapper.toDto(publicNotification);
+
+        restPublicNotificationMockMvc
+            .perform(
+                post(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(publicNotificationDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<PublicNotification> publicNotificationList = publicNotificationRepository.findAll();
+        assertThat(publicNotificationList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllPublicNotifications() throws Exception {
         // Initialize the database
         publicNotificationRepository.saveAndFlush(publicNotification);
@@ -155,7 +183,8 @@ class PublicNotificationResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(publicNotification.getId().intValue())))
             .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())))
             .andExpect(jsonPath("$.[*].fileContentType").value(hasItem(DEFAULT_FILE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].file").value(hasItem(Base64Utils.encodeToString(DEFAULT_FILE))));
+            .andExpect(jsonPath("$.[*].file").value(hasItem(Base64Utils.encodeToString(DEFAULT_FILE))))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
     }
 
     @Test
@@ -172,7 +201,8 @@ class PublicNotificationResourceIT {
             .andExpect(jsonPath("$.id").value(publicNotification.getId().intValue()))
             .andExpect(jsonPath("$.date").value(DEFAULT_DATE.toString()))
             .andExpect(jsonPath("$.fileContentType").value(DEFAULT_FILE_CONTENT_TYPE))
-            .andExpect(jsonPath("$.file").value(Base64Utils.encodeToString(DEFAULT_FILE)));
+            .andExpect(jsonPath("$.file").value(Base64Utils.encodeToString(DEFAULT_FILE)))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()));
     }
 
     @Test
@@ -194,7 +224,11 @@ class PublicNotificationResourceIT {
         PublicNotification updatedPublicNotification = publicNotificationRepository.findById(publicNotification.getId()).get();
         // Disconnect from session so that the updates on updatedPublicNotification are not directly saved in db
         em.detach(updatedPublicNotification);
-        updatedPublicNotification.date(UPDATED_DATE).file(UPDATED_FILE).fileContentType(UPDATED_FILE_CONTENT_TYPE);
+        updatedPublicNotification
+            .date(UPDATED_DATE)
+            .file(UPDATED_FILE)
+            .fileContentType(UPDATED_FILE_CONTENT_TYPE)
+            .description(UPDATED_DESCRIPTION);
         PublicNotificationDTO publicNotificationDTO = publicNotificationMapper.toDto(updatedPublicNotification);
 
         restPublicNotificationMockMvc
@@ -212,6 +246,7 @@ class PublicNotificationResourceIT {
         assertThat(testPublicNotification.getDate()).isEqualTo(UPDATED_DATE);
         assertThat(testPublicNotification.getFile()).isEqualTo(UPDATED_FILE);
         assertThat(testPublicNotification.getFileContentType()).isEqualTo(UPDATED_FILE_CONTENT_TYPE);
+        assertThat(testPublicNotification.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
     }
 
     @Test
@@ -310,6 +345,7 @@ class PublicNotificationResourceIT {
         assertThat(testPublicNotification.getDate()).isEqualTo(DEFAULT_DATE);
         assertThat(testPublicNotification.getFile()).isEqualTo(DEFAULT_FILE);
         assertThat(testPublicNotification.getFileContentType()).isEqualTo(DEFAULT_FILE_CONTENT_TYPE);
+        assertThat(testPublicNotification.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
     }
 
     @Test
@@ -324,7 +360,11 @@ class PublicNotificationResourceIT {
         PublicNotification partialUpdatedPublicNotification = new PublicNotification();
         partialUpdatedPublicNotification.setId(publicNotification.getId());
 
-        partialUpdatedPublicNotification.date(UPDATED_DATE).file(UPDATED_FILE).fileContentType(UPDATED_FILE_CONTENT_TYPE);
+        partialUpdatedPublicNotification
+            .date(UPDATED_DATE)
+            .file(UPDATED_FILE)
+            .fileContentType(UPDATED_FILE_CONTENT_TYPE)
+            .description(UPDATED_DESCRIPTION);
 
         restPublicNotificationMockMvc
             .perform(
@@ -341,6 +381,7 @@ class PublicNotificationResourceIT {
         assertThat(testPublicNotification.getDate()).isEqualTo(UPDATED_DATE);
         assertThat(testPublicNotification.getFile()).isEqualTo(UPDATED_FILE);
         assertThat(testPublicNotification.getFileContentType()).isEqualTo(UPDATED_FILE_CONTENT_TYPE);
+        assertThat(testPublicNotification.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
     }
 
     @Test

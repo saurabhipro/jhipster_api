@@ -28,6 +28,8 @@ public class CitizenDTO implements Serializable {
 
     private LocalDate dob;
 
+    private String accountName;
+
     private String accountNumber;
 
     @NotNull
@@ -114,6 +116,14 @@ public class CitizenDTO implements Serializable {
 
     public void setDob(LocalDate dob) {
         this.dob = dob;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 
     public String getAccountNumber() {
@@ -259,6 +269,7 @@ public class CitizenDTO implements Serializable {
             ", address='" + getAddress() + "'" +
             ", mobileNumber='" + getMobileNumber() + "'" +
             ", dob='" + getDob() + "'" +
+            ", accountName='" + getAccountName() + "'" +
             ", accountNumber='" + getAccountNumber() + "'" +
             ", fatherName='" + getFatherName() + "'" +
             ", spouseName='" + getSpouseName() + "'" +

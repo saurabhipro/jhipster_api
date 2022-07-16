@@ -96,8 +96,11 @@ public class KhatedarQueryService extends QueryService<Khatedar> {
             if (criteria.getRemarks() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getRemarks(), Khatedar_.remarks));
             }
+            if (criteria.getHissaType() != null) {
+                specification = specification.and(buildSpecification(criteria.getHissaType(), Khatedar_.hissaType));
+            }
             if (criteria.getKhatedarStatus() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getKhatedarStatus(), Khatedar_.khatedarStatus));
+                specification = specification.and(buildSpecification(criteria.getKhatedarStatus(), Khatedar_.khatedarStatus));
             }
             if (criteria.getProjectLandId() != null) {
                 specification =
@@ -129,6 +132,15 @@ public class KhatedarQueryService extends QueryService<Khatedar> {
                         buildSpecification(
                             criteria.getPaymentFileId(),
                             root -> root.join(Khatedar_.paymentFile, JoinType.LEFT).get(PaymentFile_.id)
+                        )
+                    );
+            }
+            if (criteria.getPaymentAdviceDetailsId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPaymentAdviceDetailsId(),
+                            root -> root.join(Khatedar_.paymentAdviceDetails, JoinType.LEFT).get(PaymentAdviceDetails_.id)
                         )
                     );
             }

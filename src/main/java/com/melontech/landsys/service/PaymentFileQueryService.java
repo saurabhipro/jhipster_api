@@ -100,14 +100,11 @@ public class PaymentFileQueryService extends QueryService<PaymentFile> {
             if (criteria.getPaymentFileDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getPaymentFileDate(), PaymentFile_.paymentFileDate));
             }
-            if (criteria.getPaymentStatus() != null) {
-                specification = specification.and(buildSpecification(criteria.getPaymentStatus(), PaymentFile_.paymentStatus));
+            if (criteria.getPaymentFileStatus() != null) {
+                specification = specification.and(buildSpecification(criteria.getPaymentFileStatus(), PaymentFile_.paymentFileStatus));
             }
-            if (criteria.getBankName() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getBankName(), PaymentFile_.bankName));
-            }
-            if (criteria.getIfscCode() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getIfscCode(), PaymentFile_.ifscCode));
+            if (criteria.getKhatedarIfscCode() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getKhatedarIfscCode(), PaymentFile_.khatedarIfscCode));
             }
             if (criteria.getPaymentMode() != null) {
                 specification = specification.and(buildSpecification(criteria.getPaymentMode(), PaymentFile_.paymentMode));
@@ -166,6 +163,15 @@ public class PaymentFileQueryService extends QueryService<PaymentFile> {
                         buildSpecification(
                             criteria.getLandCompensationId(),
                             root -> root.join(PaymentFile_.landCompensation, JoinType.LEFT).get(LandCompensation_.id)
+                        )
+                    );
+            }
+            if (criteria.getPaymentFileHeaderId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPaymentFileHeaderId(),
+                            root -> root.join(PaymentFile_.paymentFileHeader, JoinType.LEFT).get(PaymentFileHeader_.id)
                         )
                     );
             }

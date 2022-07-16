@@ -51,10 +51,16 @@ public class PaymentAdviceDetails implements Serializable {
             "paymentAdviceDetails",
             "paymentFiles",
             "khatedars",
+            "paymentFileHeaders",
         },
         allowSetters = true
     )
     private ProjectLand projectLand;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "projectLand", "citizen", "paymentAdvice", "paymentFile", "paymentAdviceDetails" }, allowSetters = true)
+    private Khatedar khatedar;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -120,6 +126,19 @@ public class PaymentAdviceDetails implements Serializable {
 
     public PaymentAdviceDetails projectLand(ProjectLand projectLand) {
         this.setProjectLand(projectLand);
+        return this;
+    }
+
+    public Khatedar getKhatedar() {
+        return this.khatedar;
+    }
+
+    public void setKhatedar(Khatedar khatedar) {
+        this.khatedar = khatedar;
+    }
+
+    public PaymentAdviceDetails khatedar(Khatedar khatedar) {
+        this.setKhatedar(khatedar);
         return this;
     }
 

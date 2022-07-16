@@ -1,6 +1,6 @@
 {
   "applications": "*",
-  "changelogDate": "20220712174415",
+  "changelogDate": "20220716103644",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "landsys_project_land",
@@ -84,6 +84,12 @@
       "otherEntityName": "khatedar",
       "otherEntityRelationshipName": "projectLand",
       "relationshipName": "khatedar",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "paymentFileHeader",
+      "otherEntityRelationshipName": "projectLand",
+      "relationshipName": "paymentFileHeader",
       "relationshipType": "one-to-many"
     }
   ],

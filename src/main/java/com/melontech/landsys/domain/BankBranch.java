@@ -45,7 +45,7 @@ public class BankBranch implements Serializable {
 
     @OneToMany(mappedBy = "bankBranch")
     @JsonIgnoreProperties(
-        value = { "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation" },
+        value = { "khatedar", "paymentAdvice", "projectLand", "survey", "bank", "bankBranch", "landCompensation", "paymentFileHeader" },
         allowSetters = true
     )
     private Set<PaymentFile> paymentFiles = new HashSet<>();

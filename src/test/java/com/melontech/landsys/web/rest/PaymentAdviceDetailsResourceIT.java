@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.melontech.landsys.IntegrationTest;
+import com.melontech.landsys.domain.Khatedar;
 import com.melontech.landsys.domain.PaymentAdvice;
 import com.melontech.landsys.domain.PaymentAdviceDetails;
 import com.melontech.landsys.domain.ProjectLand;
@@ -91,6 +92,16 @@ class PaymentAdviceDetailsResourceIT {
             projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
         }
         paymentAdviceDetails.setProjectLand(projectLand);
+        // Add required entity
+        Khatedar khatedar;
+        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
+            khatedar = KhatedarResourceIT.createEntity(em);
+            em.persist(khatedar);
+            em.flush();
+        } else {
+            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
+        }
+        paymentAdviceDetails.setKhatedar(khatedar);
         return paymentAdviceDetails;
     }
 
@@ -124,6 +135,16 @@ class PaymentAdviceDetailsResourceIT {
             projectLand = TestUtil.findAll(em, ProjectLand.class).get(0);
         }
         paymentAdviceDetails.setProjectLand(projectLand);
+        // Add required entity
+        Khatedar khatedar;
+        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
+            khatedar = KhatedarResourceIT.createUpdatedEntity(em);
+            em.persist(khatedar);
+            em.flush();
+        } else {
+            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
+        }
+        paymentAdviceDetails.setKhatedar(khatedar);
         return paymentAdviceDetails;
     }
 
@@ -451,6 +472,32 @@ class PaymentAdviceDetailsResourceIT {
 
         // Get all the paymentAdviceDetailsList where projectLand equals to (projectLandId + 1)
         defaultPaymentAdviceDetailsShouldNotBeFound("projectLandId.equals=" + (projectLandId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPaymentAdviceDetailsByKhatedarIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentAdviceDetailsRepository.saveAndFlush(paymentAdviceDetails);
+        Khatedar khatedar;
+        if (TestUtil.findAll(em, Khatedar.class).isEmpty()) {
+            khatedar = KhatedarResourceIT.createEntity(em);
+            em.persist(khatedar);
+            em.flush();
+        } else {
+            khatedar = TestUtil.findAll(em, Khatedar.class).get(0);
+        }
+        em.persist(khatedar);
+        em.flush();
+        paymentAdviceDetails.setKhatedar(khatedar);
+        paymentAdviceDetailsRepository.saveAndFlush(paymentAdviceDetails);
+        Long khatedarId = khatedar.getId();
+
+        // Get all the paymentAdviceDetailsList where khatedar equals to khatedarId
+        defaultPaymentAdviceDetailsShouldBeFound("khatedarId.equals=" + khatedarId);
+
+        // Get all the paymentAdviceDetailsList where khatedar equals to (khatedarId + 1)
+        defaultPaymentAdviceDetailsShouldNotBeFound("khatedarId.equals=" + (khatedarId + 1));
     }
 
     /**

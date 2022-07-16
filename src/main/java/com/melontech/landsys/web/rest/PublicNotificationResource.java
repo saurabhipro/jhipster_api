@@ -9,6 +9,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,7 +59,7 @@ public class PublicNotificationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/public-notifications")
-    public ResponseEntity<PublicNotificationDTO> createPublicNotification(@RequestBody PublicNotificationDTO publicNotificationDTO)
+    public ResponseEntity<PublicNotificationDTO> createPublicNotification(@Valid @RequestBody PublicNotificationDTO publicNotificationDTO)
         throws URISyntaxException {
         log.debug("REST request to save PublicNotification : {}", publicNotificationDTO);
         if (publicNotificationDTO.getId() != null) {
@@ -83,7 +85,7 @@ public class PublicNotificationResource {
     @PutMapping("/public-notifications/{id}")
     public ResponseEntity<PublicNotificationDTO> updatePublicNotification(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody PublicNotificationDTO publicNotificationDTO
+        @Valid @RequestBody PublicNotificationDTO publicNotificationDTO
     ) throws URISyntaxException {
         log.debug("REST request to update PublicNotification : {}, {}", id, publicNotificationDTO);
         if (publicNotificationDTO.getId() == null) {
@@ -118,7 +120,7 @@ public class PublicNotificationResource {
     @PatchMapping(value = "/public-notifications/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<PublicNotificationDTO> partialUpdatePublicNotification(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody PublicNotificationDTO publicNotificationDTO
+        @NotNull @RequestBody PublicNotificationDTO publicNotificationDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update PublicNotification partially : {}, {}", id, publicNotificationDTO);
         if (publicNotificationDTO.getId() == null) {
