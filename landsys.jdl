@@ -1,7 +1,7 @@
 entity Khatedar(landsys_khatedar) {
     caseFileNo String required unique
     remarks String required unique
-    khatedarStatus String
+    khatedarStatus KhatedarStatus required
 }
 
 
@@ -223,6 +223,12 @@ entity TransactionHistory(landsys_transaction_history)
     approver3 String
 }
 
+entity SequenceGen {
+ seqType SequenceType required
+ latestSequence Integer required
+ sequenceSuffix String required
+}
+
 relationship OneToOne {
     PaymentAdvice{khatedar required} to Khatedar{paymentAdvice}
     Survey{projectLand required} to ProjectLand{survey}
@@ -332,8 +338,17 @@ enum HissaType {
     DIVIDED("divided")
 }
 
+
+enum SequenceType {
+    SURVEY
+    COMPENSATION
+    KHATEDAR
+    PAYMENTADVICE
+    PAYMENTFILE
+}
+
 paginate * with pagination
 service all with serviceImpl
 dto all with mapstruct
 
-filter Citizen , Khatedar , Survey , LandCompensation , Project , PaymentFileRecon, NoticeStatusInfo, PaymentAdvice , TransactionHistory, PaymentFile , PaymentAdviceDetails
+filter Citizen , Khatedar , Survey , LandCompensation , Project , PaymentFileRecon, NoticeStatusInfo, PaymentAdvice , TransactionHistory, PaymentFile , PaymentAdviceDetails , SequenceGen

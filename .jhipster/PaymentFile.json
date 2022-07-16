@@ -1,6 +1,6 @@
 {
   "applications": "*",
-  "changelogDate": "20220712174424",
+  "changelogDate": "20220716051754",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "landsys_payment_file",

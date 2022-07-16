@@ -1,5 +1,6 @@
 package com.melontech.landsys.service.criteria;
 
+import com.melontech.landsys.domain.enumeration.KhatedarStatus;
 import java.io.Serializable;
 import java.util.Objects;
 import org.springdoc.api.annotations.ParameterObject;
@@ -24,6 +25,23 @@ import tech.jhipster.service.filter.StringFilter;
 @ParameterObject
 public class KhatedarCriteria implements Serializable, Criteria {
 
+    /**
+     * Class for filtering KhatedarStatus
+     */
+    public static class KhatedarStatusFilter extends Filter<KhatedarStatus> {
+
+        public KhatedarStatusFilter() {}
+
+        public KhatedarStatusFilter(KhatedarStatusFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public KhatedarStatusFilter copy() {
+            return new KhatedarStatusFilter(this);
+        }
+    }
+
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
@@ -32,7 +50,7 @@ public class KhatedarCriteria implements Serializable, Criteria {
 
     private StringFilter remarks;
 
-    private StringFilter khatedarStatus;
+    private KhatedarStatusFilter khatedarStatus;
 
     private LongFilter projectLandId;
 
@@ -108,18 +126,18 @@ public class KhatedarCriteria implements Serializable, Criteria {
         this.remarks = remarks;
     }
 
-    public StringFilter getKhatedarStatus() {
+    public KhatedarStatusFilter getKhatedarStatus() {
         return khatedarStatus;
     }
 
-    public StringFilter khatedarStatus() {
+    public KhatedarStatusFilter khatedarStatus() {
         if (khatedarStatus == null) {
-            khatedarStatus = new StringFilter();
+            khatedarStatus = new KhatedarStatusFilter();
         }
         return khatedarStatus;
     }
 
-    public void setKhatedarStatus(StringFilter khatedarStatus) {
+    public void setKhatedarStatus(KhatedarStatusFilter khatedarStatus) {
         this.khatedarStatus = khatedarStatus;
     }
 

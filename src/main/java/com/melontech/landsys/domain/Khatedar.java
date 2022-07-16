@@ -1,6 +1,7 @@
 package com.melontech.landsys.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.melontech.landsys.domain.enumeration.KhatedarStatus;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -28,8 +29,10 @@ public class Khatedar implements Serializable {
     @Column(name = "remarks", nullable = false, unique = true)
     private String remarks;
 
-    @Column(name = "khatedar_status")
-    private String khatedarStatus;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "khatedar_status", nullable = false)
+    private KhatedarStatus khatedarStatus;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -112,16 +115,16 @@ public class Khatedar implements Serializable {
         this.remarks = remarks;
     }
 
-    public String getKhatedarStatus() {
+    public KhatedarStatus getKhatedarStatus() {
         return this.khatedarStatus;
     }
 
-    public Khatedar khatedarStatus(String khatedarStatus) {
+    public Khatedar khatedarStatus(KhatedarStatus khatedarStatus) {
         this.setKhatedarStatus(khatedarStatus);
         return this;
     }
 
-    public void setKhatedarStatus(String khatedarStatus) {
+    public void setKhatedarStatus(KhatedarStatus khatedarStatus) {
         this.khatedarStatus = khatedarStatus;
     }
 

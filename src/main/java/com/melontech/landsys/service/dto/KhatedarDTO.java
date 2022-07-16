@@ -1,5 +1,6 @@
 package com.melontech.landsys.service.dto;
 
+import com.melontech.landsys.domain.enumeration.KhatedarStatus;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.validation.constraints.*;
@@ -17,7 +18,8 @@ public class KhatedarDTO implements Serializable {
     @NotNull
     private String remarks;
 
-    private String khatedarStatus;
+    @NotNull
+    private KhatedarStatus khatedarStatus;
 
     private ProjectLandDTO projectLand;
 
@@ -47,11 +49,11 @@ public class KhatedarDTO implements Serializable {
         this.remarks = remarks;
     }
 
-    public String getKhatedarStatus() {
+    public KhatedarStatus getKhatedarStatus() {
         return khatedarStatus;
     }
 
-    public void setKhatedarStatus(String khatedarStatus) {
+    public void setKhatedarStatus(KhatedarStatus khatedarStatus) {
         this.khatedarStatus = khatedarStatus;
     }
 

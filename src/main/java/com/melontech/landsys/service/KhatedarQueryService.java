@@ -97,7 +97,7 @@ public class KhatedarQueryService extends QueryService<Khatedar> {
                 specification = specification.and(buildStringSpecification(criteria.getRemarks(), Khatedar_.remarks));
             }
             if (criteria.getKhatedarStatus() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getKhatedarStatus(), Khatedar_.khatedarStatus));
+                specification = specification.and(buildSpecification(criteria.getKhatedarStatus(), Khatedar_.khatedarStatus));
             }
             if (criteria.getProjectLandId() != null) {
                 specification =
