@@ -27,18 +27,18 @@ public interface PaymentFileRepository extends JpaRepository<PaymentFile, Long>,
     }
 
     @Query(
-        value = "select distinct paymentFile from PaymentFile paymentFile left join fetch paymentFile.bank left join fetch paymentFile.bankBranch left join fetch paymentFile.project",
+        value = "select distinct paymentFile from PaymentFile paymentFile left join fetch paymentFile.bank left join fetch paymentFile.bankBranch",
         countQuery = "select count(distinct paymentFile) from PaymentFile paymentFile"
     )
     Page<PaymentFile> findAllWithToOneRelationships(Pageable pageable);
 
     @Query(
-        "select distinct paymentFile from PaymentFile paymentFile left join fetch paymentFile.bank left join fetch paymentFile.bankBranch left join fetch paymentFile.project"
+        "select distinct paymentFile from PaymentFile paymentFile left join fetch paymentFile.bank left join fetch paymentFile.bankBranch"
     )
     List<PaymentFile> findAllWithToOneRelationships();
 
     @Query(
-        "select paymentFile from PaymentFile paymentFile left join fetch paymentFile.bank left join fetch paymentFile.bankBranch left join fetch paymentFile.project where paymentFile.id =:id"
+        "select paymentFile from PaymentFile paymentFile left join fetch paymentFile.bank left join fetch paymentFile.bankBranch where paymentFile.id =:id"
     )
     Optional<PaymentFile> findOneWithToOneRelationships(@Param("id") Long id);
 }

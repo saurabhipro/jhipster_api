@@ -1,0 +1,36 @@
+{
+  "applications": "*",
+  "changelogDate": "20220716120811",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "landsys_state",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "State",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "district",
+      "otherEntityRelationshipName": "state",
+      "relationshipName": "district",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityField": "khasraNumber",
+      "otherEntityName": "land",
+      "otherEntityRelationshipName": "state",
+      "relationshipName": "land",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

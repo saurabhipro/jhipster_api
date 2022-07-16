@@ -32,7 +32,7 @@ public class SubDistrict implements Serializable {
     private District district;
 
     @OneToMany(mappedBy = "subDistrict")
-    @JsonIgnoreProperties(value = { "subDistrict", "lands", "surveys", "landCompensations", "projectLands" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "subDistrict", "lands" }, allowSetters = true)
     private Set<Village> villages = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

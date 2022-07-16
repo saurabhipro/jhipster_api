@@ -1,0 +1,97 @@
+{
+  "applications": "*",
+  "changelogDate": "20220716120820",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "landsys_project_land",
+  "fields": [
+    {
+      "fieldName": "remarks",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "documents",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "hissaType",
+      "fieldType": "HissaType",
+      "fieldValues": "SINGLE_OWNER (Single Owner),JOINT_OWNER (Joint Owner),DIVIDED (divided)"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "ProjectLand",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "khasraNumber",
+      "otherEntityName": "land",
+      "otherEntityRelationshipName": "projectLand",
+      "relationshipName": "land",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "project",
+      "otherEntityRelationshipName": "projectLand",
+      "relationshipName": "project",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "noticeStatusInfo",
+      "otherEntityRelationshipName": "projectLand",
+      "relationshipName": "noticeStatusInfo",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "survey",
+      "otherEntityRelationshipName": "projectLand",
+      "ownerSide": false,
+      "relationshipName": "survey",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "landCompensation",
+      "otherEntityRelationshipName": "projectLand",
+      "ownerSide": false,
+      "relationshipName": "landCompensation",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "paymentAdvice",
+      "otherEntityRelationshipName": "projectLand",
+      "relationshipName": "paymentAdvice",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "paymentAdviceDetails",
+      "otherEntityRelationshipName": "projectLand",
+      "relationshipName": "paymentAdviceDetails",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "paymentFile",
+      "otherEntityRelationshipName": "projectLand",
+      "relationshipName": "paymentFile",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "khatedar",
+      "otherEntityRelationshipName": "projectLand",
+      "relationshipName": "khatedar",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "paymentFileHeader",
+      "otherEntityRelationshipName": "projectLand",
+      "relationshipName": "paymentFileHeader",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

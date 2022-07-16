@@ -53,7 +53,6 @@ public class Project implements Serializable {
         value = {
             "land",
             "project",
-            "village",
             "noticeStatusInfo",
             "survey",
             "landCompensation",

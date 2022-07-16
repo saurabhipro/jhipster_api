@@ -1,0 +1,73 @@
+{
+  "applications": "*",
+  "changelogDate": "20220716120810",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "landsys_khatedar",
+  "fields": [
+    {
+      "fieldName": "caseFileNo",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "remarks",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "hissaType",
+      "fieldType": "HissaType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "SINGLE_OWNER (Single Owner),JOINT_OWNER (Joint Owner),DIVIDED (divided)"
+    },
+    {
+      "fieldName": "khatedarStatus",
+      "fieldType": "KhatedarStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "NEW,SURVEY_CREATED"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": true,
+  "name": "Khatedar",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "projectLand",
+      "otherEntityRelationshipName": "khatedar",
+      "relationshipName": "projectLand",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "citizen",
+      "otherEntityRelationshipName": "khatedar",
+      "relationshipName": "citizen",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "paymentAdvice",
+      "otherEntityRelationshipName": "khatedar",
+      "ownerSide": false,
+      "relationshipName": "paymentAdvice",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "paymentFile",
+      "otherEntityRelationshipName": "khatedar",
+      "ownerSide": false,
+      "relationshipName": "paymentFile",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "paymentAdviceDetails",
+      "otherEntityRelationshipName": "khatedar",
+      "relationshipName": "paymentAdviceDetails",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

@@ -168,15 +168,6 @@ public class LandCompensationQueryService extends QueryService<LandCompensation>
                         )
                     );
             }
-            if (criteria.getVillageId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getVillageId(),
-                            root -> root.join(LandCompensation_.village, JoinType.LEFT).get(Village_.id)
-                        )
-                    );
-            }
             if (criteria.getPaymentAdviceId() != null) {
                 specification =
                     specification.and(

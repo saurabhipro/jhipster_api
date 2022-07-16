@@ -72,15 +72,11 @@ public class LandCompensationServiceImpl implements LandCompensationService {
         return landCompensationRepository.findAll(pageable).map(landCompensationMapper::toDto);
     }
 
-    public Page<LandCompensationDTO> findAllWithEagerRelationships(Pageable pageable) {
-        return landCompensationRepository.findAllWithEagerRelationships(pageable).map(landCompensationMapper::toDto);
-    }
-
     @Override
     @Transactional(readOnly = true)
     public Optional<LandCompensationDTO> findOne(Long id) {
         log.debug("Request to get LandCompensation : {}", id);
-        return landCompensationRepository.findOneWithEagerRelationships(id).map(landCompensationMapper::toDto);
+        return landCompensationRepository.findById(id).map(landCompensationMapper::toDto);
     }
 
     @Override

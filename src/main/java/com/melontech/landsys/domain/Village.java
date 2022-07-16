@@ -35,32 +35,6 @@ public class Village implements Serializable {
     @JsonIgnoreProperties(value = { "village", "unit", "landType", "state", "projectLands" }, allowSetters = true)
     private Set<Land> lands = new HashSet<>();
 
-    @OneToMany(mappedBy = "village")
-    @JsonIgnoreProperties(value = { "projectLand", "village", "landCompensation", "paymentAdvices", "paymentFiles" }, allowSetters = true)
-    private Set<Survey> surveys = new HashSet<>();
-
-    @OneToMany(mappedBy = "village")
-    @JsonIgnoreProperties(value = { "projectLand", "survey", "village", "paymentAdvices", "paymentFiles" }, allowSetters = true)
-    private Set<LandCompensation> landCompensations = new HashSet<>();
-
-    @OneToMany(mappedBy = "village")
-    @JsonIgnoreProperties(
-        value = {
-            "land",
-            "project",
-            "village",
-            "noticeStatusInfo",
-            "survey",
-            "landCompensation",
-            "paymentAdvices",
-            "paymentAdviceDetails",
-            "paymentFiles",
-            "khatedars",
-        },
-        allowSetters = true
-    )
-    private Set<ProjectLand> projectLands = new HashSet<>();
-
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -130,99 +104,6 @@ public class Village implements Serializable {
     public Village removeLand(Land land) {
         this.lands.remove(land);
         land.setVillage(null);
-        return this;
-    }
-
-    public Set<Survey> getSurveys() {
-        return this.surveys;
-    }
-
-    public void setSurveys(Set<Survey> surveys) {
-        if (this.surveys != null) {
-            this.surveys.forEach(i -> i.setVillage(null));
-        }
-        if (surveys != null) {
-            surveys.forEach(i -> i.setVillage(this));
-        }
-        this.surveys = surveys;
-    }
-
-    public Village surveys(Set<Survey> surveys) {
-        this.setSurveys(surveys);
-        return this;
-    }
-
-    public Village addSurvey(Survey survey) {
-        this.surveys.add(survey);
-        survey.setVillage(this);
-        return this;
-    }
-
-    public Village removeSurvey(Survey survey) {
-        this.surveys.remove(survey);
-        survey.setVillage(null);
-        return this;
-    }
-
-    public Set<LandCompensation> getLandCompensations() {
-        return this.landCompensations;
-    }
-
-    public void setLandCompensations(Set<LandCompensation> landCompensations) {
-        if (this.landCompensations != null) {
-            this.landCompensations.forEach(i -> i.setVillage(null));
-        }
-        if (landCompensations != null) {
-            landCompensations.forEach(i -> i.setVillage(this));
-        }
-        this.landCompensations = landCompensations;
-    }
-
-    public Village landCompensations(Set<LandCompensation> landCompensations) {
-        this.setLandCompensations(landCompensations);
-        return this;
-    }
-
-    public Village addLandCompensation(LandCompensation landCompensation) {
-        this.landCompensations.add(landCompensation);
-        landCompensation.setVillage(this);
-        return this;
-    }
-
-    public Village removeLandCompensation(LandCompensation landCompensation) {
-        this.landCompensations.remove(landCompensation);
-        landCompensation.setVillage(null);
-        return this;
-    }
-
-    public Set<ProjectLand> getProjectLands() {
-        return this.projectLands;
-    }
-
-    public void setProjectLands(Set<ProjectLand> projectLands) {
-        if (this.projectLands != null) {
-            this.projectLands.forEach(i -> i.setVillage(null));
-        }
-        if (projectLands != null) {
-            projectLands.forEach(i -> i.setVillage(this));
-        }
-        this.projectLands = projectLands;
-    }
-
-    public Village projectLands(Set<ProjectLand> projectLands) {
-        this.setProjectLands(projectLands);
-        return this;
-    }
-
-    public Village addProjectLand(ProjectLand projectLand) {
-        this.projectLands.add(projectLand);
-        projectLand.setVillage(this);
-        return this;
-    }
-
-    public Village removeProjectLand(ProjectLand projectLand) {
-        this.projectLands.remove(projectLand);
-        projectLand.setVillage(null);
         return this;
     }
 

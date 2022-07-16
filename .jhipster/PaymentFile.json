@@ -1,0 +1,107 @@
+{
+  "applications": "*",
+  "changelogDate": "20220716120830",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "landsys_payment_file",
+  "fields": [
+    {
+      "fieldName": "paymentFileId",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "totalPaymentAmount",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "paymentFileDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "paymentFileStatus",
+      "fieldType": "PaymentStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PENDING,APPROVED,PAID"
+    },
+    {
+      "fieldName": "khatedarIfscCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "paymentMode",
+      "fieldType": "PaymentAdviceType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ONLINE,CHECQUE,OTHER"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": true,
+  "name": "PaymentFile",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "khatedar",
+      "otherEntityRelationshipName": "paymentFile",
+      "ownerSide": true,
+      "relationshipName": "khatedar",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "paymentAdvice",
+      "otherEntityRelationshipName": "paymentFile",
+      "ownerSide": true,
+      "relationshipName": "paymentAdvice",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "projectLand",
+      "otherEntityRelationshipName": "paymentFile",
+      "relationshipName": "projectLand",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "survey",
+      "otherEntityRelationshipName": "paymentFile",
+      "relationshipName": "survey",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "bank",
+      "otherEntityRelationshipName": "paymentFile",
+      "relationshipName": "bank",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "bankBranch",
+      "otherEntityRelationshipName": "paymentFile",
+      "relationshipName": "bankBranch",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "landCompensation",
+      "otherEntityRelationshipName": "paymentFile",
+      "relationshipName": "landCompensation",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "paymentFileHeader",
+      "otherEntityRelationshipName": "paymentFile",
+      "relationshipName": "paymentFileHeader",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "service": "serviceImpl"
+}

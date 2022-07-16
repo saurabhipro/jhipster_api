@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <!--
+        Added the constraints for entity PaymentAdvice.
+    -->
+    <changeSet id="20220716120827-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="khatedar_id"
+                                 baseTableName="landsys_payment_advice"
+                                 constraintName="fk_landsys_payment_advice__khatedar_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landsys_khatedar"/>
+
+        <addForeignKeyConstraint baseColumnNames="land_compensation_id"
+                                 baseTableName="landsys_payment_advice"
+                                 constraintName="fk_landsys_payment_advice__land_compensation_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="land_compensation"/>
+
+        <addForeignKeyConstraint baseColumnNames="project_land_id"
+                                 baseTableName="landsys_payment_advice"
+                                 constraintName="fk_landsys_payment_advice__project_land_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landsys_project_land"/>
+
+        <addForeignKeyConstraint baseColumnNames="survey_id"
+                                 baseTableName="landsys_payment_advice"
+                                 constraintName="fk_landsys_payment_advice__survey_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landsys_survey"/>
+    </changeSet>
+</databaseChangeLog>

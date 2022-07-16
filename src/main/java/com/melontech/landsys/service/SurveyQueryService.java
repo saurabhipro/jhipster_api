@@ -132,12 +132,6 @@ public class SurveyQueryService extends QueryService<Survey> {
                         )
                     );
             }
-            if (criteria.getVillageId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getVillageId(), root -> root.join(Survey_.village, JoinType.LEFT).get(Village_.id))
-                    );
-            }
             if (criteria.getLandCompensationId() != null) {
                 specification =
                     specification.and(

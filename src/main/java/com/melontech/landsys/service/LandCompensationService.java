@@ -42,14 +42,6 @@ public interface LandCompensationService {
     Page<LandCompensationDTO> findAll(Pageable pageable);
 
     /**
-     * Get all the landCompensations with eager load of many-to-many relationships.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    Page<LandCompensationDTO> findAllWithEagerRelationships(Pageable pageable);
-
-    /**
      * Get the "id" landCompensation.
      *
      * @param id the id of the entity.

@@ -55,7 +55,7 @@ public class Land implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "subDistrict", "lands", "surveys", "landCompensations", "projectLands" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "subDistrict", "lands" }, allowSetters = true)
     private Village village;
 
     @ManyToOne(optional = false)
@@ -78,7 +78,6 @@ public class Land implements Serializable {
         value = {
             "land",
             "project",
-            "village",
             "noticeStatusInfo",
             "survey",
             "landCompensation",

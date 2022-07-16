@@ -1,0 +1,36 @@
+{
+  "applications": "*",
+  "changelogDate": "20220716120812",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "landsys_district",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "District",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "state",
+      "otherEntityRelationshipName": "district",
+      "relationshipName": "state",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "subDistrict",
+      "otherEntityRelationshipName": "district",
+      "relationshipName": "subDistrict",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

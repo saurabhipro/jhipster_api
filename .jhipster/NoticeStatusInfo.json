@@ -1,0 +1,28 @@
+{
+  "applications": "*",
+  "changelogDate": "20220716120833",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "landsys_notice_status",
+  "fields": [
+    {
+      "fieldName": "status",
+      "fieldType": "NoticeStatus",
+      "fieldValues": "SENT,ACCEPTED"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": true,
+  "name": "NoticeStatusInfo",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "projectLand",
+      "otherEntityRelationshipName": "noticeStatusInfo",
+      "relationshipName": "projectLand",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}
